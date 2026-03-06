@@ -13,8 +13,7 @@ const Index = () => {
   const [soundOn, setSoundOn] = useState(isSoundEnabled());
 
   const handleToggleSound = () => {
-    const newState = toggleSound();
-    setSoundOn(newState);
+    setSoundOn(toggleSound());
   };
 
   return (
@@ -29,7 +28,6 @@ const Index = () => {
               Sistema de Tarot para Lives — Zé Pelintra & Zé Pretinho
             </p>
           </div>
-          </div>
           <Button
             variant="ghost"
             size="icon"
@@ -41,6 +39,8 @@ const Index = () => {
           </Button>
         </div>
       </header>
+
+      <main className="max-w-4xl mx-auto p-4 mt-4">
         <Tabs defaultValue="atendimento" className="w-full">
           <TabsList className="grid w-full grid-cols-5 bg-secondary/50 border border-border">
             <TabsTrigger value="atendimento" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">

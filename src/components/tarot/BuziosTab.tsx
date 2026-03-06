@@ -32,7 +32,7 @@ export default function BuziosTab() {
     <Card className="card-mystical mystic-glow animate-fade-up">
       <CardHeader className="pb-3">
         <CardTitle className="font-cinzel gold-text text-lg">🐚 Jogo de Búzios</CardTitle>
-        <p className="text-muted-foreground text-xs">12 búzios — ● aberto / ○ fechado</p>
+        <p className="text-muted-foreground text-xs">16 búzios — ● aberto / ○ fechado</p>
       </CardHeader>
       <CardContent className="space-y-4">
         <Button onClick={handleJogar} className="w-full font-cinzel text-base py-5">

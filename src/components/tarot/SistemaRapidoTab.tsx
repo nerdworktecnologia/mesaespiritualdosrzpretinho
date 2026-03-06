@@ -15,11 +15,14 @@ type ResponseLevel = "5s" | "15s" | "full";
 const quickTopics = [
   { label: "❤️ Amor", q: "Sobre amor" },
   { label: "💼 Trabalho", q: "Sobre trabalho" },
-  { label: "💔 Traição", q: "Sobre traição" },
-  { label: "🔄 Volta", q: "Vai voltar?" },
+  { label: "💔 Traição", q: "Tem traição?" },
+  { label: "🔄 Volta", q: "Ele vai voltar?" },
   { label: "💰 Dinheiro", q: "Sobre dinheiro" },
-  { label: "🧿 Inveja", q: "Sobre inveja" },
+  { label: "🧿 Inveja", q: "Tem inveja?" },
   { label: "🙏 Espiritual", q: "Orientação espiritual" },
+  { label: "💭 Pensa em mim", q: "Ele pensa em mim?" },
+  { label: "🏆 Vou conseguir", q: "Vou conseguir?" },
+  { label: "💼 Emprego", q: "Vou arrumar trabalho?" },
 ];
 
 function randomCards(count: number): number[] {

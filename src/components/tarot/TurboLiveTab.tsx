@@ -5,8 +5,9 @@ import { cardMeanings, getYesNoResult, CardMeaning } from "@/data/cardMeanings";
 import { generateShortResponse, generateFullResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { detectTheme, getThemedCards, getThemeLabel, getAllThemes, QuestionTheme } from "@/utils/themeDetection";
 import { playRevealSound, playResultSound } from "@/utils/sounds";
+import { supabase } from "@/integrations/supabase/client";
 import TarotCard from "./TarotCard";
-import { Mic, MicOff, RotateCcw, Plus, Copy, Check } from "lucide-react";
+import { Mic, MicOff, RotateCcw, Copy, Check, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 type ReadingType = "1" | "3" | "yesno";
@@ -51,6 +52,8 @@ export default function TurboLiveTab() {
   const [readingType, setReadingType] = useState<ReadingType>("3");
   const [isRecording, setIsRecording] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [useAI, setUseAI] = useState(true);
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Result
   const [resolvedCards, setResolvedCards] = useState<CardMeaning[]>([]);
@@ -95,7 +98,7 @@ export default function TurboLiveTab() {
     setDetectedTheme(theme);
   };
 
-  const generate = () => {
+  const generate = async () => {
     const count = readingType === "yesno" ? 1 : parseInt(readingType);
     const theme = detectedTheme;
     const numbers = getThemedCards(count, theme);
@@ -106,7 +109,7 @@ export default function TurboLiveTab() {
 
     setResolvedCards(cards);
 
-    // Generate 3 levels
+    // Generate local responses first (instant)
     const r5 = cards.map((c) => c.shortMeaning).join(" ");
     const r10 = readingType === "yesno" ? generateYesNoResponse(cards[0]) : generateShortResponse(cards);
     const rFull = readingType === "yesno" ? generateYesNoResponse(cards[0]) : generateFullResponse(cards, question || "Consulta live");
@@ -131,6 +134,45 @@ export default function TurboLiveTab() {
       time: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
     };
     setQueue((prev) => [item, ...prev].slice(0, 100));
+
+    // If AI mode is on, fetch AI interpretation in background
+    if (useAI) {
+      setAiLoading(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("interpret-cards", {
+          body: {
+            question: question || "Consulta rápida",
+            cards: cards.map((c) => ({ number: c.number, name: c.name, meaning: c.meaning, energy: c.energy })),
+            readingType,
+            theme,
+          },
+        });
+
+        if (error) throw error;
+
+        if (data && !data.error) {
+          setResponse5s(data.relampago || r5);
+          setResponse10s(data.curta || r10);
+          setResponseFull(data.completa || rFull);
+          // Update queue item
+          setQueue((prev) =>
+            prev.map((q) =>
+              q.id === item.id
+                ? { ...q, quickResponse: data.relampago || r5, fullResponse: data.completa || rFull }
+                : q
+            )
+          );
+          toast.success("✨ Interpretação espiritual gerada");
+        } else if (data?.error) {
+          toast.error(data.error);
+        }
+      } catch (err) {
+        console.error("AI interpretation error:", err);
+        // Keep local responses as fallback — no toast needed
+      } finally {
+        setAiLoading(false);
+      }
+    }
   };
 
   const reset = () => {
@@ -259,6 +301,16 @@ export default function TurboLiveTab() {
             ))}
           </div>
 
+          {/* AI toggle */}
+          <Button
+            variant="outline"
+            onClick={() => setUseAI(!useAI)}
+            className={`w-full font-cinzel text-xs py-3 border ${useAI ? "bg-foreground/10 border-foreground text-foreground" : "border-border text-muted-foreground"}`}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            {useAI ? "✨ IA Espiritual ATIVA" : "IA Desligada (respostas locais)"}
+          </Button>
+
           {/* Generate */}
           <Button
             onClick={generate}
@@ -343,6 +395,12 @@ export default function TurboLiveTab() {
 
           {/* Response */}
           <div className="card-mystical rounded-lg p-4 border border-border">
+            {aiLoading && (
+              <div className="flex items-center gap-2 mb-2 text-muted-foreground">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                <span className="font-crimson text-xs">Consultando a espiritualidade...</span>
+              </div>
+            )}
             <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-sm leading-relaxed">
               {currentResponse}
             </pre>

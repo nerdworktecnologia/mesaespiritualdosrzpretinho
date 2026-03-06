@@ -8,6 +8,7 @@ import CabalaTab from "@/components/tarot/CabalaTab";
 import TiragemTab from "@/components/tarot/TiragemTab";
 import LiveModeTab from "@/components/tarot/LiveModeTab";
 import HistoricoTab from "@/components/tarot/HistoricoTab";
+import SistemaRapidoTab from "@/components/tarot/SistemaRapidoTab";
 import { isSoundEnabled, toggleSound } from "@/utils/sounds";
 
 export default function Mesa() {
@@ -45,22 +46,26 @@ export default function Mesa() {
 
       <main className="max-w-3xl mx-auto p-4 mt-4">
         <Tabs defaultValue="mesa" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-secondary border border-border">
-            <TabsTrigger value="mesa" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+          <TabsList className="grid w-full grid-cols-5 bg-secondary border border-border">
+            <TabsTrigger value="mesa" className="font-cinzel text-[10px] md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
               Mesa
             </TabsTrigger>
-            <TabsTrigger value="live" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background" onClick={(e) => { e.preventDefault(); navigate("/live"); }}>
-              ⚡ Live
+            <TabsTrigger value="rapido" className="font-cinzel text-[10px] md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+              ⚡ Rápido
             </TabsTrigger>
-            <TabsTrigger value="cabala" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="live" className="font-cinzel text-[10px] md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background" onClick={(e) => { e.preventDefault(); navigate("/live"); }}>
+              📺 Live
+            </TabsTrigger>
+            <TabsTrigger value="cabala" className="font-cinzel text-[10px] md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
               Cabala
             </TabsTrigger>
-            <TabsTrigger value="historico" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="historico" className="font-cinzel text-[10px] md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
               Histórico
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="mesa"><MesaTab /></TabsContent>
+          <TabsContent value="rapido"><SistemaRapidoTab /></TabsContent>
           <TabsContent value="live"><LiveModeTab /></TabsContent>
           <TabsContent value="cabala"><CabalaTab /></TabsContent>
           <TabsContent value="historico"><HistoricoTab /></TabsContent>

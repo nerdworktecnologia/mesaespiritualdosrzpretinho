@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -28,25 +28,16 @@ export default function LiveModeTab() {
       .split(/[\s,]+/)
       .map((n) => parseInt(n.trim()))
       .filter((n) => n >= 1 && n <= 36);
-
     if (numbers.length !== count) return;
 
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
     setResolvedCards(cards);
     setShowResult(false);
-
-    cards.forEach((_, i) => {
-      setTimeout(() => playRevealSound(), i * 500 + 200);
-    });
+    cards.forEach((_, i) => { setTimeout(() => playRevealSound(), i * 500 + 200); });
 
     const response = generateShortResponse(cards);
     setResult(response);
-
-    setTimeout(() => {
-      setShowResult(true);
-      playResultSound();
-    }, cards.length * 500 + 800);
-
+    setTimeout(() => { setShowResult(true); playResultSound(); }, cards.length * 500 + 800);
     addToHistory({ clientName: "", question: question || "Live rápida", readingType: `Live ${cardCount} carta(s)`, cardNumbers: numbers, result: response });
   };
 
@@ -56,18 +47,12 @@ export default function LiveModeTab() {
     const card = cardMeanings[num - 1];
     setResolvedCards([card]);
     setShowResult(false);
-
     setTimeout(() => playRevealSound(), 200);
 
     const { result: yesNoResult } = getYesNoResult(num);
     const response = `Resposta: ${yesNoResult}\n\n${generateYesNoResponse(card)}`;
     setResult(response);
-
-    setTimeout(() => {
-      setShowResult(true);
-      playResultSound();
-    }, 1300);
-
+    setTimeout(() => { setShowResult(true); playResultSound(); }, 1300);
     addToHistory({ clientName: "", question: question || "Sim ou Não (Live)", readingType: "Live Sim/Não", cardNumbers: [num], result: response });
   };
 
@@ -80,45 +65,40 @@ export default function LiveModeTab() {
   };
 
   return (
-    <Card className="card-mystical mt-4 border-accent/30 animate-fade-up" style={{ boxShadow: "0 0 30px hsl(340 70% 50% / 0.15)" }}>
-      <CardHeader>
-        <CardTitle className="font-cinzel text-accent text-xl">🔥 Modo Live — Resposta Rápida</CardTitle>
-        <p className="text-muted-foreground text-sm">Otimizado para TikTok, YouTube e Instagram Live</p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Mode toggle */}
+    <Card className="card-mystical mt-4 animate-fade-up">
+      <CardContent className="pt-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-cinzel text-foreground tracking-wider text-sm uppercase">⚡ Modo Live</h3>
+          <p className="text-muted-foreground text-[10px] uppercase tracking-wider">Resposta rápida</p>
+        </div>
+
         <div className="flex gap-2">
           <Button
             variant={mode === "quick" ? "default" : "secondary"}
             onClick={() => { setMode("quick"); reset(); }}
-            className="flex-1 font-cinzel"
+            className={`flex-1 font-cinzel text-xs tracking-wider ${mode === "quick" ? "bg-foreground text-background" : "border border-border"}`}
           >
-            🃏 Tiragem Rápida
+            Tiragem Rápida
           </Button>
           <Button
             variant={mode === "yesno" ? "default" : "secondary"}
             onClick={() => { setMode("yesno"); reset(); }}
-            className="flex-1 font-cinzel"
+            className={`flex-1 font-cinzel text-xs tracking-wider ${mode === "yesno" ? "bg-foreground text-background" : "border border-border"}`}
           >
-            ✅ Sim ou Não
+            Sim ou Não
           </Button>
         </div>
 
         {!result && (
           <div className="space-y-3 animate-fade-up">
             <div className="space-y-2">
-              <Label className="text-foreground/80">Pergunta</Label>
-              <Input
-                placeholder="Pergunta rápida..."
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                className="bg-muted/50 border-border"
-              />
+              <Label className="text-foreground/50 text-xs uppercase tracking-wider">Pergunta</Label>
+              <Input placeholder="Pergunta rápida..." value={question} onChange={(e) => setQuestion(e.target.value)} className="bg-secondary border-border" />
             </div>
 
             {mode === "quick" && (
               <div className="space-y-2">
-                <Label className="text-foreground/80">Quantas cartas?</Label>
+                <Label className="text-foreground/50 text-xs uppercase tracking-wider">Quantas cartas?</Label>
                 <div className="flex gap-2">
                   {["1", "3", "5"].map((n) => (
                     <Button
@@ -126,7 +106,7 @@ export default function LiveModeTab() {
                       variant={cardCount === n ? "default" : "secondary"}
                       size="sm"
                       onClick={() => setCardCount(n)}
-                      className="font-cinzel"
+                      className={`font-cinzel ${cardCount === n ? "bg-foreground text-background" : "border border-border"}`}
                     >
                       {n}
                     </Button>
@@ -136,65 +116,51 @@ export default function LiveModeTab() {
             )}
 
             <div className="space-y-2">
-              <Label className="text-foreground/80">
+              <Label className="text-foreground/50 text-xs uppercase tracking-wider">
                 {mode === "yesno" ? "Número da carta (1-36)" : `Números das cartas (${cardCount})`}
               </Label>
               <Input
                 placeholder={mode === "yesno" ? "Ex: 7" : "Ex: 12 3 18"}
                 value={cardInput}
                 onChange={(e) => setCardInput(e.target.value)}
-                className="bg-muted/50 border-border text-xl font-cinzel tracking-widest text-center"
+                className="bg-secondary border-border text-xl font-cinzel tracking-widest text-center"
                 autoFocus
               />
             </div>
 
             <Button
               onClick={mode === "yesno" ? handleYesNo : handleQuick}
-              className="w-full font-cinzel text-xl py-8 animate-glow-pulse"
+              className="w-full font-cinzel text-sm py-8 tracking-wider uppercase bg-foreground text-background hover:bg-foreground/90 animate-glow-pulse"
             >
-              ⚡ Gerar Resposta
+              ⚡ Resposta de 5 segundos
             </Button>
           </div>
         )}
 
         {result && (
           <div className="space-y-4 animate-fade-up">
-            {/* Card display with flip animation */}
             <div className="flex flex-wrap gap-4 justify-center py-4">
               {resolvedCards.map((card, index) => (
-                <TarotCard
-                  key={card.number}
-                  card={card}
-                  size="lg"
-                  showMeaning={showResult}
-                  revealed={true}
-                  delay={index * 500}
-                />
+                <TarotCard key={card.number} card={card} size="lg" showMeaning={showResult} revealed={true} delay={index * 500} />
               ))}
             </div>
 
             {showResult && (
-              <div className="card-mystical rounded-lg p-6 border border-accent/20 animate-fade-in">
-                <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-xl leading-relaxed">
-                  {result}
-                </pre>
+              <div className="card-mystical rounded-lg p-6 border border-border animate-fade-up">
+                <pre className="whitespace-pre-wrap font-crimson text-foreground/80 text-xl leading-relaxed">{result}</pre>
               </div>
             )}
 
             {!showResult && (
               <div className="text-center py-4">
-                <p className="text-muted-foreground font-crimson italic animate-pulse">
-                  ✨ Revelando as cartas...
-                </p>
+                <p className="text-muted-foreground font-crimson italic animate-pulse">Revelando...</p>
               </div>
             )}
 
             {showResult && (
-              <div className="flex gap-2">
-                <Button onClick={reset} variant="secondary" className="flex-1 font-cinzel py-6">
-                  🔄 Nova Leitura
-                </Button>
-              </div>
+              <Button onClick={reset} variant="secondary" className="w-full font-cinzel py-6 text-xs tracking-wider uppercase border border-border">
+                Nova Leitura
+              </Button>
             )}
           </div>
         )}

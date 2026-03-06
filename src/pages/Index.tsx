@@ -40,7 +40,7 @@ const Index = () => {
             {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
           </Button>
         </div>
-      <main className="max-w-4xl mx-auto p-4 mt-4">
+      </header>
         <Tabs defaultValue="atendimento" className="w-full">
           <TabsList className="grid w-full grid-cols-5 bg-secondary/50 border border-border">
             <TabsTrigger value="atendimento" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">

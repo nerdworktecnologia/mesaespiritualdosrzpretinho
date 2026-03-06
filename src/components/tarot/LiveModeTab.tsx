@@ -21,7 +21,7 @@ export default function LiveModeTab() {
     const numbers = cardInput
       .split(/[\s,]+/)
       .map((n) => parseInt(n.trim()))
-      .filter((n) => n >= 1 && n <= 21);
+      .filter((n) => n >= 1 && n <= 36);
 
     if (numbers.length !== count) return;
 
@@ -31,7 +31,7 @@ export default function LiveModeTab() {
 
   const handleYesNo = () => {
     const num = parseInt(cardInput.trim());
-    if (num < 1 || num > 21) return;
+    if (num < 1 || num > 36) return;
     const card = cardMeanings[num - 1];
     const { result: yesNoResult } = getYesNoResult(num);
     setResult(`Resposta: ${yesNoResult}\n\n${generateYesNoResponse(card)}`);
@@ -101,7 +101,7 @@ export default function LiveModeTab() {
 
             <div className="space-y-2">
               <Label className="text-foreground/80">
-                {mode === "yesno" ? "Número da carta (1-21)" : `Números das cartas (${cardCount})`}
+                {mode === "yesno" ? "Número da carta (1-36)" : `Números das cartas (${cardCount})`}
               </Label>
               <Input
                 placeholder={mode === "yesno" ? "Ex: 7" : "Ex: 12 3 18"}

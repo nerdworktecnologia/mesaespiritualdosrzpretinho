@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +17,14 @@ interface ClientData {
 }
 
 export default function AtendimentoTab() {
-  const [data, setData] = useState<ClientData>({ name: "", whatsapp: "", birthDate: "", birthTime: "", question: "" });
+  const [searchParams] = useSearchParams();
+  const [data, setData] = useState<ClientData>(() => ({
+    name: searchParams.get("name") || "",
+    whatsapp: searchParams.get("whatsapp") || "",
+    birthDate: searchParams.get("birthDate") || "",
+    birthTime: "",
+    question: "",
+  }));
   const [isRecording, setIsRecording] = useState(false);
   const [saved, setSaved] = useState(false);
   const [cabalaResult, setCabalaResult] = useState<CabalaResult | null>(null);

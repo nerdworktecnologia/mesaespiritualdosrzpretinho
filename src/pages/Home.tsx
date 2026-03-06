@@ -78,6 +78,15 @@ export default function Home() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<"dashboard" | "clients" | "agenda">("dashboard");
 
+  const navigateToMesa = (clientName?: string, whatsapp?: string, birthDate?: string) => {
+    const params = new URLSearchParams();
+    if (clientName) params.set("name", clientName);
+    if (whatsapp) params.set("whatsapp", whatsapp);
+    if (birthDate) params.set("birthDate", birthDate);
+    const qs = params.toString();
+    navigate(`/mesa${qs ? `?${qs}` : ""}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -92,7 +101,7 @@ export default function Home() {
             </p>
           </div>
           <Button
-            onClick={() => navigate("/mesa")}
+            onClick={() => navigateToMesa()}
             className="font-cinzel text-xs tracking-wider uppercase bg-foreground text-background hover:bg-foreground/90 gap-2"
           >
             <Sparkles className="h-4 w-4" />
@@ -127,16 +136,16 @@ export default function Home() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto p-4 mt-4">
-        {activeSection === "dashboard" && <DashboardSection onNavigate={setActiveSection} onOpenMesa={() => navigate("/mesa")} />}
+        {activeSection === "dashboard" && <DashboardSection onNavigate={setActiveSection} onOpenMesa={navigateToMesa} />}
         {activeSection === "clients" && <ClientsSection />}
-        {activeSection === "agenda" && <AgendaSection />}
+        {activeSection === "agenda" && <AgendaSection onAtender={navigateToMesa} />}
       </main>
     </div>
   );
 }
 
 /* ── Dashboard ── */
-function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients" | "agenda") => void; onOpenMesa: () => void }) {
+function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients" | "agenda") => void; onOpenMesa: (clientName?: string, whatsapp?: string, birthDate?: string) => void }) {
   const history = getHistory();
   const clients = getClients();
   const agenda = getAgenda();
@@ -155,7 +164,7 @@ function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients
 
       {/* Quick actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <button onClick={onOpenMesa} className="card-mystical rounded-lg p-5 border border-border text-left hover:border-foreground/30 transition-colors group">
+        <button onClick={() => onOpenMesa()} className="card-mystical rounded-lg p-5 border border-border text-left hover:border-foreground/30 transition-colors group">
           <Sparkles className="h-5 w-5 text-foreground/60 mb-2 group-hover:text-foreground transition-colors" />
           <p className="font-cinzel text-foreground text-sm tracking-wider">Iniciar Consulta</p>
           <p className="text-muted-foreground text-xs mt-1 font-crimson">Abrir a mesa espiritual</p>
@@ -179,17 +188,20 @@ function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients
             <CardTitle className="font-cinzel text-sm tracking-wider uppercase text-foreground">Agenda de Hoje</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {todayAppointments.map((a) => (
+            {todayAppointments.map((a) => {
+              const client = clients.find((c) => c.name === a.clientName);
+              return (
               <div key={a.id} className="flex items-center justify-between p-3 rounded bg-secondary border border-border">
                 <div>
                   <p className="font-cinzel text-foreground text-xs">{a.clientName}</p>
                   <p className="text-muted-foreground text-[10px]">{a.time} {a.notes && `· ${a.notes}`}</p>
                 </div>
-                <Button size="sm" variant="ghost" onClick={onOpenMesa} className="text-xs gap-1">
+                <Button size="sm" variant="ghost" onClick={() => onOpenMesa(a.clientName, client?.whatsapp, client?.birthDate)} className="text-xs gap-1">
                   <ArrowRight className="h-3 w-3" /> Atender
                 </Button>
               </div>
-            ))}
+              );
+            })}
           </CardContent>
         </Card>
       )}
@@ -356,7 +368,7 @@ function ClientsSection() {
 }
 
 /* ── Agenda Section ── */
-function AgendaSection() {
+function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsapp?: string, birthDate?: string) => void }) {
   const [items, setItems] = useState<Appointment[]>(getAgenda);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({ clientName: "", date: "", time: "", notes: "" });
@@ -458,7 +470,7 @@ function AgendaSection() {
             <div className="space-y-2">
               <p className="text-muted-foreground text-[10px] uppercase tracking-wider font-cinzel">Próximos</p>
               {upcoming.map((a) => (
-                <AppointmentCard key={a.id} appointment={a} onDelete={handleDelete} />
+                <AppointmentCard key={a.id} appointment={a} onDelete={handleDelete} onAtender={onAtender} clients={clients} />
               ))}
             </div>
           )}
@@ -466,7 +478,7 @@ function AgendaSection() {
             <div className="space-y-2 mt-6">
               <p className="text-muted-foreground text-[10px] uppercase tracking-wider font-cinzel">Passados</p>
               {past.slice(0, 10).map((a) => (
-                <AppointmentCard key={a.id} appointment={a} onDelete={handleDelete} isPast />
+                <AppointmentCard key={a.id} appointment={a} onDelete={handleDelete} isPast onAtender={onAtender} clients={clients} />
               ))}
             </div>
           )}
@@ -476,7 +488,8 @@ function AgendaSection() {
   );
 }
 
-function AppointmentCard({ appointment: a, onDelete, isPast }: { appointment: Appointment; onDelete: (id: string) => void; isPast?: boolean }) {
+function AppointmentCard({ appointment: a, onDelete, isPast, onAtender, clients }: { appointment: Appointment; onDelete: (id: string) => void; isPast?: boolean; onAtender: (clientName?: string, whatsapp?: string, birthDate?: string) => void; clients: Client[] }) {
+  const client = clients.find((c) => c.name === a.clientName);
   return (
     <div className={`card-mystical rounded-lg p-4 border border-border flex items-center justify-between group ${isPast ? "opacity-50" : ""}`}>
       <div>
@@ -486,14 +499,26 @@ function AppointmentCard({ appointment: a, onDelete, isPast }: { appointment: Ap
           {a.notes && ` · ${a.notes}`}
         </p>
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => onDelete(a.id)}
-        className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
+      <div className="flex items-center gap-1">
+        {!isPast && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onAtender(a.clientName, client?.whatsapp, client?.birthDate)}
+            className="text-xs gap-1 text-foreground/70 hover:text-foreground"
+          >
+            <ArrowRight className="h-3 w-3" /> Atender
+          </Button>
+        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => onDelete(a.id)}
+          className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }

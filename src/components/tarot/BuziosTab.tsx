@@ -58,7 +58,7 @@ export default function BuziosTab() {
             {/* Resultado */}
             <div className="text-center space-y-2 p-4 rounded-lg bg-secondary/50 border border-border/50">
               <p className="text-muted-foreground text-sm">
-                Abertos: <span className="text-primary font-bold">{result.abertos}</span> de 12
+                Abertos: <span className="text-primary font-bold">{result.abertos}</span> de 16
               </p>
               <p className="font-cinzel gold-text text-2xl font-bold">{result.odu.name}</p>
               <p className="text-accent text-sm font-cinzel">{result.odu.orixa}</p>

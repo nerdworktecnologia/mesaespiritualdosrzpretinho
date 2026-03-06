@@ -220,8 +220,11 @@ function interpretarOdu(label: string, emoji: string, odu: Odu): string {
   return [
     `${emoji} ${label}: ${odu.name}`,
     `Orixás: ${odu.orixa}`,
+    `Elemento: ${odu.elemento}`,
     `${odu.meaning}`,
     `Personalidade: ${odu.personality}`,
+    `✅ Positivo: ${odu.positivo}`,
+    `❌ Negativo: ${odu.negativo}`,
     `Conselho: ${odu.advice}`,
     `⚠️ Evitar: ${odu.evitar}`,
   ].join("\n");

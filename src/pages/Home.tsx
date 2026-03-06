@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
+import logoImg from "@/assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -103,13 +104,16 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border py-5 px-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="font-cinzel text-lg md:text-xl tracking-[0.2em] uppercase text-foreground spirit-highlight">
-              Sr. Zé Pretinho
-            </h1>
-            <p className="text-muted-foreground text-xs mt-1 font-crimson italic">
-              Painel de Atendimento
-            </p>
+          <div className="flex items-center gap-3">
+            <img src={logoImg} alt="Mesa Espiritual" className="h-12 w-12 rounded-lg object-cover" />
+            <div>
+              <h1 className="font-cinzel text-lg md:text-xl tracking-[0.2em] uppercase text-foreground spirit-highlight">
+                Sr. Zé Pretinho
+              </h1>
+              <p className="text-muted-foreground text-xs mt-1 font-crimson italic">
+                Painel de Atendimento
+              </p>
+            </div>
           </div>
           <div className="flex gap-2">
             <Button

@@ -52,6 +52,8 @@ export default function TurboLiveTab() {
   const [readingType, setReadingType] = useState<ReadingType>("3");
   const [isRecording, setIsRecording] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [useAI, setUseAI] = useState(true);
+  const [aiLoading, setAiLoading] = useState(false);
 
   // Result
   const [resolvedCards, setResolvedCards] = useState<CardMeaning[]>([]);

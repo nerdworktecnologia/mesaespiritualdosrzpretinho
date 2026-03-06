@@ -207,7 +207,7 @@ function OduCard({ label, odu, size = "md" }: { label: string; odu: { number: nu
   return (
     <div className={`text-center rounded-lg bg-secondary/50 border border-border/50 ${size === "sm" ? "p-2" : "p-3"}`}>
       <p className="text-muted-foreground text-xs mb-1">{label}</p>
-      <p className={`font-cinzel gold-text font-bold ${size === "sm" ? "text-sm" : "text-lg"}`}>{odu.name}</p>
+      <p className={`font-cinzel gold-text font-bold ${size === "sm" ? "text-sm" : "text-lg"}`}>{odu.number} – {odu.name}</p>
       <p className="text-accent text-xs font-cinzel">{odu.orixa}</p>
     </div>
   );

@@ -9,6 +9,7 @@ import TiragemTab from "@/components/tarot/TiragemTab";
 import HistoricoTab from "@/components/tarot/HistoricoTab";
 import SistemaRapidoTab from "@/components/tarot/SistemaRapidoTab";
 import TurboLiveTab from "@/components/tarot/TurboLiveTab";
+import BancoRespostasTab from "@/components/tarot/BancoRespostasTab";
 import { isSoundEnabled, toggleSound } from "@/utils/sounds";
 
 export default function Mesa() {
@@ -40,20 +41,23 @@ export default function Mesa() {
 
       <main className="max-w-3xl mx-auto p-3 mt-2">
         <Tabs defaultValue="turbo" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-secondary border border-border h-auto">
-            <TabsTrigger value="turbo" className="font-cinzel text-[9px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+          <TabsList className="grid w-full grid-cols-6 bg-secondary border border-border h-auto">
+            <TabsTrigger value="turbo" className="font-cinzel text-[8px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               ⚡ Turbo
             </TabsTrigger>
-            <TabsTrigger value="rapido" className="font-cinzel text-[9px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="rapido" className="font-cinzel text-[8px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🔮 Rápido
             </TabsTrigger>
-            <TabsTrigger value="mesa" className="font-cinzel text-[9px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="banco" className="font-cinzel text-[8px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+              📖 Banco
+            </TabsTrigger>
+            <TabsTrigger value="mesa" className="font-cinzel text-[8px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               📋 Mesa
             </TabsTrigger>
-            <TabsTrigger value="cabala" className="font-cinzel text-[9px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="cabala" className="font-cinzel text-[8px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🔢 Cabala
             </TabsTrigger>
-            <TabsTrigger value="historico" className="font-cinzel text-[9px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="historico" className="font-cinzel text-[8px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               📜 Hist.
             </TabsTrigger>
           </TabsList>

@@ -29,7 +29,7 @@ export default function TiragemTab() {
     const numbers = cardInput
       .split(/[\s,]+/)
       .map((n) => parseInt(n.trim()))
-      .filter((n) => n >= 1 && n <= 21);
+      .filter((n) => n >= 1 && n <= 36);
 
     const option = readingOptions.find((o) => o.value === readingType);
     if (!option || numbers.length !== option.count) return;
@@ -104,7 +104,7 @@ export default function TiragemTab() {
 
             <div className="space-y-2">
               <Label className="text-foreground/80">
-                Números das cartas (1-21) — {readingOptions.find((o) => o.value === readingType)?.count} carta(s)
+                Números das cartas (1-36) — {readingOptions.find((o) => o.value === readingType)?.count} carta(s)
               </Label>
               <Input
                 placeholder="Ex: 12 3 18"

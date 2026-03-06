@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { calculateCabala, CabalaResult, odus, Odu } from "@/data/odus";
 import { cardMeanings, CardMeaning } from "@/data/cardMeanings";
 import TarotCard from "./TarotCard";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { detectarTema, temasLabels } from "@/utils/detectTema";
 
 interface BuziosState {
   buzios: number[];
@@ -16,7 +16,11 @@ interface BuziosState {
   odu: Odu;
 }
 
-interface Interpretation {
+interface FullInterpretation {
+  temaDetectado?: string;
+  relampago: string;
+  media: string;
+  completa: string;
   destino: string;
   energia: string;
   situacao: string;
@@ -24,20 +28,9 @@ interface Interpretation {
   resumo: string;
 }
 
-const temas = [
-  { value: "amor", label: "❤️ Amor" },
-  { value: "trabalho", label: "💼 Trabalho" },
-  { value: "dinheiro", label: "💰 Dinheiro" },
-  { value: "espiritual", label: "🔮 Espiritual" },
-  { value: "familia", label: "👨‍👩‍👧 Família" },
-  { value: "geral", label: "🌟 Geral" },
-];
-
 function jogarBuzios(): BuziosState {
   const buzios: number[] = [];
-  for (let i = 0; i < 12; i++) {
-    buzios.push(Math.random() < 0.5 ? 0 : 1);
-  }
+  for (let i = 0; i < 12; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
   let abertos = buzios.reduce((a, b) => a + b, 0);
   if (abertos === 0) abertos = 1;
   return { buzios, abertos, odu: odus[abertos - 1] };
@@ -47,16 +40,24 @@ export default function PainelEspiritualTab() {
   const { toast } = useToast();
   const [clientName, setClientName] = useState("");
   const [pergunta, setPergunta] = useState("");
-  const [tema, setTema] = useState("geral");
+  const [temaAuto, setTemaAuto] = useState("geral");
   const [birthDate, setBirthDate] = useState("");
   const [cardInput, setCardInput] = useState("");
 
   const [cabalaResult, setCabalaResult] = useState<CabalaResult | null>(null);
   const [buziosResult, setBuziosResult] = useState<BuziosState | null>(null);
   const [tarotCards, setTarotCards] = useState<CardMeaning[]>([]);
-  const [interpretation, setInterpretation] = useState<Interpretation | null>(null);
+  const [interpretation, setInterpretation] = useState<FullInterpretation | null>(null);
+  const [activeLevel, setActiveLevel] = useState<"relampago" | "media" | "completa">("relampago");
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Auto-detect tema when pergunta changes
+  useEffect(() => {
+    if (pergunta.trim().length > 3) {
+      setTemaAuto(detectarTema(pergunta));
+    }
+  }, [pergunta]);
 
   const handleCabala = () => {
     if (!birthDate) return;
@@ -68,10 +69,7 @@ export default function PainelEspiritualTab() {
   };
 
   const handleTarot = () => {
-    const numbers = cardInput
-      .split(/[\s]+/)
-      .map((n) => parseInt(n.trim()))
-      .filter((n) => n >= 1 && n <= 36);
+    const numbers = cardInput.split(/[\s]+/).map((n) => parseInt(n.trim())).filter((n) => n >= 1 && n <= 36);
     if (numbers.length === 0) return;
     setTarotCards(numbers.map((n) => cardMeanings[n - 1]).filter(Boolean));
   };
@@ -86,7 +84,7 @@ export default function PainelEspiritualTab() {
     setInterpretation(null);
 
     try {
-      const payload: any = { pergunta: pergunta || "Consulta espiritual geral", tema };
+      const payload: any = { pergunta: pergunta || "Consulta espiritual geral", tema: temaAuto };
 
       if (cabalaResult) {
         payload.cabala = {
@@ -109,15 +107,14 @@ export default function PainelEspiritualTab() {
 
       if (tarotCards.length > 0) {
         payload.tarot = {
-          cartas: tarotCards.map((c) => ({
-            number: c.number, name: c.name, meaning: c.meaning, energy: c.energy,
-          })),
+          cartas: tarotCards.map((c) => ({ number: c.number, name: c.name, meaning: c.meaning, energy: c.energy })),
         };
       }
 
       const { data, error } = await supabase.functions.invoke("spiritual-panel", { body: payload });
       if (error) throw error;
-      setInterpretation(data as Interpretation);
+      setInterpretation(data as FullInterpretation);
+      setActiveLevel("relampago");
     } catch (e: any) {
       console.error(e);
       toast({ title: "Erro ao interpretar", description: e.message || "Tente novamente", variant: "destructive" });
@@ -128,24 +125,18 @@ export default function PainelEspiritualTab() {
 
   const handleSave = async () => {
     try {
-      // Try to find existing client
       let clientId: string | null = null;
       if (clientName.trim()) {
-        const { data: existing } = await supabase
-          .from("clients")
-          .select("id")
-          .ilike("name", clientName.trim())
-          .limit(1)
-          .single();
+        const { data: existing } = await supabase.from("clients").select("id").ilike("name", clientName.trim()).limit(1).single();
         if (existing) clientId = existing.id;
       }
 
       const record: any = {
-        client_name: clientName.trim() || "Consulta Live",
+        client_name: clientName.trim() || "Consulta",
         client_id: clientId,
         birth_date: birthDate || null,
         question: pergunta || null,
-        tema,
+        tema: temaAuto,
         reading_type: "painel",
       };
 
@@ -156,17 +147,14 @@ export default function PainelEspiritualTab() {
         record.cabala_central = cabalaResult.central.name;
         record.cabala_final = cabalaResult.final.name;
       }
-
       if (buziosResult) {
         record.buzios_abertos = buziosResult.abertos;
         record.buzios_odu = buziosResult.odu.name;
       }
-
       if (tarotCards.length > 0) {
         record.tarot_cards = tarotCards.map((c) => c.number);
         record.tarot_card_names = tarotCards.map((c) => c.name);
       }
-
       if (interpretation) {
         record.interpretation_destino = interpretation.destino;
         record.interpretation_energia = interpretation.energia;
@@ -178,36 +166,26 @@ export default function PainelEspiritualTab() {
       const { error } = await supabase.from("consultations").insert(record as any);
       if (error) throw error;
 
-      // Update client last visit
       if (clientId) {
-        await supabase.from("clients").update({
-          last_visit: new Date().toISOString().split("T")[0],
-        }).eq("id", clientId);
+        await supabase.from("clients").update({ last_visit: new Date().toISOString().split("T")[0] }).eq("id", clientId);
       }
 
       setSaved(true);
       toast({ title: "✅ Consulta salva com sucesso!" });
     } catch (e: any) {
-      console.error(e);
       toast({ title: "Erro ao salvar", description: e.message, variant: "destructive" });
     }
   };
 
   const handleNovaConsulta = () => {
-    setClientName("");
-    setPergunta("");
-    setBirthDate("");
-    setCardInput("");
-    setCabalaResult(null);
-    setBuziosResult(null);
-    setTarotCards([]);
-    setInterpretation(null);
-    setSaved(false);
+    setClientName(""); setPergunta(""); setBirthDate(""); setCardInput("");
+    setCabalaResult(null); setBuziosResult(null); setTarotCards([]);
+    setInterpretation(null); setSaved(false); setTemaAuto("geral");
   };
 
   return (
     <div className="space-y-4 mt-4 animate-fade-up">
-      {/* Header: Cliente + Pergunta + Tema */}
+      {/* Header */}
       <Card className="card-mystical">
         <CardHeader className="pb-3">
           <CardTitle className="font-cinzel gold-text text-lg">🌟 Painel Espiritual</CardTitle>
@@ -220,34 +198,35 @@ export default function PainelEspiritualTab() {
               <Input placeholder="Nome do consulente" value={clientName} onChange={(e) => setClientName(e.target.value)} className="bg-secondary border-border" />
             </div>
             <div className="space-y-2">
-              <Label className="text-foreground/60 text-xs uppercase tracking-wider">Tema</Label>
-              <Select value={tema} onValueChange={setTema}>
-                <SelectTrigger className="bg-secondary border-border"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {temas.map((t) => (<SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>))}
-                </SelectContent>
-              </Select>
+              <Label className="text-foreground/60 text-xs uppercase tracking-wider">Data de nascimento</Label>
+              <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="bg-secondary border-border" />
             </div>
           </div>
           <div className="space-y-2">
             <Label className="text-foreground/60 text-xs uppercase tracking-wider">Pergunta</Label>
             <Input placeholder="Qual a pergunta?" value={pergunta} onChange={(e) => setPergunta(e.target.value)} className="bg-secondary border-border" />
           </div>
+          {/* Auto-detected tema */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-foreground/50 text-xs">Tema detectado:</span>
+            <span className="text-xs font-cinzel px-3 py-1 rounded-full bg-primary/15 text-primary border border-primary/20">
+              {temasLabels[temaAuto] || "🌟 Geral"}
+            </span>
+            {temaAuto !== "geral" && pergunta.trim().length > 3 && (
+              <span className="text-[10px] text-muted-foreground italic">auto</span>
+            )}
+          </div>
         </CardContent>
       </Card>
 
-      {/* Two columns: Cabala + Búzios */}
+      {/* Cabala + Búzios */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="card-mystical">
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-base">🔢 Cabala de Ifá</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="space-y-2">
-              <Label className="text-foreground/60 text-xs">Data de nascimento</Label>
-              <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="bg-secondary border-border" />
-            </div>
-            <Button onClick={handleCabala} className="w-full font-cinzel text-sm py-4">🔮 Calcular Cabala</Button>
+            <Button onClick={handleCabala} disabled={!birthDate} className="w-full font-cinzel text-sm py-4">🔮 Calcular Cabala</Button>
             {cabalaResult && (
               <div className="space-y-2 animate-fade-up">
                 <div className="flex flex-col items-center gap-1">
@@ -267,7 +246,6 @@ export default function PainelEspiritualTab() {
         <Card className="card-mystical">
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-base">🐚 Jogo de Búzios</CardTitle>
-            <p className="text-muted-foreground text-xs">12 búzios — ● aberto / ○ fechado</p>
           </CardHeader>
           <CardContent className="space-y-3">
             <Button onClick={handleBuzios} className="w-full font-cinzel text-sm py-4">🐚 Jogar Búzios</Button>
@@ -312,37 +290,72 @@ export default function PainelEspiritualTab() {
         </CardContent>
       </Card>
 
-      {/* Action buttons */}
+      {/* Actions */}
       <div className="flex gap-2">
         <Button onClick={handleInterpretar} disabled={loading} className="flex-1 font-cinzel text-sm py-5 bg-primary text-primary-foreground">
           {loading ? "⏳ Consultando..." : "✨ Interpretar Consulta"}
         </Button>
         {interpretation && !saved && (
-          <Button onClick={handleSave} variant="secondary" className="font-cinzel text-sm py-5 border border-primary/30">
-            💾 Salvar
-          </Button>
+          <Button onClick={handleSave} variant="secondary" className="font-cinzel text-sm py-5 border border-primary/30">💾 Salvar</Button>
         )}
-        <Button onClick={handleNovaConsulta} variant="secondary" className="font-cinzel text-sm py-5 border border-border">
-          🔄 Nova
-        </Button>
+        <Button onClick={handleNovaConsulta} variant="secondary" className="font-cinzel text-sm py-5 border border-border">🔄 Nova</Button>
       </div>
 
-      {/* Interpretation */}
+      {/* Interpretation with 3 levels */}
       {interpretation && (
         <Card className="card-mystical mystic-glow animate-fade-up">
           <CardHeader className="pb-3">
-            <CardTitle className="font-cinzel gold-text text-lg">📜 Interpretação Espiritual</CardTitle>
+            <CardTitle className="font-cinzel gold-text text-lg">📜 Leitura Espiritual</CardTitle>
+            {interpretation.temaDetectado && (
+              <p className="text-xs text-muted-foreground">
+                Tema: <span className="text-primary">{temasLabels[interpretation.temaDetectado] || interpretation.temaDetectado}</span>
+              </p>
+            )}
           </CardHeader>
           <CardContent className="space-y-4">
-            <InterpretBlock emoji="🔮" title="Destino Espiritual (Cabala)" text={interpretation.destino} />
-            <InterpretBlock emoji="🐚" title="Energia do Momento (Búzios)" text={interpretation.energia} />
-            <InterpretBlock emoji="🃏" title="Situação Prática (Tarot)" text={interpretation.situacao} />
-            <div className="border-t border-primary/20 pt-4">
-              <InterpretBlock emoji="✨" title="Orientação Espiritual" text={interpretation.orientacao} highlight />
+            {/* Level selector */}
+            <div className="flex gap-1 p-1 bg-secondary rounded-lg border border-border">
+              {([
+                { key: "relampago" as const, label: "⚡ Relâmpago", desc: "5s" },
+                { key: "media" as const, label: "📖 Média", desc: "15s" },
+                { key: "completa" as const, label: "✨ Completa", desc: "1min" },
+              ]).map(({ key, label, desc }) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveLevel(key)}
+                  className={`flex-1 py-2 px-2 rounded-md font-cinzel text-[10px] md:text-xs transition-all ${
+                    activeLevel === key
+                      ? "bg-foreground text-background shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                  <span className="block text-[8px] opacity-60">{desc}</span>
+                </button>
+              ))}
             </div>
-            {interpretation.resumo && (
-              <div className="text-center p-4 rounded-lg bg-primary/10 border border-primary/20">
-                <p className="font-cinzel text-primary text-sm italic">"{interpretation.resumo}"</p>
+
+            {/* Active level content */}
+            <div className="card-mystical rounded-lg p-5 border border-primary/20 animate-fade-up">
+              <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-base md:text-lg leading-relaxed">
+                {interpretation[activeLevel]}
+              </pre>
+            </div>
+
+            {/* Detailed blocks (shown in completa mode) */}
+            {activeLevel === "completa" && (
+              <div className="space-y-3 animate-fade-up">
+                <InterpretBlock emoji="🔮" title="Destino Espiritual (Cabala)" text={interpretation.destino} />
+                <InterpretBlock emoji="🐚" title="Energia do Momento (Búzios)" text={interpretation.energia} />
+                <InterpretBlock emoji="🃏" title="Situação Prática (Tarot)" text={interpretation.situacao} />
+                <div className="border-t border-primary/20 pt-4">
+                  <InterpretBlock emoji="✨" title="Orientação Espiritual" text={interpretation.orientacao} highlight />
+                </div>
+                {interpretation.resumo && (
+                  <div className="text-center p-4 rounded-lg bg-primary/10 border border-primary/20">
+                    <p className="font-cinzel text-primary text-sm italic">"{interpretation.resumo}"</p>
+                  </div>
+                )}
               </div>
             )}
           </CardContent>

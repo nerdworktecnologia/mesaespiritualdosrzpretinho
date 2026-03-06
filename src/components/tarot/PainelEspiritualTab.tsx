@@ -30,7 +30,7 @@ interface FullInterpretation {
 
 function jogarBuzios(): BuziosState {
   const buzios: number[] = [];
-  for (let i = 0; i < 12; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
+  for (let i = 0; i < 16; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
   let abertos = buzios.reduce((a, b) => a + b, 0);
   if (abertos === 0) abertos = 1;
   return { buzios, abertos, odu: odus[abertos - 1] };
@@ -259,7 +259,7 @@ export default function PainelEspiritualTab() {
                   ))}
                 </div>
                 <div className="text-center p-3 rounded-lg bg-secondary/50 border border-border/50">
-                  <p className="text-muted-foreground text-xs">Abertos: <span className="text-primary font-bold">{buziosResult.abertos}</span>/12</p>
+                  <p className="text-muted-foreground text-xs">Abertos: <span className="text-primary font-bold">{buziosResult.abertos}</span>/16</p>
                   <p className="font-cinzel gold-text text-xl font-bold">{buziosResult.odu.name}</p>
                   <p className="text-accent text-xs font-cinzel">{buziosResult.odu.orixa}</p>
                 </div>

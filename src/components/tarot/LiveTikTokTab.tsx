@@ -14,7 +14,7 @@ interface BuziosState { buzios: number[]; abertos: number; odu: Odu; }
 
 function jogarBuzios(): BuziosState {
   const buzios: number[] = [];
-  for (let i = 0; i < 12; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
+  for (let i = 0; i < 16; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
   let abertos = buzios.reduce((a, b) => a + b, 0);
   if (abertos === 0) abertos = 1;
   return { buzios, abertos, odu: odus[abertos - 1] };

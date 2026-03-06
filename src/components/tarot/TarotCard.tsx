@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CardMeaning } from "@/data/cardMeanings";
 
 interface TarotCardProps {
@@ -9,17 +9,69 @@ interface TarotCardProps {
   delay?: number;
 }
 
+function SparkleEffect() {
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; duration: number; delay: number }[]>([]);
+
+  useEffect(() => {
+    const p = Array.from({ length: 16 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 140 - 20,
+      y: Math.random() * 200 - 20,
+      size: Math.random() * 6 + 2,
+      duration: Math.random() * 0.8 + 0.4,
+      delay: Math.random() * 0.3,
+    }));
+    setParticles(p);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-visible z-10">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            background: `radial-gradient(circle, hsl(45 100% 70%), hsl(45 90% 55%), transparent)`,
+            boxShadow: `0 0 ${p.size * 2}px hsl(45 90% 55% / 0.8), 0 0 ${p.size * 4}px hsl(45 90% 55% / 0.4)`,
+            animation: `sparkle-float ${p.duration}s ease-out ${p.delay}s forwards`,
+            opacity: 0,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes sparkle-float {
+          0% { opacity: 0; transform: scale(0) translateY(0); }
+          30% { opacity: 1; transform: scale(1.2) translateY(-8px); }
+          100% { opacity: 0; transform: scale(0) translateY(-30px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function TarotCard({ card, size = "md", showMeaning = false, revealed = true, delay = 0 }: TarotCardProps) {
   const [flipped, setFlipped] = useState(!revealed);
   const [visible, setVisible] = useState(delay === 0);
+  const [showSparkle, setShowSparkle] = useState(false);
 
   useEffect(() => {
     if (delay > 0) {
       const showTimer = setTimeout(() => setVisible(true), delay);
-      const flipTimer = setTimeout(() => setFlipped(false), delay + 200);
-      return () => { clearTimeout(showTimer); clearTimeout(flipTimer); };
+      const flipTimer = setTimeout(() => {
+        setFlipped(false);
+        setShowSparkle(true);
+      }, delay + 200);
+      const sparkleEnd = setTimeout(() => setShowSparkle(false), delay + 1500);
+      return () => { clearTimeout(showTimer); clearTimeout(flipTimer); clearTimeout(sparkleEnd); };
     } else if (revealed) {
       setFlipped(false);
+      setShowSparkle(true);
+      const t = setTimeout(() => setShowSparkle(false), 1300);
+      return () => clearTimeout(t);
     }
   }, [revealed, delay]);
 
@@ -38,7 +90,8 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
   }
 
   return (
-    <div className="flex flex-col items-center gap-2" style={{ perspective: "600px" }}>
+    <div className="flex flex-col items-center gap-2 relative" style={{ perspective: "600px" }}>
+      {showSparkle && <SparkleEffect />}
       <div
         className={`${sizes[size]} relative cursor-default select-none`}
         style={{
@@ -56,7 +109,9 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
             border: "1.5px solid hsl(45 90% 55% / 0.3)",
             boxShadow: flipped
               ? "0 4px 20px hsl(45 90% 55% / 0.1)"
-              : "0 4px 30px hsl(45 90% 55% / 0.25), 0 0 40px hsl(45 90% 55% / 0.1)",
+              : showSparkle
+                ? "0 4px 40px hsl(45 90% 55% / 0.5), 0 0 60px hsl(45 90% 55% / 0.2)"
+                : "0 4px 30px hsl(45 90% 55% / 0.25), 0 0 40px hsl(45 90% 55% / 0.1)",
             transition: "box-shadow 0.5s ease",
           }}
         >

@@ -11,7 +11,6 @@ import { Mic, MicOff, RotateCcw } from "lucide-react";
 
 type ReadingType = "1" | "3" | "5" | "yesno";
 type ResponseLevel = "5s" | "15s" | "full";
-type ResponseLevel = "5s" | "15s" | "full";
 
 const quickTopics = [
   { label: "❤️ Amor", q: "Sobre amor" },
@@ -62,7 +61,6 @@ function generateCompleteResponse(cards: CardMeaning[], question: string, type: 
 export default function SistemaRapidoTab() {
   const [question, setQuestion] = useState("");
   const [readingType, setReadingType] = useState<ReadingType>("3");
-  const [cardInput, setCardInput] = useState("");
   const [cardInput, setCardInput] = useState("");
   const [isRecording, setIsRecording] = useState(false);
 

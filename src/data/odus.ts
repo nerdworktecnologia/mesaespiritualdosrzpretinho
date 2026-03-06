@@ -27,12 +27,11 @@ export const odus: Odu[] = [
 ];
 
 export interface CabalaResult {
-  nuca: Odu;      // Passado/Origem
-  frente: Odu;    // Futuro/Destino
-  centro: Odu;    // Odu principal (cabeça)
-  testa: Odu;     // Caminho mental
-  costas: Odu;    // Proteção espiritual
-  oduNascimento: Odu; // Odu geral de nascimento
+  superior: Odu;    // Esquerda (posições ímpares)
+  inferior: Odu;    // Direita (posições pares)
+  lateral: Odu;     // Soma esquerda + direita
+  central: Odu;     // Soma esquerda + direita + lateral
+  final: Odu;       // Soma de tudo
   summary: string;
 }
 
@@ -45,47 +44,33 @@ function reduceToOdu(n: number): number {
 }
 
 export function calculateCabala(birthDate: string): CabalaResult {
-  // Parse date: expected format YYYY-MM-DD
+  // Format: YYYY-MM-DD → "DDMMAAAA" (8 dígitos)
   const parts = birthDate.split("-");
-  const year = parseInt(parts[0]);
-  const month = parseInt(parts[1]);
-  const day = parseInt(parts[2]);
+  const formatted = parts[2] + parts[1] + parts[0]; // DDMMAAAA
+  const numeros = formatted.split("").map(Number);
 
-  // 1. Odu de Nascimento (soma de todos os dígitos)
-  const allDigits = birthDate.replace(/\D/g, "").split("").reduce((s, d) => s + parseInt(d), 0);
-  const oduNascimentoNum = reduceToOdu(allDigits);
+  // PASSO 1 — separar esquerda (posições ímpares 0,2,4,6) e direita (1,3,5,7)
+  const esquerda = reduceToOdu(numeros[0] + numeros[2] + numeros[4] + numeros[6]);
+  const direita = reduceToOdu(numeros[1] + numeros[3] + numeros[5] + numeros[7]);
 
-  // 2. Nuca (Passado/Origem): dia + mês
-  const nucaSum = day + month;
-  const nucaNum = reduceToOdu(nucaSum);
+  // PASSO 2 — lateral: soma esquerda + direita
+  const lateralNum = reduceToOdu(esquerda + direita);
 
-  // 3. Frente (Futuro/Destino): últimos 2 dígitos do ano
-  const lastTwoDigits = year % 100;
-  const frenteSum = Math.floor(lastTwoDigits / 10) + (lastTwoDigits % 10);
-  const frenteNum = reduceToOdu(frenteSum);
+  // PASSO 3 — central: esquerda + direita + lateral
+  const centralNum = reduceToOdu(esquerda + direita + lateralNum);
 
-  // 4. Centro da Cabeça (Odu principal): nuca + frente
-  const centroSum = nucaNum + frenteNum;
-  const centroNum = reduceToOdu(centroSum);
+  // PASSO 4 — final: esquerda + direita + lateral + central
+  const finalNum = reduceToOdu(esquerda + direita + lateralNum + centralNum);
 
-  // 5. Testa (Caminho mental): dia + últimos 2 dígitos do ano
-  const testaSum = day + lastTwoDigits;
-  const testaNum = reduceToOdu(testaSum);
+  const superior = odus[esquerda - 1];
+  const inferior = odus[direita - 1];
+  const lateral = odus[lateralNum - 1];
+  const central = odus[centralNum - 1];
+  const finalOdu = odus[finalNum - 1];
 
-  // 6. Costas (Proteção): mês + últimos 2 dígitos do ano
-  const costasSum = month + lastTwoDigits;
-  const costasNum = reduceToOdu(costasSum);
+  const summary = generateCabalaSummary(superior, inferior, lateral, central, finalOdu);
 
-  const nuca = odus[nucaNum - 1];
-  const frente = odus[frenteNum - 1];
-  const centro = odus[centroNum - 1];
-  const testa = odus[testaNum - 1];
-  const costas = odus[costasNum - 1];
-  const oduNascimento = odus[oduNascimentoNum - 1];
-
-  const summary = generateCabalaSummary(nuca, frente, centro, testa, costas, oduNascimento);
-
-  return { nuca, frente, centro, testa, costas, oduNascimento, summary };
+  return { superior, inferior, lateral, central, final: finalOdu, summary };
 }
 
 function generateCabalaSummary(

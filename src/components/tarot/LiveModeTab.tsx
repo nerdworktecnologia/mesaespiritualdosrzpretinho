@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { cardMeanings } from "@/data/cardMeanings";
 import { generateShortResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { getYesNoResult } from "@/data/cardMeanings";
+import { addToHistory } from "@/utils/history";
 
 type LiveReading = "quick" | "yesno";
 
@@ -26,7 +27,9 @@ export default function LiveModeTab() {
     if (numbers.length !== count) return;
 
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
-    setResult(generateShortResponse(cards));
+    const response = generateShortResponse(cards);
+    setResult(response);
+    addToHistory({ clientName: "", question: question || "Live rápida", readingType: `Live ${cardCount} carta(s)`, cardNumbers: numbers, result: response });
   };
 
   const handleYesNo = () => {
@@ -34,7 +37,9 @@ export default function LiveModeTab() {
     if (num < 1 || num > 36) return;
     const card = cardMeanings[num - 1];
     const { result: yesNoResult } = getYesNoResult(num);
-    setResult(`Resposta: ${yesNoResult}\n\n${generateYesNoResponse(card)}`);
+    const response = `Resposta: ${yesNoResult}\n\n${generateYesNoResponse(card)}`;
+    setResult(response);
+    addToHistory({ clientName: "", question: question || "Sim ou Não (Live)", readingType: "Live Sim/Não", cardNumbers: [num], result: response });
   };
 
   const reset = () => {

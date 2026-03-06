@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cardMeanings, CardMeaning, getYesNoResult } from "@/data/cardMeanings";
 import TarotCard from "./TarotCard";
 import { generateFullResponse, generateShortResponse, generateYesNoResponse } from "@/utils/generateResponse";
+import { addToHistory } from "@/utils/history";
 
 type ReadingType = "1" | "3" | "5" | "7" | "9" | "yesno";
 
@@ -38,11 +39,21 @@ export default function TiragemTab() {
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
     setResolvedCards(cards);
 
+    let response: string;
     if (readingType === "yesno") {
-      setResult(generateYesNoResponse(cards[0]));
+      response = generateYesNoResponse(cards[0]);
     } else {
-      setResult(generateFullResponse(cards, question));
+      response = generateFullResponse(cards, question);
     }
+    setResult(response);
+
+    addToHistory({
+      clientName: "",
+      question: question || "Sim ou Não",
+      readingType: option.label,
+      cardNumbers: numbers,
+      result: response,
+    });
   };
 
   const handleShort = () => {

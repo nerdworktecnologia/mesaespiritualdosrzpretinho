@@ -29,9 +29,17 @@ const Index = () => {
               Sistema de Tarot para Lives — Zé Pelintra & Zé Pretinho
             </p>
           </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleToggleSound}
+            className="text-muted-foreground hover:text-primary"
+            title={soundOn ? "Desativar sons" : "Ativar sons"}
+          >
+            {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+          </Button>
         </div>
-      </header>
-
       <main className="max-w-4xl mx-auto p-4 mt-4">
         <Tabs defaultValue="atendimento" className="w-full">
           <TabsList className="grid w-full grid-cols-5 bg-secondary/50 border border-border">

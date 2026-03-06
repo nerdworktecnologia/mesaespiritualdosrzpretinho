@@ -1,10 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import {
   Calendar,
   Users,
@@ -24,59 +23,72 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getHistory, HistoryEntry } from "@/utils/history";
+import { getHistory } from "@/utils/history";
+import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 
-/* ── Client storage helpers ── */
-interface Client {
-  id: string;
-  name: string;
-  whatsapp: string;
-  birthDate: string;
-  notes: string;
-  createdAt: string;
-  lastVisit?: string;
-  totalReadings: number;
+type Client = Tables<"clients">;
+type Appointment = Tables<"appointments">;
+
+/* ── Hooks ── */
+function useClients() {
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetch = useCallback(async () => {
+    const { data } = await supabase.from("clients").select("*").order("created_at", { ascending: false });
+    if (data) setClients(data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { fetch(); }, [fetch]);
+
+  const add = async (c: { name: string; whatsapp: string; birth_date: string; notes: string }) => {
+    const { data } = await supabase.from("clients").insert(c).select().single();
+    if (data) setClients((prev) => [data, ...prev]);
+    return data;
+  };
+
+  const remove = async (id: string) => {
+    await supabase.from("clients").delete().eq("id", id);
+    setClients((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  return { clients, loading, add, remove, refetch: fetch };
 }
 
-const CLIENTS_KEY = "tarot-clients-v2";
+function useAppointments() {
+  const [items, setItems] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
 
-function getClients(): Client[] {
-  try {
-    return JSON.parse(localStorage.getItem(CLIENTS_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-function saveClients(clients: Client[]) {
-  localStorage.setItem(CLIENTS_KEY, JSON.stringify(clients));
-}
+  const fetch = useCallback(async () => {
+    const { data } = await supabase.from("appointments").select("*").order("date", { ascending: true });
+    if (data) setItems(data);
+    setLoading(false);
+  }, []);
 
-/* ── Agenda storage helpers ── */
-interface Appointment {
-  id: string;
-  clientName: string;
-  date: string;
-  time: string;
-  notes: string;
-}
+  useEffect(() => { fetch(); }, [fetch]);
 
-const AGENDA_KEY = "tarot-agenda";
+  const add = async (a: { client_name: string; date: string; time: string; notes: string }) => {
+    const { data } = await supabase.from("appointments").insert(a).select().single();
+    if (data) setItems((prev) => [...prev, data]);
+    return data;
+  };
 
-function getAgenda(): Appointment[] {
-  try {
-    return JSON.parse(localStorage.getItem(AGENDA_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-function saveAgenda(items: Appointment[]) {
-  localStorage.setItem(AGENDA_KEY, JSON.stringify(items));
+  const remove = async (id: string) => {
+    await supabase.from("appointments").delete().eq("id", id);
+    setItems((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  return { items, loading, add, remove };
 }
 
 /* ── Main Home Page ── */
 export default function Home() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<"dashboard" | "clients" | "agenda">("dashboard");
+  const clientsHook = useClients();
+  const agendaHook = useAppointments();
 
   const navigateToMesa = (clientName?: string, whatsapp?: string, birthDate?: string) => {
     const params = new URLSearchParams();
@@ -89,7 +101,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-border py-5 px-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div>
@@ -110,14 +121,13 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Nav */}
       <nav className="border-b border-border bg-card/50">
         <div className="max-w-5xl mx-auto flex">
-          {[
+          {([
             { key: "dashboard" as const, label: "Painel", icon: Star },
             { key: "clients" as const, label: "Clientes", icon: Users },
             { key: "agenda" as const, label: "Agenda", icon: Calendar },
-          ].map(({ key, label, icon: Icon }) => (
+          ]).map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setActiveSection(key)}
@@ -134,27 +144,23 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Content */}
       <main className="max-w-5xl mx-auto p-4 mt-4">
-        {activeSection === "dashboard" && <DashboardSection onNavigate={setActiveSection} onOpenMesa={navigateToMesa} />}
-        {activeSection === "clients" && <ClientsSection />}
-        {activeSection === "agenda" && <AgendaSection onAtender={navigateToMesa} />}
+        {activeSection === "dashboard" && <DashboardSection clients={clientsHook.clients} agenda={agendaHook.items} onNavigate={setActiveSection} onOpenMesa={navigateToMesa} />}
+        {activeSection === "clients" && <ClientsSection hook={clientsHook} />}
+        {activeSection === "agenda" && <AgendaSection hook={agendaHook} clients={clientsHook.clients} onAtender={navigateToMesa} />}
       </main>
     </div>
   );
 }
 
 /* ── Dashboard ── */
-function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients" | "agenda") => void; onOpenMesa: (clientName?: string, whatsapp?: string, birthDate?: string) => void }) {
+function DashboardSection({ clients, agenda, onNavigate, onOpenMesa }: { clients: Client[]; agenda: Appointment[]; onNavigate: (s: "clients" | "agenda") => void; onOpenMesa: (clientName?: string, whatsapp?: string, birthDate?: string) => void }) {
   const history = getHistory();
-  const clients = getClients();
-  const agenda = getAgenda();
   const today = new Date().toISOString().split("T")[0];
   const todayAppointments = agenda.filter((a) => a.date === today);
 
   return (
     <div className="space-y-6 animate-fade-up">
-      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatCard label="Clientes" value={clients.length} icon={Users} />
         <StatCard label="Consultas" value={history.length} icon={Star} />
@@ -162,7 +168,6 @@ function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients
         <StatCard label="Agendados" value={agenda.filter((a) => a.date >= today).length} icon={Calendar} />
       </div>
 
-      {/* Quick actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <button onClick={() => onOpenMesa()} className="card-mystical rounded-lg p-5 border border-border text-left hover:border-foreground/30 transition-colors group">
           <Sparkles className="h-5 w-5 text-foreground/60 mb-2 group-hover:text-foreground transition-colors" />
@@ -181,7 +186,6 @@ function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients
         </button>
       </div>
 
-      {/* Today's agenda */}
       {todayAppointments.length > 0 && (
         <Card className="card-mystical border-border">
           <CardHeader className="pb-3">
@@ -189,24 +193,23 @@ function DashboardSection({ onNavigate, onOpenMesa }: { onNavigate: (s: "clients
           </CardHeader>
           <CardContent className="space-y-2">
             {todayAppointments.map((a) => {
-              const client = clients.find((c) => c.name === a.clientName);
+              const client = clients.find((c) => c.name === a.client_name);
               return (
-              <div key={a.id} className="flex items-center justify-between p-3 rounded bg-secondary border border-border">
-                <div>
-                  <p className="font-cinzel text-foreground text-xs">{a.clientName}</p>
-                  <p className="text-muted-foreground text-[10px]">{a.time} {a.notes && `· ${a.notes}`}</p>
+                <div key={a.id} className="flex items-center justify-between p-3 rounded bg-secondary border border-border">
+                  <div>
+                    <p className="font-cinzel text-foreground text-xs">{a.client_name}</p>
+                    <p className="text-muted-foreground text-[10px]">{a.time} {a.notes && `· ${a.notes}`}</p>
+                  </div>
+                  <Button size="sm" variant="ghost" onClick={() => onOpenMesa(a.client_name, client?.whatsapp || "", client?.birth_date || "")} className="text-xs gap-1">
+                    <ArrowRight className="h-3 w-3" /> Atender
+                  </Button>
                 </div>
-                <Button size="sm" variant="ghost" onClick={() => onOpenMesa(a.clientName, client?.whatsapp, client?.birthDate)} className="text-xs gap-1">
-                  <ArrowRight className="h-3 w-3" /> Atender
-                </Button>
-              </div>
               );
             })}
           </CardContent>
         </Card>
       )}
 
-      {/* Recent readings */}
       {history.length > 0 && (
         <Card className="card-mystical border-border">
           <CardHeader className="pb-3">
@@ -240,39 +243,22 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: number; 
 }
 
 /* ── Clients Section ── */
-function ClientsSection() {
-  const [clients, setClients] = useState<Client[]>(getClients);
+function ClientsSection({ hook }: { hook: ReturnType<typeof useClients> }) {
+  const { clients, add, remove } = hook;
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", whatsapp: "", birthDate: "", notes: "" });
+  const [form, setForm] = useState({ name: "", whatsapp: "", birth_date: "", notes: "" });
 
   const filtered = useMemo(
     () => clients.filter((c) => c.name.toLowerCase().includes(search.toLowerCase())),
     [clients, search]
   );
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!form.name.trim()) return;
-    const newClient: Client = {
-      id: crypto.randomUUID(),
-      name: form.name.trim(),
-      whatsapp: form.whatsapp.trim(),
-      birthDate: form.birthDate,
-      notes: form.notes.trim(),
-      createdAt: new Date().toISOString(),
-      totalReadings: 0,
-    };
-    const updated = [newClient, ...clients];
-    setClients(updated);
-    saveClients(updated);
-    setForm({ name: "", whatsapp: "", birthDate: "", notes: "" });
+    await add({ name: form.name.trim(), whatsapp: form.whatsapp.trim(), birth_date: form.birth_date, notes: form.notes.trim() });
+    setForm({ name: "", whatsapp: "", birth_date: "", notes: "" });
     setDialogOpen(false);
-  };
-
-  const handleDelete = (id: string) => {
-    const updated = clients.filter((c) => c.id !== id);
-    setClients(updated);
-    saveClients(updated);
   };
 
   return (
@@ -280,12 +266,7 @@ function ClientsSection() {
       <div className="flex items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar cliente..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-secondary border-border"
-          />
+          <Input placeholder="Buscar cliente..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9 bg-secondary border-border" />
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -309,7 +290,7 @@ function ClientsSection() {
                 </div>
                 <div className="space-y-1">
                   <Label className="text-muted-foreground text-[10px] uppercase tracking-wider">Nascimento</Label>
-                  <Input type="date" value={form.birthDate} onChange={(e) => setForm({ ...form, birthDate: e.target.value })} className="bg-secondary border-border" />
+                  <Input type="date" value={form.birth_date} onChange={(e) => setForm({ ...form, birth_date: e.target.value })} className="bg-secondary border-border" />
                 </div>
               </div>
               <div className="space-y-1">
@@ -343,9 +324,9 @@ function ClientsSection() {
                       <Phone className="h-3 w-3" /> {client.whatsapp}
                     </span>
                   )}
-                  {client.birthDate && (
+                  {client.birth_date && (
                     <span className="text-muted-foreground text-[10px]">
-                      Nasc: {new Date(client.birthDate + "T12:00").toLocaleDateString("pt-BR")}
+                      Nasc: {new Date(client.birth_date + "T12:00").toLocaleDateString("pt-BR")}
                     </span>
                   )}
                 </div>
@@ -354,7 +335,7 @@ function ClientsSection() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => handleDelete(client.id)}
+                onClick={() => remove(client.id)}
                 className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 className="h-4 w-4" />
@@ -368,10 +349,10 @@ function ClientsSection() {
 }
 
 /* ── Agenda Section ── */
-function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsapp?: string, birthDate?: string) => void }) {
-  const [items, setItems] = useState<Appointment[]>(getAgenda);
+function AgendaSection({ hook, clients, onAtender }: { hook: ReturnType<typeof useAppointments>; clients: Client[]; onAtender: (clientName?: string, whatsapp?: string, birthDate?: string) => void }) {
+  const { items, add, remove } = hook;
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [form, setForm] = useState({ clientName: "", date: "", time: "", notes: "" });
+  const [form, setForm] = useState({ client_name: "", date: "", time: "", notes: "" });
   const today = new Date().toISOString().split("T")[0];
 
   const upcoming = useMemo(
@@ -383,29 +364,12 @@ function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsap
     [items, today]
   );
 
-  const handleAdd = () => {
-    if (!form.clientName.trim() || !form.date || !form.time) return;
-    const newItem: Appointment = {
-      id: crypto.randomUUID(),
-      clientName: form.clientName.trim(),
-      date: form.date,
-      time: form.time,
-      notes: form.notes.trim(),
-    };
-    const updated = [...items, newItem];
-    setItems(updated);
-    saveAgenda(updated);
-    setForm({ clientName: "", date: "", time: "", notes: "" });
+  const handleAdd = async () => {
+    if (!form.client_name.trim() || !form.date || !form.time) return;
+    await add({ client_name: form.client_name.trim(), date: form.date, time: form.time, notes: form.notes.trim() });
+    setForm({ client_name: "", date: "", time: "", notes: "" });
     setDialogOpen(false);
   };
-
-  const handleDelete = (id: string) => {
-    const updated = items.filter((a) => a.id !== id);
-    setItems(updated);
-    saveAgenda(updated);
-  };
-
-  const clients = getClients();
 
   return (
     <div className="space-y-4 animate-fade-up">
@@ -425,8 +389,8 @@ function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsap
               <div className="space-y-1">
                 <Label className="text-muted-foreground text-[10px] uppercase tracking-wider">Cliente *</Label>
                 <Input
-                  value={form.clientName}
-                  onChange={(e) => setForm({ ...form, clientName: e.target.value })}
+                  value={form.client_name}
+                  onChange={(e) => setForm({ ...form, client_name: e.target.value })}
                   className="bg-secondary border-border"
                   placeholder="Nome do cliente"
                   list="client-suggestions"
@@ -470,7 +434,7 @@ function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsap
             <div className="space-y-2">
               <p className="text-muted-foreground text-[10px] uppercase tracking-wider font-cinzel">Próximos</p>
               {upcoming.map((a) => (
-                <AppointmentCard key={a.id} appointment={a} onDelete={handleDelete} onAtender={onAtender} clients={clients} />
+                <AppointmentCard key={a.id} appointment={a} onDelete={remove} onAtender={onAtender} clients={clients} />
               ))}
             </div>
           )}
@@ -478,7 +442,7 @@ function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsap
             <div className="space-y-2 mt-6">
               <p className="text-muted-foreground text-[10px] uppercase tracking-wider font-cinzel">Passados</p>
               {past.slice(0, 10).map((a) => (
-                <AppointmentCard key={a.id} appointment={a} onDelete={handleDelete} isPast onAtender={onAtender} clients={clients} />
+                <AppointmentCard key={a.id} appointment={a} onDelete={remove} isPast onAtender={onAtender} clients={clients} />
               ))}
             </div>
           )}
@@ -489,11 +453,11 @@ function AgendaSection({ onAtender }: { onAtender: (clientName?: string, whatsap
 }
 
 function AppointmentCard({ appointment: a, onDelete, isPast, onAtender, clients }: { appointment: Appointment; onDelete: (id: string) => void; isPast?: boolean; onAtender: (clientName?: string, whatsapp?: string, birthDate?: string) => void; clients: Client[] }) {
-  const client = clients.find((c) => c.name === a.clientName);
+  const client = clients.find((c) => c.name === a.client_name);
   return (
     <div className={`card-mystical rounded-lg p-4 border border-border flex items-center justify-between group ${isPast ? "opacity-50" : ""}`}>
       <div>
-        <p className="font-cinzel text-foreground text-sm tracking-wider">{a.clientName}</p>
+        <p className="font-cinzel text-foreground text-sm tracking-wider">{a.client_name}</p>
         <p className="text-muted-foreground text-[10px] mt-1">
           {new Date(a.date + "T12:00").toLocaleDateString("pt-BR")} às {a.time}
           {a.notes && ` · ${a.notes}`}
@@ -504,7 +468,7 @@ function AppointmentCard({ appointment: a, onDelete, isPast, onAtender, clients 
           <Button
             size="sm"
             variant="ghost"
-            onClick={() => onAtender(a.clientName, client?.whatsapp, client?.birthDate)}
+            onClick={() => onAtender(a.client_name, client?.whatsapp || "", client?.birth_date || "")}
             className="text-xs gap-1 text-foreground/70 hover:text-foreground"
           >
             <ArrowRight className="h-3 w-3" /> Atender

@@ -11,16 +11,17 @@ interface TarotCardProps {
 }
 
 function SparkleEffect() {
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; duration: number; delay: number }[]>([]);
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; duration: number; delay: number; gold: boolean }[]>([]);
 
   useEffect(() => {
-    setParticles(Array.from({ length: 12 }, (_, i) => ({
+    setParticles(Array.from({ length: 16 }, (_, i) => ({
       id: i,
       x: Math.random() * 140 - 20,
       y: Math.random() * 200 - 20,
       size: Math.random() * 4 + 2,
       duration: Math.random() * 0.8 + 0.4,
       delay: Math.random() * 0.3,
+      gold: Math.random() > 0.3,
     })));
   }, []);
 
@@ -32,8 +33,12 @@ function SparkleEffect() {
           className="absolute rounded-full"
           style={{
             left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size,
-            background: `radial-gradient(circle, hsl(0 0% 100%), hsl(0 0% 80%), transparent)`,
-            boxShadow: `0 0 ${p.size * 2}px hsl(0 0% 100% / 0.6)`,
+            background: p.gold
+              ? `radial-gradient(circle, hsl(45 90% 70%), hsl(40 80% 50%), transparent)`
+              : `radial-gradient(circle, hsl(0 0% 100%), hsl(0 0% 80%), transparent)`,
+            boxShadow: p.gold
+              ? `0 0 ${p.size * 3}px hsl(45 80% 55% / 0.7)`
+              : `0 0 ${p.size * 2}px hsl(0 0% 100% / 0.6)`,
             animation: `sparkle-float ${p.duration}s ease-out ${p.delay}s forwards`,
             opacity: 0,
           }}
@@ -89,15 +94,12 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
       >
         {/* Front face */}
         <div
-          className="absolute inset-0 rounded-lg overflow-hidden flex flex-col items-center justify-center"
+          className={`absolute inset-0 rounded-lg overflow-hidden flex flex-col items-center justify-center ${showSparkle ? "card-border-ornate-glow" : "card-border-ornate"}`}
           style={{
             backfaceVisibility: "hidden",
             background: cardImage ? "transparent" : "linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 3%))",
-            border: "1px solid hsl(0 0% 25%)",
-            boxShadow: showSparkle
-              ? "0 0 30px hsl(0 0% 100% / 0.2), 0 0 60px hsl(0 0% 100% / 0.05)"
-              : "0 4px 20px hsl(0 0% 0% / 0.5)",
-            transition: "box-shadow 0.5s ease",
+            animation: showSparkle ? "golden-pulse 1.2s ease-in-out" : "none",
+            transition: "border-color 0.8s ease, box-shadow 0.8s ease",
           }}
         >
           {cardImage ? (

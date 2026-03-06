@@ -1,56 +1,101 @@
 // Theme detection: analyzes the question keywords to determine the topic
 // and returns prioritized card numbers for that theme.
 
-export type QuestionTheme = "amor" | "trabalho" | "dinheiro" | "espiritual" | "geral";
+export type QuestionTheme = "amor" | "trabalho" | "dinheiro" | "espiritual" | "familia" | "justica" | "saude" | "sorte" | "geral";
 
 interface ThemeConfig {
+  label: string;
   keywords: string[];
-  priorityCards: number[]; // card numbers that resonate with this theme
+  priorityCards: number[];
 }
 
 const themes: Record<QuestionTheme, ThemeConfig> = {
   amor: {
+    label: "❤️ Amor",
     keywords: [
       "amor", "relacionamento", "ele", "ela", "voltar", "volta", "ex",
       "casamento", "namorado", "namorada", "marido", "esposa", "paixão",
       "casal", "namoro", "sentimento", "coração", "pensa em mim",
       "procurar", "procura", "saudade", "traição", "trair", "traiu",
+      "outra pessoa", "amante", "me ama", "gosta de mim",
     ],
-    priorityCards: [32, 20, 26, 21, 19, 18, 23], // Rosa, Anel, Perfume, Espelho, Relógio, Gravata, Vela
+    priorityCards: [32, 20, 26, 21, 19, 18, 23],
   },
   trabalho: {
+    label: "💼 Trabalho",
     keywords: [
       "trabalho", "emprego", "empresa", "carreira", "profissão",
       "chefe", "colega", "promoção", "demissão", "arrumar trabalho",
-      "conseguir emprego", "negócio", "contrato",
+      "conseguir emprego", "negócio", "contrato", "chamada", "crescer",
     ],
-    priorityCards: [3, 25, 34, 17, 22, 11, 16], // Carteira, Dinheiro, Escada, Mesa, Chave, Moeda, Paletó
+    priorityCards: [3, 25, 34, 17, 22, 11, 16],
   },
   dinheiro: {
+    label: "💰 Dinheiro",
     keywords: [
       "dinheiro", "prosperidade", "ganho", "financeiro", "grana",
       "riqueza", "investimento", "lucro", "dívida", "conta",
-      "fortuna", "abundância",
+      "fortuna", "abundância", "receber", "entra dinheiro",
     ],
-    priorityCards: [11, 25, 3, 28, 34, 22], // Moeda, Dinheiro, Carteira, Dado, Escada, Chave
+    priorityCards: [11, 25, 3, 28, 34, 22],
   },
   espiritual: {
+    label: "🧿 Espiritual",
     keywords: [
       "inveja", "energia", "espiritual", "macumba", "olho gordo",
       "proteção", "limpeza", "descarrego", "mau olhado", "feitiço",
-      "trabalho espiritual", "encosto", "demanda",
+      "encosto", "demanda", "carregada", "carregado", "fizeram algo",
     ],
-    priorityCards: [1, 14, 23, 4, 5, 36, 6], // Cristais, Fumo, Vela, Navalha, Chapéu, Zé Pelintra, Terno
+    priorityCards: [1, 14, 23, 4, 5, 36, 6],
+  },
+  familia: {
+    label: "👨‍👩‍👧 Família",
+    keywords: [
+      "família", "filho", "filha", "mãe", "pai", "irmão", "irmã",
+      "parente", "casa", "lar", "convivência",
+    ],
+    priorityCards: [17, 23, 20, 27, 9, 6],
+  },
+  justica: {
+    label: "⚖️ Justiça",
+    keywords: [
+      "justiça", "processo", "advogado", "tribunal", "juiz",
+      "causa", "direito", "ganhar causa", "pensão", "guarda",
+    ],
+    priorityCards: [22, 17, 27, 10, 34, 2],
+  },
+  saude: {
+    label: "💚 Saúde",
+    keywords: [
+      "saúde", "doença", "ansiedade", "depressão", "emocional",
+      "cura", "tratamento", "médico", "hospital", "saúde emocional",
+    ],
+    priorityCards: [23, 35, 6, 9, 27, 1],
+  },
+  sorte: {
+    label: "🍀 Sorte",
+    keywords: [
+      "sorte", "oportunidade", "chance", "conseguir", "loteria",
+    ],
+    priorityCards: [8, 10, 22, 28, 35],
   },
   geral: {
+    label: "🔮 Geral",
     keywords: [],
     priorityCards: [],
   },
 };
 
-/**
- * Detects the theme of a question based on keyword matching.
- */
+export function getThemeLabel(theme: QuestionTheme): string {
+  return themes[theme].label;
+}
+
+export function getAllThemes(): { key: QuestionTheme; label: string }[] {
+  return Object.entries(themes)
+    .filter(([k]) => k !== "geral")
+    .map(([key, config]) => ({ key: key as QuestionTheme, label: config.label }));
+}
+
 export function detectTheme(question: string): QuestionTheme {
   const q = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
@@ -73,10 +118,6 @@ export function detectTheme(question: string): QuestionTheme {
   return bestTheme;
 }
 
-/**
- * Returns card numbers for a reading, prioritizing theme-relevant cards.
- * Uses a weighted random: priority cards have higher chance but aren't guaranteed.
- */
 export function getThemedCards(count: number, theme: QuestionTheme): number[] {
   const config = themes[theme];
   const priorityCards = config.priorityCards;
@@ -88,7 +129,6 @@ export function getThemedCards(count: number, theme: QuestionTheme): number[] {
 
   const selected: number[] = [];
 
-  // First card: 70% chance from priority pool
   for (let i = 0; i < count; i++) {
     const usePriority = Math.random() < (i === 0 ? 0.7 : 0.4);
     const pool = usePriority

@@ -11,6 +11,8 @@ import SistemaRapidoTab from "@/components/tarot/SistemaRapidoTab";
 import TurboLiveTab from "@/components/tarot/TurboLiveTab";
 import BancoRespostasTab from "@/components/tarot/BancoRespostasTab";
 import PainelEspiritualTab from "@/components/tarot/PainelEspiritualTab";
+import HistoricoConsultasTab from "@/components/tarot/HistoricoConsultasTab";
+import LiveTikTokTab from "@/components/tarot/LiveTikTokTab";
 import { isSoundEnabled, toggleSound } from "@/utils/sounds";
 
 export default function Mesa() {
@@ -42,9 +44,13 @@ export default function Mesa() {
 
       <main className="max-w-3xl mx-auto p-3 mt-2">
         <Tabs defaultValue="painel" className="w-full">
-          <TabsList className="grid w-full grid-cols-7 bg-secondary border border-border h-auto">
+          {/* Row 1: main tabs */}
+          <TabsList className="grid w-full grid-cols-5 bg-secondary border border-border h-auto mb-1">
             <TabsTrigger value="painel" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🌟 Painel
+            </TabsTrigger>
+            <TabsTrigger value="live-tiktok" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+              📺 Live
             </TabsTrigger>
             <TabsTrigger value="turbo" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               ⚡ Turbo
@@ -52,26 +58,34 @@ export default function Mesa() {
             <TabsTrigger value="rapido" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🔮 Rápido
             </TabsTrigger>
-            <TabsTrigger value="banco" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
-              📖 Banco
-            </TabsTrigger>
             <TabsTrigger value="mesa" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               📋 Mesa
             </TabsTrigger>
+          </TabsList>
+          {/* Row 2: secondary tabs */}
+          <TabsList className="grid w-full grid-cols-4 bg-secondary border border-border h-auto">
             <TabsTrigger value="cabala" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🔢 Cabala
             </TabsTrigger>
+            <TabsTrigger value="banco" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+              📖 Banco
+            </TabsTrigger>
+            <TabsTrigger value="consultas" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+              📜 Consultas
+            </TabsTrigger>
             <TabsTrigger value="historico" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
-              📜 Hist.
+              🕐 Hist.
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="painel"><PainelEspiritualTab /></TabsContent>
+          <TabsContent value="live-tiktok"><LiveTikTokTab /></TabsContent>
           <TabsContent value="turbo"><TurboLiveTab /></TabsContent>
           <TabsContent value="rapido"><SistemaRapidoTab /></TabsContent>
-          <TabsContent value="banco"><BancoRespostasTab /></TabsContent>
           <TabsContent value="mesa"><MesaTab /></TabsContent>
           <TabsContent value="cabala"><CabalaTab /></TabsContent>
+          <TabsContent value="banco"><BancoRespostasTab /></TabsContent>
+          <TabsContent value="consultas"><HistoricoConsultasTab /></TabsContent>
           <TabsContent value="historico"><HistoricoTab /></TabsContent>
         </Tabs>
       </main>

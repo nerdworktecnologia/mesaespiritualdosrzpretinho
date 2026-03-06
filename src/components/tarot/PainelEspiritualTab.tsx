@@ -45,17 +45,18 @@ function jogarBuzios(): BuziosState {
 
 export default function PainelEspiritualTab() {
   const { toast } = useToast();
+  const [clientName, setClientName] = useState("");
   const [pergunta, setPergunta] = useState("");
   const [tema, setTema] = useState("geral");
   const [birthDate, setBirthDate] = useState("");
   const [cardInput, setCardInput] = useState("");
 
-  // Results
   const [cabalaResult, setCabalaResult] = useState<CabalaResult | null>(null);
   const [buziosResult, setBuziosResult] = useState<BuziosState | null>(null);
   const [tarotCards, setTarotCards] = useState<CardMeaning[]>([]);
   const [interpretation, setInterpretation] = useState<Interpretation | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const handleCabala = () => {
     if (!birthDate) return;
@@ -72,8 +73,7 @@ export default function PainelEspiritualTab() {
       .map((n) => parseInt(n.trim()))
       .filter((n) => n >= 1 && n <= 36);
     if (numbers.length === 0) return;
-    const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
-    setTarotCards(cards);
+    setTarotCards(numbers.map((n) => cardMeanings[n - 1]).filter(Boolean));
   };
 
   const handleInterpretar = async () => {
@@ -86,23 +86,15 @@ export default function PainelEspiritualTab() {
     setInterpretation(null);
 
     try {
-      const payload: any = {
-        pergunta: pergunta || "Consulta espiritual geral",
-        tema,
-      };
+      const payload: any = { pergunta: pergunta || "Consulta espiritual geral", tema };
 
       if (cabalaResult) {
         payload.cabala = {
-          superior: cabalaResult.superior.name,
-          superiorOrixa: cabalaResult.superior.orixa,
-          inferior: cabalaResult.inferior.name,
-          inferiorOrixa: cabalaResult.inferior.orixa,
-          lateral: cabalaResult.lateral.name,
-          lateralOrixa: cabalaResult.lateral.orixa,
-          central: cabalaResult.central.name,
-          centralOrixa: cabalaResult.central.orixa,
-          final: cabalaResult.final.name,
-          finalOrixa: cabalaResult.final.orixa,
+          superior: cabalaResult.superior.name, superiorOrixa: cabalaResult.superior.orixa,
+          inferior: cabalaResult.inferior.name, inferiorOrixa: cabalaResult.inferior.orixa,
+          lateral: cabalaResult.lateral.name, lateralOrixa: cabalaResult.lateral.orixa,
+          central: cabalaResult.central.name, centralOrixa: cabalaResult.central.orixa,
+          final: cabalaResult.final.name, finalOrixa: cabalaResult.final.orixa,
         };
       }
 
@@ -118,18 +110,12 @@ export default function PainelEspiritualTab() {
       if (tarotCards.length > 0) {
         payload.tarot = {
           cartas: tarotCards.map((c) => ({
-            number: c.number,
-            name: c.name,
-            meaning: c.meaning,
-            energy: c.energy,
+            number: c.number, name: c.name, meaning: c.meaning, energy: c.energy,
           })),
         };
       }
 
-      const { data, error } = await supabase.functions.invoke("spiritual-panel", {
-        body: payload,
-      });
-
+      const { data, error } = await supabase.functions.invoke("spiritual-panel", { body: payload });
       if (error) throw error;
       setInterpretation(data as Interpretation);
     } catch (e: any) {
@@ -140,7 +126,75 @@ export default function PainelEspiritualTab() {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      // Try to find existing client
+      let clientId: string | null = null;
+      if (clientName.trim()) {
+        const { data: existing } = await supabase
+          .from("clients")
+          .select("id")
+          .ilike("name", clientName.trim())
+          .limit(1)
+          .single();
+        if (existing) clientId = existing.id;
+      }
+
+      const record: any = {
+        client_name: clientName.trim() || "Consulta Live",
+        client_id: clientId,
+        birth_date: birthDate || null,
+        question: pergunta || null,
+        tema,
+        reading_type: "painel",
+      };
+
+      if (cabalaResult) {
+        record.cabala_superior = cabalaResult.superior.name;
+        record.cabala_inferior = cabalaResult.inferior.name;
+        record.cabala_lateral = cabalaResult.lateral.name;
+        record.cabala_central = cabalaResult.central.name;
+        record.cabala_final = cabalaResult.final.name;
+      }
+
+      if (buziosResult) {
+        record.buzios_abertos = buziosResult.abertos;
+        record.buzios_odu = buziosResult.odu.name;
+      }
+
+      if (tarotCards.length > 0) {
+        record.tarot_cards = tarotCards.map((c) => c.number);
+        record.tarot_card_names = tarotCards.map((c) => c.name);
+      }
+
+      if (interpretation) {
+        record.interpretation_destino = interpretation.destino;
+        record.interpretation_energia = interpretation.energia;
+        record.interpretation_situacao = interpretation.situacao;
+        record.interpretation_orientacao = interpretation.orientacao;
+        record.interpretation_resumo = interpretation.resumo;
+      }
+
+      const { error } = await supabase.from("consultations").insert(record as any);
+      if (error) throw error;
+
+      // Update client last visit
+      if (clientId) {
+        await supabase.from("clients").update({
+          last_visit: new Date().toISOString().split("T")[0],
+        }).eq("id", clientId);
+      }
+
+      setSaved(true);
+      toast({ title: "✅ Consulta salva com sucesso!" });
+    } catch (e: any) {
+      console.error(e);
+      toast({ title: "Erro ao salvar", description: e.message, variant: "destructive" });
+    }
+  };
+
   const handleNovaConsulta = () => {
+    setClientName("");
     setPergunta("");
     setBirthDate("");
     setCardInput("");
@@ -148,45 +202,42 @@ export default function PainelEspiritualTab() {
     setBuziosResult(null);
     setTarotCards([]);
     setInterpretation(null);
+    setSaved(false);
   };
 
   return (
     <div className="space-y-4 mt-4 animate-fade-up">
-      {/* Pergunta + Tema */}
+      {/* Header: Cliente + Pergunta + Tema */}
       <Card className="card-mystical">
         <CardHeader className="pb-3">
           <CardTitle className="font-cinzel gold-text text-lg">🌟 Painel Espiritual</CardTitle>
           <p className="text-muted-foreground text-xs">Cabala + Búzios + Tarot — leitura cruzada com IA</p>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="space-y-2">
-            <Label className="text-foreground/60 text-xs uppercase tracking-wider">Pergunta</Label>
-            <Input
-              placeholder="Qual a sua pergunta?"
-              value={pergunta}
-              onChange={(e) => setPergunta(e.target.value)}
-              className="bg-secondary border-border"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label className="text-foreground/60 text-xs uppercase tracking-wider">Nome do Cliente</Label>
+              <Input placeholder="Nome do consulente" value={clientName} onChange={(e) => setClientName(e.target.value)} className="bg-secondary border-border" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-foreground/60 text-xs uppercase tracking-wider">Tema</Label>
+              <Select value={tema} onValueChange={setTema}>
+                <SelectTrigger className="bg-secondary border-border"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {temas.map((t) => (<SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="space-y-2">
-            <Label className="text-foreground/60 text-xs uppercase tracking-wider">Tema</Label>
-            <Select value={tema} onValueChange={setTema}>
-              <SelectTrigger className="bg-secondary border-border">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {temas.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label className="text-foreground/60 text-xs uppercase tracking-wider">Pergunta</Label>
+            <Input placeholder="Qual a pergunta?" value={pergunta} onChange={(e) => setPergunta(e.target.value)} className="bg-secondary border-border" />
           </div>
         </CardContent>
       </Card>
 
       {/* Two columns: Cabala + Búzios */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Cabala */}
         <Card className="card-mystical">
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-base">🔢 Cabala de Ifá</CardTitle>
@@ -196,9 +247,7 @@ export default function PainelEspiritualTab() {
               <Label className="text-foreground/60 text-xs">Data de nascimento</Label>
               <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="bg-secondary border-border" />
             </div>
-            <Button onClick={handleCabala} className="w-full font-cinzel text-sm py-4">
-              🔮 Calcular Cabala
-            </Button>
+            <Button onClick={handleCabala} className="w-full font-cinzel text-sm py-4">🔮 Calcular Cabala</Button>
             {cabalaResult && (
               <div className="space-y-2 animate-fade-up">
                 <div className="flex flex-col items-center gap-1">
@@ -215,16 +264,13 @@ export default function PainelEspiritualTab() {
           </CardContent>
         </Card>
 
-        {/* Búzios */}
         <Card className="card-mystical">
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-base">🐚 Jogo de Búzios</CardTitle>
             <p className="text-muted-foreground text-xs">12 búzios — ● aberto / ○ fechado</p>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button onClick={handleBuzios} className="w-full font-cinzel text-sm py-4">
-              🐚 Jogar Búzios
-            </Button>
+            <Button onClick={handleBuzios} className="w-full font-cinzel text-sm py-4">🐚 Jogar Búzios</Button>
             {buziosResult && (
               <div className="space-y-3 animate-fade-up">
                 <div className="flex flex-wrap justify-center gap-1.5 py-2">
@@ -253,16 +299,9 @@ export default function PainelEspiritualTab() {
         <CardContent className="space-y-3">
           <div className="space-y-2">
             <Label className="text-foreground/60 text-xs">Cartas (1-36 separadas por espaço)</Label>
-            <Input
-              placeholder="Ex: 3 19 34"
-              value={cardInput}
-              onChange={(e) => setCardInput(e.target.value)}
-              className="bg-secondary border-border text-lg font-cinzel tracking-widest"
-            />
+            <Input placeholder="Ex: 3 19 34" value={cardInput} onChange={(e) => setCardInput(e.target.value)} className="bg-secondary border-border text-lg font-cinzel tracking-widest" />
           </div>
-          <Button onClick={handleTarot} className="w-full font-cinzel text-sm py-4">
-            🃏 Tirar Cartas
-          </Button>
+          <Button onClick={handleTarot} className="w-full font-cinzel text-sm py-4">🃏 Tirar Cartas</Button>
           {tarotCards.length > 0 && (
             <div className="flex flex-wrap gap-3 justify-center py-3 animate-fade-up">
               {tarotCards.map((card) => (
@@ -275,13 +314,14 @@ export default function PainelEspiritualTab() {
 
       {/* Action buttons */}
       <div className="flex gap-2">
-        <Button
-          onClick={handleInterpretar}
-          disabled={loading}
-          className="flex-1 font-cinzel text-sm py-5 bg-primary text-primary-foreground"
-        >
+        <Button onClick={handleInterpretar} disabled={loading} className="flex-1 font-cinzel text-sm py-5 bg-primary text-primary-foreground">
           {loading ? "⏳ Consultando..." : "✨ Interpretar Consulta"}
         </Button>
+        {interpretation && !saved && (
+          <Button onClick={handleSave} variant="secondary" className="font-cinzel text-sm py-5 border border-primary/30">
+            💾 Salvar
+          </Button>
+        )}
         <Button onClick={handleNovaConsulta} variant="secondary" className="font-cinzel text-sm py-5 border border-border">
           🔄 Nova
         </Button>
@@ -324,12 +364,8 @@ function OduBadge({ label, name, size = "md" }: { label: string; name: string; s
 function InterpretBlock({ emoji, title, text, highlight }: { emoji: string; title: string; text: string; highlight?: boolean }) {
   return (
     <div className="space-y-1">
-      <h4 className={`font-cinzel text-sm ${highlight ? "text-primary" : "text-foreground/70"}`}>
-        {emoji} {title}
-      </h4>
-      <p className={`font-crimson text-base leading-relaxed ${highlight ? "text-foreground" : "text-foreground/80"}`}>
-        {text}
-      </p>
+      <h4 className={`font-cinzel text-sm ${highlight ? "text-primary" : "text-foreground/70"}`}>{emoji} {title}</h4>
+      <p className={`font-crimson text-base leading-relaxed ${highlight ? "text-foreground" : "text-foreground/80"}`}>{text}</p>
     </div>
   );
 }

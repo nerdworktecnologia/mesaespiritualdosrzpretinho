@@ -1,44 +1,5 @@
 import { CardMeaning, getYesNoResult } from "@/data/cardMeanings";
 
-const openings = [
-  "Filho, a espiritualidade mostra que",
-  "Presta atenção no que vou te dizer.",
-  "Escuta bem o que os guias estão mostrando.",
-  "Olha só o que teu caminho está revelando.",
-  "A espiritualidade não mente. Olha só.",
-  "Senta e escuta. O que tenho pra falar é sério.",
-];
-
-const closings = [
-  "O que é seu chega. Saravá.",
-  "Segue firme e confia. Saravá.",
-  "Quem tem fé não treme. Saravá.",
-  "Fé no caminho. Saravá.",
-  "Confia no processo. Saravá.",
-  "Quem anda certo não tem o que temer. Saravá.",
-];
-
-const advices: Record<string, string[]> = {
-  positive: [
-    "Aproveite esse momento. Quando o caminho abre, é hora de caminhar.",
-    "A energia está a seu favor. Use com sabedoria.",
-    "Continue fazendo sua parte. Os guias estão sorrindo pra você.",
-    "Essa é a hora de plantar. A colheita vem.",
-  ],
-  warning: [
-    "Cuidado com quem anda perto. Nem todo sorriso é verdadeiro.",
-    "Não conte seus planos para qualquer um.",
-    "Faça uma limpeza espiritual. Energia pesada atrasa o que é seu.",
-    "Vigile suas palavras e companhias.",
-  ],
-  negative: [
-    "Não force nada. Quem corre demais tropeça.",
-    "Esse caminho precisa de tempo e paciência.",
-    "A orientação é recuar, refletir e esperar.",
-    "Às vezes o não também é proteção. Aceite e confie.",
-  ],
-};
-
 const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
 
 function getCardTone(card: CardMeaning): "positive" | "warning" | "negative" {
@@ -58,122 +19,145 @@ function getOverallTone(cards: CardMeaning[]): "positive" | "warning" | "negativ
   return "warning";
 }
 
+// ── Alerts by tone ──
+const alerts: Record<string, string[]> = {
+  positive: [
+    "O caminho está aberto e a energia é favorável.",
+    "A espiritualidade está sorrindo para essa situação.",
+    "Existe força espiritual atuando a seu favor.",
+  ],
+  warning: [
+    "Mas existe energia de interferência ou dúvida ao redor.",
+    "Nem tudo está claro ainda. Cuidado com quem está perto.",
+    "A espiritualidade pede atenção. Observe antes de agir.",
+  ],
+  negative: [
+    "Existe energia pesada interferindo nesse caminho.",
+    "Cuidado. Nem tudo que parece ser, é de verdade.",
+    "A espiritualidade mostra obstáculo que precisa ser trabalhado.",
+  ],
+};
+
+// ── Spiritual counsel ──
+const counsels: Record<string, string[]> = {
+  positive: [
+    "O conselho é seguir firme e aproveitar esse momento.",
+    "Continue no caminho. O que é seu está chegando.",
+    "Mantenha a fé. A espiritualidade está do seu lado.",
+  ],
+  warning: [
+    "O conselho é não comentar seus planos com qualquer pessoa.",
+    "Faça uma limpeza espiritual e vigile suas companhias.",
+    "Tenha paciência. O caminho existe, mas pede equilíbrio.",
+  ],
+  negative: [
+    "O conselho é recuar, refletir e esperar o momento certo.",
+    "Não force nada. Às vezes o não também é proteção.",
+    "Cuide da sua energia. Nem todo caminho deve ser seguido agora.",
+  ],
+};
+
+const closings = [
+  "O que for seu chega no tempo certo. Saravá.",
+  "Quem tem fé não treme. Saravá.",
+  "Segue firme e confia. Saravá.",
+  "Fé no caminho. Saravá.",
+  "Quem anda certo não tem o que temer. Saravá.",
+];
+
+// ── Full response: 3-part structure ──
 export function generateFullResponse(cards: CardMeaning[], question: string): string {
   const tone = getOverallTone(cards);
 
-  const cardAnalysis = cards
+  // Part 1: Card-by-card energy reading
+  const reading = cards
     .map((c, i) => {
-      const cardTone = getCardTone(c);
       const position = cards.length === 3
         ? ["(Passado)", "(Presente)", "(Futuro)"][i]
         : cards.length === 5
           ? ["(Situação)", "(Obstáculo)", "(Conselho)", "(Influência)", "(Resultado)"][i]
           : "";
-
-      let elaboration = "";
-      if (cardTone === "positive") {
-        elaboration = pick([
-          "Essa energia está a seu favor.",
-          "Aqui a espiritualidade mostra força.",
-          "Esse ponto está aberto e positivo.",
-        ]);
-      } else if (cardTone === "negative") {
-        elaboration = pick([
-          "Aqui tem um ponto de atenção. Não ignore.",
-          "Essa energia precisa ser trabalhada.",
-          "Cuidado nesse aspecto. Os guias alertam.",
-        ]);
-      } else {
-        elaboration = pick([
-          "Aqui a coisa pede equilíbrio.",
-          "Nem tudo está claro ainda. Observe.",
-          "Depende das suas atitudes a partir de agora.",
-        ]);
-      }
-
-      return `Carta ${c.number} — ${c.name} ${position}\n${c.meaning}\n→ ${elaboration}`;
+      return `Carta ${c.number} — ${c.name} ${position}\n${c.meaning}`;
     })
     .join("\n\n");
 
-  const synthesis = cards.length >= 3 ? `\n\n${generateSynthesis(cards, tone)}` : "";
+  // Part 2: Alert/orientation
+  const alert = pick(alerts[tone]);
+
+  // Part 3: Spiritual counsel
+  const counsel = pick(counsels[tone]);
+
+  // Synthesis for 3+ cards
+  const synthesis = cards.length >= 3 ? buildSynthesis(cards, tone) : "";
 
   return [
-    `Sr. Zé Pretinho fala:`,
+    "Sr. Zé Pretinho fala:",
     "",
-    pick(openings),
+    reading,
     "",
-    cardAnalysis,
+    alert,
+    "",
     synthesis,
-    "",
-    pick(advices[tone]),
+    counsel,
     "",
     pick(closings),
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 }
 
-function generateSynthesis(cards: CardMeaning[], tone: "positive" | "warning" | "negative"): string {
-  const hasProtection = cards.some((c) => [4, 17, 18, 32, 33].includes(c.number));
-  const hasLove = cards.some((c) => [6, 14, 25, 29].includes(c.number));
-  const hasObstacle = cards.some((c) => [3, 5, 8, 12, 15, 16, 22, 34].includes(c.number));
-  const hasProsperity = cards.some((c) => [7, 10, 19, 23, 24, 35, 36].includes(c.number));
+function buildSynthesis(cards: CardMeaning[], tone: "positive" | "warning" | "negative"): string {
+  const parts: string[] = [];
+  if (cards.some((c) => [4, 17, 18, 32, 33].includes(c.number)))
+    parts.push("A proteção espiritual está presente.");
+  if (cards.some((c) => [6, 14, 25, 29].includes(c.number)))
+    parts.push("Existe energia de sentimento verdadeiro.");
+  if (cards.some((c) => [3, 5, 8, 12, 15, 16, 22, 34].includes(c.number)))
+    parts.push("Há interferências que precisam ser trabalhadas.");
+  if (cards.some((c) => [7, 10, 19, 23, 24, 35, 36].includes(c.number)))
+    parts.push("O caminho aponta para conquistas.");
 
-  const parts: string[] = ["Resumo:"];
-
-  if (hasProtection) parts.push("A proteção espiritual está presente.");
-  if (hasLove) parts.push("Existe energia de sentimento verdadeiro.");
-  if (hasObstacle) parts.push("Há interferências que precisam ser trabalhadas.");
-  if (hasProsperity) parts.push("O caminho aponta para conquistas.");
-
-  if (tone === "positive") {
-    parts.push("No geral, cenário favorável. Continue firme.");
-  } else if (tone === "negative") {
-    parts.push("As cartas pedem cautela. Não aja por impulso.");
-  } else {
-    parts.push("O cenário pede equilíbrio. Há caminho, mas com atenção.");
-  }
-
-  return parts.join("\n");
+  if (parts.length > 0) return parts.join("\n") + "\n";
+  return "";
 }
 
+// ── Short response for live ──
 export function generateShortResponse(cards: CardMeaning[]): string {
   const tone = getOverallTone(cards);
   const summary = cards.map((c) => c.shortMeaning).join(" ");
   return [
-    `Sr. Zé Pretinho:`,
+    "Sr. Zé Pretinho:",
+    "",
     summary,
     "",
-    pick(advices[tone]),
+    pick(counsels[tone]),
     pick(closings),
   ].join("\n");
 }
 
+// ── Yes/No response ──
 export function generateYesNoResponse(card: CardMeaning): string {
   const { result } = getYesNoResult(card.number);
   const tone = getCardTone(card);
 
   const extras: Record<string, string[]> = {
     SIM: [
-      "O caminho está aberto. Tenha paciência que o resultado vem.",
+      "O caminho está aberto. Tenha paciência que chega.",
       "Sim, mas com paciência e fé. Não desista.",
       "A resposta é positiva. Confie.",
-      "Sim. Mas silêncio e fé. Não conte antes da hora.",
     ],
     TALVEZ: [
       "Depende das suas atitudes a partir de agora.",
       "O caminho existe, mas precisa de trabalho espiritual.",
-      "Nem sim nem não. Depende da sua fé e das suas ações.",
       "A resposta está nas suas mãos.",
     ],
     NÃO: [
       "Não é o momento. Espere o tempo certo.",
-      "Esse caminho está fechado por enquanto. Cautela.",
-      "Fechado por hora. Mas todo fechamento é temporário com fé.",
-      "Não force. Às vezes o não é a maior proteção.",
+      "Esse caminho está fechado por enquanto.",
+      "Não force. Às vezes o não é proteção.",
     ],
   };
 
   return [
-    `Sr. Zé Pretinho fala:`,
+    "Sr. Zé Pretinho fala:",
     "",
     `Resposta: ${result}`,
     "",
@@ -182,7 +166,7 @@ export function generateYesNoResponse(card: CardMeaning): string {
     "",
     pick(extras[result] || extras["TALVEZ"]),
     "",
-    pick(advices[tone]),
+    pick(counsels[tone]),
     "",
     pick(closings),
   ].join("\n");

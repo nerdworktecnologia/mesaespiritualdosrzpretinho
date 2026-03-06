@@ -64,6 +64,7 @@ export default function Mesa() {
 
           <TabsContent value="turbo"><TurboLiveTab /></TabsContent>
           <TabsContent value="rapido"><SistemaRapidoTab /></TabsContent>
+          <TabsContent value="banco"><BancoRespostasTab /></TabsContent>
           <TabsContent value="mesa"><MesaTab /></TabsContent>
           <TabsContent value="cabala"><CabalaTab /></TabsContent>
           <TabsContent value="historico"><HistoricoTab /></TabsContent>

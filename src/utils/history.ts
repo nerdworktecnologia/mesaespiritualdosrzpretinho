@@ -2,6 +2,7 @@ export interface HistoryEntry {
   id: string;
   timestamp: string;
   clientName: string;
+  clientWhatsapp?: string;
   question: string;
   readingType: string;
   cardNumbers: number[];
@@ -27,7 +28,6 @@ export function addToHistory(entry: Omit<HistoryEntry, "id" | "timestamp">): voi
     id: crypto.randomUUID(),
     timestamp: new Date().toISOString(),
   });
-  // Keep last 100 entries
   localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 100)));
 }
 

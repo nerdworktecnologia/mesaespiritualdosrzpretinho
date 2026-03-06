@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getHistory, clearHistory, deleteEntry, HistoryEntry } from "@/utils/history";
-import { Trash2, Clock, Search } from "lucide-react";
+import { Trash2, Clock, Search, Phone } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
 
 export default function HistoricoTab() {
@@ -94,6 +95,11 @@ export default function HistoricoTab() {
                       </span>
                     </div>
                     <p className="text-foreground/70 text-sm mt-1 truncate">{entry.question}</p>
+                    {entry.clientWhatsapp && (
+                      <p className="text-muted-foreground text-xs mt-0.5 flex items-center gap-1">
+                        <Phone className="h-3 w-3" /> {entry.clientWhatsapp}
+                      </p>
+                    )}
                     <p className="text-muted-foreground text-xs mt-1 flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {formatDate(entry.timestamp)}

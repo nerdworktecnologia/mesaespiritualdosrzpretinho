@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Mic, MicOff, Phone } from "lucide-react";
-import { calculateOdu } from "@/data/odus";
+import { calculateCabala, CabalaResult } from "@/data/odus";
 
 interface ClientData {
   name: string;
@@ -19,7 +19,7 @@ export default function AtendimentoTab() {
   const [data, setData] = useState<ClientData>({ name: "", whatsapp: "", birthDate: "", birthTime: "", question: "" });
   const [isRecording, setIsRecording] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [oduResult, setOduResult] = useState<ReturnType<typeof calculateOdu> | null>(null);
+  const [cabalaResult, setCabalaResult] = useState<CabalaResult | null>(null);
 
   const handleVoice = async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -47,19 +47,16 @@ export default function AtendimentoTab() {
   const handleSave = () => {
     if (!data.name || !data.birthDate || !data.question) return;
 
-    // Auto-calculate Odu/Cabala
-    const odu = calculateOdu(data.name, data.birthDate);
-    setOduResult(odu);
+    const cabala = calculateCabala(data.birthDate);
+    setCabalaResult(cabala);
     setSaved(true);
-
-    // Save client to localStorage for quick access later
     saveClient(data.name, data.whatsapp);
   };
 
   const handleReset = () => {
     setData({ name: "", whatsapp: "", birthDate: "", birthTime: "", question: "" });
     setSaved(false);
-    setOduResult(null);
+    setCabalaResult(null);
   };
 
   return (
@@ -137,7 +134,6 @@ export default function AtendimentoTab() {
               )}
             </div>
 
-            {/* Quick client suggestions */}
             <ClientSuggestions onSelect={(name, whatsapp) => setData((prev) => ({ ...prev, name, whatsapp }))} />
 
             <Button onClick={handleSave} className="w-full font-cinzel text-lg py-6">
@@ -165,32 +161,30 @@ export default function AtendimentoTab() {
               </div>
             </div>
 
-            {/* Auto Cabala result */}
-            {oduResult && (
+            {/* Cabala completa */}
+            {cabalaResult && (
               <div className="card-mystical rounded-lg p-5 border border-primary/20 animate-fade-up">
-                <h3 className="font-cinzel gold-text text-lg mb-3">🔢 Cabala de Nascimento (calculada automaticamente)</h3>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="text-center p-3 rounded-lg bg-secondary/50">
-                    <p className="text-muted-foreground text-xs">Odu Principal</p>
-                    <p className="font-cinzel gold-text text-xl font-bold">{oduResult.principal.name}</p>
-                    <p className="text-foreground/60 text-xs mt-1">{oduResult.principal.meaning}</p>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-secondary/50">
-                    <p className="text-muted-foreground text-xs">Odu de Destino</p>
-                    <p className="font-cinzel gold-text text-xl font-bold">{oduResult.destino.name}</p>
-                    <p className="text-foreground/60 text-xs mt-1">{oduResult.destino.meaning}</p>
-                  </div>
+                <h3 className="font-cinzel gold-text text-lg mb-3">🔢 Cabala dos Odus (automática)</h3>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                  <MiniOdu label="👤 Centro" odu={cabalaResult.centro} />
+                  <MiniOdu label="🧠 Testa" odu={cabalaResult.testa} />
+                  <MiniOdu label="👁️ Nuca" odu={cabalaResult.nuca} />
+                  <MiniOdu label="🛤️ Frente" odu={cabalaResult.frente} />
+                  <MiniOdu label="🛡️ Costas" odu={cabalaResult.costas} />
+                  <MiniOdu label="🔮 Nascimento" odu={cabalaResult.oduNascimento} />
                 </div>
+
                 <div className="border-t border-border/30 pt-3">
-                  <p className="text-foreground/70 text-sm whitespace-pre-line leading-relaxed">
-                    ✨ {oduResult.message}
-                  </p>
+                  <pre className="whitespace-pre-wrap font-crimson text-foreground/70 text-sm leading-relaxed">
+                    {cabalaResult.summary}
+                  </pre>
                 </div>
               </div>
             )}
 
             <p className="text-center text-muted-foreground text-sm font-crimson italic">
-              ↑ Use a Cabala acima para enriquecer sua leitura das cartas. Agora vá para a aba 🔮 Tiragem ou 🔥 Live.
+              ↑ Use a Cabala acima para enriquecer a leitura. Agora vá para 🔮 Tiragem ou 🔥 Live.
             </p>
           </div>
         )}
@@ -199,27 +193,28 @@ export default function AtendimentoTab() {
   );
 }
 
-// Save/load known clients for quick re-attendance
+function MiniOdu({ label, odu }: { label: string; odu: { name: string; orixa: string } }) {
+  return (
+    <div className="text-center p-2 rounded-lg bg-secondary/50">
+      <p className="text-muted-foreground text-[10px]">{label}</p>
+      <p className="font-cinzel gold-text text-sm font-bold">{odu.name}</p>
+      <p className="text-accent text-[10px]">{odu.orixa}</p>
+    </div>
+  );
+}
+
 function saveClient(name: string, whatsapp: string) {
   if (!name) return;
   try {
-    const key = "tarot-clients";
-    const clients: Record<string, string> = JSON.parse(localStorage.getItem(key) || "{}");
+    const clients: Record<string, string> = JSON.parse(localStorage.getItem("tarot-clients") || "{}");
     clients[name] = whatsapp;
-    localStorage.setItem(key, JSON.stringify(clients));
+    localStorage.setItem("tarot-clients", JSON.stringify(clients));
   } catch { /* ignore */ }
 }
 
-function getClients(): Record<string, string> {
-  try {
-    return JSON.parse(localStorage.getItem("tarot-clients") || "{}");
-  } catch {
-    return {};
-  }
-}
-
 function ClientSuggestions({ onSelect }: { onSelect: (name: string, whatsapp: string) => void }) {
-  const clients = getClients();
+  let clients: Record<string, string> = {};
+  try { clients = JSON.parse(localStorage.getItem("tarot-clients") || "{}"); } catch {}
   const entries = Object.entries(clients);
   if (entries.length === 0) return null;
 
@@ -228,14 +223,8 @@ function ClientSuggestions({ onSelect }: { onSelect: (name: string, whatsapp: st
       <Label className="text-muted-foreground text-xs">Clientes recentes:</Label>
       <div className="flex flex-wrap gap-2">
         {entries.slice(0, 8).map(([name, whatsapp]) => (
-          <Button
-            key={name}
-            variant="outline"
-            size="sm"
-            className="text-xs border-border/50 hover:border-primary/50"
-            onClick={() => onSelect(name, whatsapp)}
-          >
-            {name} {whatsapp && `📱`}
+          <Button key={name} variant="outline" size="sm" className="text-xs border-border/50 hover:border-primary/50" onClick={() => onSelect(name, whatsapp)}>
+            {name} {whatsapp && "📱"}
           </Button>
         ))}
       </div>

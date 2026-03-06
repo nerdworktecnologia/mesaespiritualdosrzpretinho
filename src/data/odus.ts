@@ -135,43 +135,43 @@ export const odus: Odu[] = [
   },
   {
     number: 13, name: "Ejiologbon", orixa: "Nanã, Obaluaê",
-    orixaDescricao: "Regido por Nanã e Obaluaê. Associação forte com pessoas mais velhas e sabedoria. Tem a Terra como elemento, capaz de concretizar planos e boa capacidade de comunicação.",
+    orixaDescricao: "Regido por Nanã (anciã, avó nas religiões afro-brasileiras, ligada à sabedoria e águas paradas) e Obaluaê (voltado para cura e proteção de pessoas mais velhas).",
     elemento: "Terra",
-    meaning: "Energia de sabedoria e conhecimento. Alma velha com visão de longo prazo. Capacidade de concretizar planos com comunicação.",
-    personality: "Alma velha. Pessoa madura, estudiosa e com visão de longo prazo. Sábia desde jovem, mas pode se isolar.",
-    positivo: "Maturidade precoce, capacidade de ensinar, visão estratégica de longo prazo. Conhecimento ancestral. Boa comunicação.",
-    negativo: "Isolamento social, dificuldade de se conectar com pessoas da mesma idade, solidão intelectual.",
-    evitar: "isolamento", advice: "compartilhar conhecimento"
+    meaning: "Usa sagacidade e habilidades para conquistar bem-estar e fortuna. Dá-se bem em atividades ligadas à comunicação. Intuição aguçada e capacidade de convencer.",
+    personality: "Alma velha. Pessoa madura, teimosa, só faz o que deseja. Forte poder de realização, mas depende da vontade do Odu. Adaptável aos mais diversos locais.",
+    positivo: "Adaptabilidade absurda, poder de raciocínio, incrível capacidade de comunicação. Conseguem se adequar a qualquer ambiente com facilidade.",
+    negativo: "Tendência à melancolia, teimosia como característica negativa. Forte poder de realização que pode ser ignorado por falta de vontade.",
+    evitar: "isolamento e teimosia", advice: "compartilhar conhecimento e agir com determinação"
   },
   {
-    number: 14, name: "Iká", orixa: "Obaluaiê, Nanã",
-    orixaDescricao: "Regido por Obaluaiê (senhor da terra e das doenças) e Nanã (a mais velha dos orixás, senhora da lama primordial).",
-    elemento: "Terra",
-    meaning: "Energia espiritual profunda e transformação. Cada obstáculo fortalece o espírito.",
-    personality: "Pessoa resiliente que supera grandes provas. Forte espiritualmente e com poder de cura. Cada obstáculo a fortalece.",
-    positivo: "Resiliência extraordinária, poder de cura espiritual, capacidade de transformar dor em sabedoria.",
-    negativo: "Tendência a atrair provações constantes, absorção de energias pesadas, desgaste espiritual.",
-    evitar: "ambientes negativos", advice: "fortalecer proteção espiritual"
+    number: 14, name: "Iká", orixa: "Ewá, Oxumaré",
+    orixaDescricao: "Regido por Ewá (símbolo de beleza, sensualidade, sabedoria e vidência, protetora da pureza) e Oxumaré (conexão entre céu e terra, associado a dificuldades e superação).",
+    elemento: "Água",
+    meaning: "Odu ligado à ideia de superação. Aqueles associados a ele aprendem a lidar com dificuldades e ultrapassá-las de forma eficaz. Coragem e fluidez em negociações.",
+    personality: "Pessoa resiliente que supera grandes provas. Mesmo nas turbulências, prefere olhá-las como contratempos. Conquistam boas amizades ao longo da vida.",
+    positivo: "Vida feliz, boas amizades, capacidade de passar pelas tempestades de forma eficiente. Triunfa sobre inimigos e controla situações tumultuadas.",
+    negativo: "Impotência quando negativado, tendência a brigas, vinganças, perversidade e agressões na vida das pessoas associadas.",
+    evitar: "ambientes negativos e vinganças", advice: "fortalecer proteção espiritual e cultivar amizades"
   },
   {
-    number: 15, name: "Ogbéogundá", orixa: "Ogum, Oxóssi",
-    orixaDescricao: "Regido por Ogum (senhor do ferro e da guerra) e Oxóssi (senhor da caça e das matas). Desbravadores de caminhos.",
-    elemento: "Terra",
-    meaning: "Odù de abertura de caminhos. Prosperidade natural e facilidade para conquistas.",
-    personality: "Pessoa com caminhos sempre se abrindo. Prosperidade natural e facilidade para conquistas. Precisa manter a humildade.",
-    positivo: "Caminhos sempre abertos, prosperidade natural, proteção espiritual forte nas matas e estradas.",
-    negativo: "Pode se perder pela falta de planejamento, arrogância diante das conquistas fáceis.",
-    evitar: "agir sem planejamento", advice: "focar nos objetivos"
+    number: 15, name: "Obeogundá", orixa: "Ewá",
+    orixaDescricao: "Influenciado por Ewá, deusa da intuição com dom da vidência. Associada à pureza, beleza e sensualidade. Orixá feminino e sábio.",
+    elemento: "Água",
+    meaning: "Sabedoria e dinamismo fazem parte das características, mas demonstra resistência às mudanças. Problemas com estagnação, especialmente no campo profissional.",
+    personality: "Pessoa com caminhos que se abrem pelo amor. Felicidade no amor é perspectiva real pela regência de Ewá. Dinâmica mas pode ser impulsiva e mimada.",
+    positivo: "Chance de felicidade no amor, embora precise batalhar por ela. Dinamismo potencializado pelo elemento Água. Capacidade de atingir objetivos.",
+    negativo: "Estagnação, inflexibilidade de opiniões mesmo percebendo estar errado. Resistência à mudança. Concorrência constante no amor. Possibilidades de sucesso limitadas.",
+    evitar: "estagnação e inflexibilidade", advice: "focar nos objetivos e aceitar mudanças"
   },
   {
-    number: 16, name: "Aláfia", orixa: "Oxalá, Oxum",
-    orixaDescricao: "Regido por Oxalá (o grande pai, criador) e Oxum (mãe das águas doces). Paz suprema e equilíbrio divino.",
+    number: 16, name: "Aláfia", orixa: "Oxalá, Orumilá",
+    orixaDescricao: "Regido por Oxalá (criação do mundo, símbolo de paz, sereno e pacificador) e Orumilá (profecia e adivinhação, sabedoria). Pessoas com lado espiritual desenvolvido.",
     elemento: "Ar",
-    meaning: "Energia de paz e equilíbrio. Proteção espiritual forte e missão elevada.",
-    personality: "Pessoa pacificadora, equilibrada e com proteção espiritual forte. Missão elevada. Não deve se acomodar.",
-    positivo: "Paz interior, proteção divina constante, capacidade de harmonizar ambientes e pessoas.",
-    negativo: "Acomodação, passividade excessiva, pode deixar de agir por excesso de confiança na proteção espiritual.",
-    evitar: "acomodação", advice: "manter espiritualidade forte"
+    meaning: "Odu positivo, tendência a estar sempre de bem com a vida. Progresso como realidade. Hesitação em situações que demandam instinto. Inclinações artísticas.",
+    personality: "Pessoa pacificadora, equilibrada, sensível e afetuosa. Características femininas pela conexão com o Ar. Constantemente tranquila pelo desenvolvimento espiritual.",
+    positivo: "Pureza como aspecto mais positivo. Espalham felicidade e paz em todos os espaços, tornando qualquer ambiente mais harmônico.",
+    negativo: "Poucos aspectos negativos. Acomodação pode interromper o progresso e causar declínio. Precisa encontrar ponto de equilíbrio.",
+    evitar: "acomodação e reclamações sem ação", advice: "manter espiritualidade forte e agir com mudanças de atitude"
   },
 ];
 

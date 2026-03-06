@@ -74,39 +74,35 @@ export function calculateCabala(birthDate: string): CabalaResult {
 }
 
 function generateCabalaSummary(
-  nuca: Odu, frente: Odu, centro: Odu, testa: Odu, costas: Odu, nascimento: Odu
+  superior: Odu, inferior: Odu, lateral: Odu, central: Odu, finalOdu: Odu
 ): string {
   return [
-    `🔮 Odu de Nascimento: ${nascimento.name} (${nascimento.orixa})`,
-    `${nascimento.meaning}`,
-    `Personalidade: ${nascimento.personality}`,
+    `🔮 Odu Superior (Esquerda): ${superior.name} (${superior.orixa})`,
+    `${superior.meaning}`,
+    `Personalidade: ${superior.personality}`,
     "",
-    `👤 Centro da Cabeça (Odu Principal): ${centro.name} (${centro.orixa})`,
-    `Essa é a sua essência. ${centro.meaning}`,
-    `${centro.personality}`,
+    `👤 Odu Inferior (Direita): ${inferior.name} (${inferior.orixa})`,
+    `${inferior.meaning}`,
+    `${inferior.personality}`,
     "",
-    `🧠 Testa (Caminho Mental): ${testa.name} (${testa.orixa})`,
-    `A forma como você pensa e toma decisões. ${testa.meaning}`,
+    `🧠 Odu Lateral: ${lateral.name} (${lateral.orixa})`,
+    `${lateral.meaning}`,
     "",
-    `👁️ Nuca (Passado/Origem): ${nuca.name} (${nuca.orixa})`,
-    `De onde você vem espiritualmente. ${nuca.meaning}`,
-    `Herança espiritual: ${nuca.personality}`,
+    `🛤️ Odu Central: ${central.name} (${central.orixa})`,
+    `${central.meaning}`,
+    `${central.advice}`,
     "",
-    `🛤️ Frente (Futuro/Destino): ${frente.name} (${frente.orixa})`,
-    `Para onde você está caminhando. ${frente.meaning}`,
-    `${frente.advice}`,
-    "",
-    `🛡️ Costas (Proteção Espiritual): ${costas.name} (${costas.orixa})`,
-    `Quem protege você por trás. ${costas.meaning}`,
+    `🛡️ Odu Final: ${finalOdu.name} (${finalOdu.orixa})`,
+    `${finalOdu.meaning}`,
     "",
     `━━━━━━━━━━━━━━━━━━`,
     `✨ Resumo da Vida Espiritual:`,
-    `Você é regido(a) por ${centro.orixa} no centro da cabeça, com ${nascimento.orixa} como energia de nascimento.`,
-    `Sua origem espiritual vem de ${nuca.orixa} (nuca), e seu destino caminha para ${frente.orixa} (frente).`,
-    `Sua mente é guiada por ${testa.orixa} (testa) e sua proteção vem de ${costas.orixa} (costas).`,
+    `Seu Odu Superior é ${superior.name} (${superior.orixa}), e o Inferior é ${inferior.name} (${inferior.orixa}).`,
+    `O Odu Central da sua cabala é ${central.name} (${central.orixa}).`,
+    `O Odu Final, que rege sua missão, é ${finalOdu.name} (${finalOdu.orixa}).`,
     "",
-    `💡 Conselho principal: ${centro.advice}`,
-    `📿 Orixá regente: ${centro.orixa}`,
+    `💡 Conselho principal: ${central.advice}`,
+    `📿 Orixá regente: ${central.orixa}`,
   ].join("\n");
 }
 
@@ -114,8 +110,8 @@ function generateCabalaSummary(
 export function calculateOdu(fullName: string, birthDate: string) {
   const result = calculateCabala(birthDate);
   return {
-    principal: result.centro,
-    destino: result.frente,
+    principal: result.central,
+    destino: result.final,
     message: result.summary,
   };
 }

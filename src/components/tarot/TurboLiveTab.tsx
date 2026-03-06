@@ -395,6 +395,12 @@ export default function TurboLiveTab() {
 
           {/* Response */}
           <div className="card-mystical rounded-lg p-4 border border-border">
+            {aiLoading && (
+              <div className="flex items-center gap-2 mb-2 text-muted-foreground">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                <span className="font-crimson text-xs">Consultando a espiritualidade...</span>
+              </div>
+            )}
             <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-sm leading-relaxed">
               {currentResponse}
             </pre>

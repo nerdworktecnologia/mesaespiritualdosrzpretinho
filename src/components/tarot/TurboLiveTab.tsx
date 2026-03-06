@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cardMeanings, CardMeaning } from "@/data/cardMeanings";
+import { cardMeanings, getYesNoResult, CardMeaning } from "@/data/cardMeanings";
 import { generateShortResponse, generateFullResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { detectTheme, getThemedCards, getThemeLabel, getAllThemes, QuestionTheme } from "@/utils/themeDetection";
 import { playRevealSound, playResultSound } from "@/utils/sounds";
@@ -38,7 +38,7 @@ const turboButtons = [
 
 function generate5s(cards: CardMeaning[], type: ReadingType): string {
   if (type === "yesno") {
-    const { result } = require("@/data/cardMeanings").getYesNoResult(cards[0].number);
+    const { result } = getYesNoResult(cards[0].number);
     return `${result}. ${cards[0].shortMeaning}`;
   }
   return cards.map((c) => c.shortMeaning).join(" ");

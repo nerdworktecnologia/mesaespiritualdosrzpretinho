@@ -301,6 +301,16 @@ export default function TurboLiveTab() {
             ))}
           </div>
 
+          {/* AI toggle */}
+          <Button
+            variant="outline"
+            onClick={() => setUseAI(!useAI)}
+            className={`w-full font-cinzel text-xs py-3 border ${useAI ? "bg-foreground/10 border-foreground text-foreground" : "border-border text-muted-foreground"}`}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            {useAI ? "✨ IA Espiritual ATIVA" : "IA Desligada (respostas locais)"}
+          </Button>
+
           {/* Generate */}
           <Button
             onClick={generate}

@@ -206,10 +206,10 @@ export function calculateCabala(birthDate: string): CabalaResult {
   const finalNum = reduceToOdu(esquerda + direita + lateralNum + centralNum);
 
   const superior = odus[esquerda - 1];
-  const inferior = odus[direita - 1];
-  const lateral = odus[lateralNum - 1];
-  const central = odus[centralNum - 1];
-  const finalOdu = odus[finalNum - 1];
+  const inferior = odus[lateralNum - 1];
+  const lateral = odus[centralNum - 1];
+  const central = odus[finalNum - 1];
+  const finalOdu = odus[direita - 1];
 
   const summary = generateCabalaSummary(superior, inferior, lateral, central, finalOdu);
 

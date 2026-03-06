@@ -73,8 +73,9 @@ function interpretarOdu(label: string, emoji: string, odu: Odu): string {
     `${emoji} ${label}: ${odu.name}`,
     `Orixás: ${odu.orixa}`,
     `${odu.meaning}`,
+    `Personalidade: ${odu.personality}`,
     `Conselho: ${odu.advice}`,
-    `Evitar: ${odu.evitar}`,
+    `⚠️ Evitar: ${odu.evitar}`,
   ].join("\n");
 }
 
@@ -83,6 +84,9 @@ function generateCabalaSummary(
 ): string {
   return [
     `Seu caminho espiritual é guiado pelo Odu ${superior.name}.`,
+    ``,
+    `👤 Personalidade pelo cálculo:`,
+    `${superior.personality}`,
     ``,
     `Este Odu indica ${superior.meaning}`,
     `O conselho espiritual é ${superior.advice}`,
@@ -103,10 +107,10 @@ function generateCabalaSummary(
     ``,
     `━━━━━━━━━━━━━━━━━━`,
     `✨ Resumo Espiritual:`,
-    `Superior: ${superior.name} (${superior.orixa})`,
-    `Inferior: ${inferior.name} (${inferior.orixa})`,
-    `Central: ${central.name} (${central.orixa})`,
-    `Final: ${finalOdu.name} (${finalOdu.orixa})`,
+    `Superior: ${superior.name} (${superior.orixa}) — ${superior.personality}`,
+    `Inferior: ${inferior.name} (${inferior.orixa}) — ${inferior.personality}`,
+    `Central: ${central.name} (${central.orixa}) — ${central.personality}`,
+    `Final: ${finalOdu.name} (${finalOdu.orixa}) — ${finalOdu.personality}`,
     ``,
     `💡 Conselho principal: ${central.advice}`,
     `📿 Orixás regentes: ${central.orixa}`,

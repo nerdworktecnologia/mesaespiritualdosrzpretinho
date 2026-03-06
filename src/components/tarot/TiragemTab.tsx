@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cardMeanings, CardMeaning, getYesNoResult } from "@/data/cardMeanings";
+import TarotCard from "./TarotCard";
 import { generateFullResponse, generateShortResponse, generateYesNoResponse } from "@/utils/generateResponse";
 
 type ReadingType = "1" | "3" | "5" | "7" | "9" | "yesno";
@@ -134,19 +135,10 @@ export default function TiragemTab() {
             </div>
 
             {/* Card display */}
-            <div className="flex flex-wrap gap-3 justify-center">
-              {resolvedCards.map((card) => {
-                const yesNo = getYesNoResult(card.number);
-                return (
-                  <div
-                    key={card.number}
-                    className="card-mystical rounded-lg p-3 text-center w-28 border border-primary/20 animate-fade-up"
-                  >
-                    <p className="font-cinzel gold-text text-2xl font-bold">{card.number}</p>
-                    <p className="text-foreground text-xs font-cinzel mt-1">{card.name}</p>
-                  </div>
-                );
-              })}
+            <div className="flex flex-wrap gap-4 justify-center py-2">
+              {resolvedCards.map((card) => (
+                <TarotCard key={card.number} card={card} size="md" showMeaning />
+              ))}
             </div>
 
             {/* Response */}

@@ -67,34 +67,46 @@ export function calculateCabala(birthDate: string): CabalaResult {
   return { superior, inferior, lateral, central, final: finalOdu, summary };
 }
 
+function interpretarOdu(label: string, emoji: string, odu: Odu): string {
+  return [
+    `${emoji} ${label}: ${odu.name}`,
+    `Orixás: ${odu.orixa}`,
+    `${odu.meaning}`,
+    `Conselho: ${odu.advice}`,
+    `Evitar: ${odu.evitar}`,
+  ].join("\n");
+}
+
 function generateCabalaSummary(
   superior: Odu, inferior: Odu, lateral: Odu, central: Odu, finalOdu: Odu
 ): string {
   return [
-    `🔮 Odu Superior: ${superior.name} (${superior.orixa})`,
-    `${superior.meaning}`,
-    `⚠️ Evitar: ${superior.evitar}`,
-    "",
-    `👤 Odu Inferior: ${inferior.name} (${inferior.orixa})`,
-    `${inferior.meaning}`,
-    `⚠️ Evitar: ${inferior.evitar}`,
-    "",
-    `🧠 Odu Lateral: ${lateral.name} (${lateral.orixa})`,
-    `${lateral.meaning}`,
-    "",
-    `🛤️ Odu Central: ${central.name} (${central.orixa})`,
-    `${central.meaning}`,
-    `💡 Conselho: ${central.advice}`,
-    "",
-    `🛡️ Odu Final: ${finalOdu.name} (${finalOdu.orixa})`,
-    `${finalOdu.meaning}`,
-    "",
+    `Seu caminho espiritual é guiado pelo Odu ${superior.name}.`,
+    ``,
+    `Este Odu indica ${superior.meaning}`,
+    `O conselho espiritual é ${superior.advice}`,
+    `Evite ${superior.evitar}.`,
+    `Os orixás que respondem são ${superior.orixa}.`,
+    ``,
     `━━━━━━━━━━━━━━━━━━`,
-    `✨ Resumo da Vida Espiritual:`,
-    `Seu Odu Superior é ${superior.name} (${superior.orixa}), e o Inferior é ${inferior.name} (${inferior.orixa}).`,
-    `O Odu Central da sua cabala é ${central.name} (${central.orixa}).`,
-    `O Odu Final, que rege sua missão, é ${finalOdu.name} (${finalOdu.orixa}).`,
-    "",
+    ``,
+    interpretarOdu("Odu Superior", "🔮", superior),
+    ``,
+    interpretarOdu("Odu Inferior", "👤", inferior),
+    ``,
+    interpretarOdu("Odu Lateral", "🧠", lateral),
+    ``,
+    interpretarOdu("Odu Central", "🛤️", central),
+    ``,
+    interpretarOdu("Odu Final", "🛡️", finalOdu),
+    ``,
+    `━━━━━━━━━━━━━━━━━━`,
+    `✨ Resumo Espiritual:`,
+    `Superior: ${superior.name} (${superior.orixa})`,
+    `Inferior: ${inferior.name} (${inferior.orixa})`,
+    `Central: ${central.name} (${central.orixa})`,
+    `Final: ${finalOdu.name} (${finalOdu.orixa})`,
+    ``,
     `💡 Conselho principal: ${central.advice}`,
     `📿 Orixás regentes: ${central.orixa}`,
   ].join("\n");

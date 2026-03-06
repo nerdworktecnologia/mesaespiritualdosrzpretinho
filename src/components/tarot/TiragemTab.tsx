@@ -3,11 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { cardMeanings, CardMeaning, getYesNoResult } from "@/data/cardMeanings";
 import TarotCard from "./TarotCard";
 import { generateFullResponse, generateShortResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { addToHistory } from "@/utils/history";
+import { playRevealSound, playResultSound } from "@/utils/sounds";
 
 type ReadingType = "1" | "3" | "5" | "7" | "9" | "yesno";
 
@@ -26,6 +26,7 @@ export default function TiragemTab() {
   const [question, setQuestion] = useState("");
   const [result, setResult] = useState<string | null>(null);
   const [resolvedCards, setResolvedCards] = useState<CardMeaning[]>([]);
+  const [showResult, setShowResult] = useState(false);
 
   const handleReading = () => {
     const numbers = cardInput
@@ -38,6 +39,12 @@ export default function TiragemTab() {
 
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
     setResolvedCards(cards);
+    setShowResult(false);
+
+    // Play reveal sound for each card sequentially
+    cards.forEach((_, i) => {
+      setTimeout(() => playRevealSound(), i * 500 + 200);
+    });
 
     let response: string;
     if (readingType === "yesno") {
@@ -46,6 +53,12 @@ export default function TiragemTab() {
       response = generateFullResponse(cards, question);
     }
     setResult(response);
+
+    // Show result text after all cards are revealed
+    setTimeout(() => {
+      setShowResult(true);
+      playResultSound();
+    }, cards.length * 500 + 800);
 
     addToHistory({
       clientName: "",
@@ -68,6 +81,7 @@ export default function TiragemTab() {
     setQuestion("");
     setResult(null);
     setResolvedCards([]);
+    setShowResult(false);
   };
 
   return (
@@ -134,7 +148,7 @@ export default function TiragemTab() {
 
         {/* Result */}
         {result && (
-          <div className="space-y-4 animate-fade-up">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-cinzel text-primary">Resultado</h3>
               <div className="flex gap-2">
@@ -145,19 +159,36 @@ export default function TiragemTab() {
               </div>
             </div>
 
-            {/* Card display */}
-            <div className="flex flex-wrap gap-4 justify-center py-2">
-              {resolvedCards.map((card) => (
-                <TarotCard key={card.number} card={card} size="md" showMeaning />
+            {/* Card display with sequential reveal */}
+            <div className="flex flex-wrap gap-4 justify-center py-4">
+              {resolvedCards.map((card, index) => (
+                <TarotCard
+                  key={card.number}
+                  card={card}
+                  size="lg"
+                  showMeaning={showResult}
+                  revealed={true}
+                  delay={index * 500}
+                />
               ))}
             </div>
 
-            {/* Response */}
-            <div className="card-mystical rounded-lg p-6 border border-primary/20">
-              <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-lg leading-relaxed">
-                {result}
-              </pre>
-            </div>
+            {/* Response - appears after cards */}
+            {showResult && (
+              <div className="card-mystical rounded-lg p-6 border border-primary/20 animate-fade-up">
+                <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-lg leading-relaxed">
+                  {result}
+                </pre>
+              </div>
+            )}
+
+            {!showResult && (
+              <div className="text-center py-4">
+                <p className="text-muted-foreground font-crimson italic animate-pulse">
+                  ✨ Revelando as cartas...
+                </p>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

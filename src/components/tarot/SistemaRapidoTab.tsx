@@ -5,6 +5,7 @@ import { cardMeanings, getYesNoResult, CardMeaning } from "@/data/cardMeanings";
 import { generateShortResponse, generateFullResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { addToHistory } from "@/utils/history";
 import { playRevealSound, playResultSound } from "@/utils/sounds";
+import { detectTheme, getThemedCards } from "@/utils/themeDetection";
 import TarotCard from "./TarotCard";
 import { Mic, MicOff, RotateCcw } from "lucide-react";
 
@@ -101,7 +102,8 @@ export default function SistemaRapidoTab() {
     const count = readingType === "yesno" ? 1 : parseInt(readingType);
 
     if (mode === "auto") {
-      numbers = randomCards(count);
+      const theme = detectTheme(question || "");
+      numbers = getThemedCards(count, theme);
     } else {
       numbers = cardInput.split(/[\s,]+/).map((n) => parseInt(n.trim())).filter((n) => n >= 1 && n <= 36);
       if (numbers.length !== count) return;

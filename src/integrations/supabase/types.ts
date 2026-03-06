@@ -74,6 +74,89 @@ export type Database = {
         }
         Relationships: []
       }
+      consultations: {
+        Row: {
+          birth_date: string | null
+          buzios_abertos: number | null
+          buzios_odu: string | null
+          cabala_central: string | null
+          cabala_final: string | null
+          cabala_inferior: string | null
+          cabala_lateral: string | null
+          cabala_superior: string | null
+          client_id: string | null
+          client_name: string
+          created_at: string
+          id: string
+          interpretation_destino: string | null
+          interpretation_energia: string | null
+          interpretation_orientacao: string | null
+          interpretation_resumo: string | null
+          interpretation_situacao: string | null
+          question: string | null
+          reading_type: string | null
+          tarot_card_names: string[] | null
+          tarot_cards: number[] | null
+          tema: string | null
+        }
+        Insert: {
+          birth_date?: string | null
+          buzios_abertos?: number | null
+          buzios_odu?: string | null
+          cabala_central?: string | null
+          cabala_final?: string | null
+          cabala_inferior?: string | null
+          cabala_lateral?: string | null
+          cabala_superior?: string | null
+          client_id?: string | null
+          client_name: string
+          created_at?: string
+          id?: string
+          interpretation_destino?: string | null
+          interpretation_energia?: string | null
+          interpretation_orientacao?: string | null
+          interpretation_resumo?: string | null
+          interpretation_situacao?: string | null
+          question?: string | null
+          reading_type?: string | null
+          tarot_card_names?: string[] | null
+          tarot_cards?: number[] | null
+          tema?: string | null
+        }
+        Update: {
+          birth_date?: string | null
+          buzios_abertos?: number | null
+          buzios_odu?: string | null
+          cabala_central?: string | null
+          cabala_final?: string | null
+          cabala_inferior?: string | null
+          cabala_lateral?: string | null
+          cabala_superior?: string | null
+          client_id?: string | null
+          client_name?: string
+          created_at?: string
+          id?: string
+          interpretation_destino?: string | null
+          interpretation_energia?: string | null
+          interpretation_orientacao?: string | null
+          interpretation_resumo?: string | null
+          interpretation_situacao?: string | null
+          question?: string | null
+          reading_type?: string | null
+          tarot_card_names?: string[] | null
+          tarot_cards?: number[] | null
+          tema?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

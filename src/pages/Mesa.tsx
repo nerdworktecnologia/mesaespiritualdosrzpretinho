@@ -45,7 +45,7 @@ export default function Mesa() {
       </header>
 
       <main className="max-w-3xl mx-auto p-4 mt-4">
-        <Tabs defaultValue="mesa" className="w-full">
+        <Tabs defaultValue="rapido" className="w-full">
           <TabsList className="grid w-full grid-cols-5 bg-secondary border border-border">
             <TabsTrigger value="mesa" className="font-cinzel text-[10px] md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
               Mesa

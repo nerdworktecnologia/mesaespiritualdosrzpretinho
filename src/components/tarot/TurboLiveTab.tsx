@@ -5,8 +5,9 @@ import { cardMeanings, getYesNoResult, CardMeaning } from "@/data/cardMeanings";
 import { generateShortResponse, generateFullResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { detectTheme, getThemedCards, getThemeLabel, getAllThemes, QuestionTheme } from "@/utils/themeDetection";
 import { playRevealSound, playResultSound } from "@/utils/sounds";
+import { supabase } from "@/integrations/supabase/client";
 import TarotCard from "./TarotCard";
-import { Mic, MicOff, RotateCcw, Plus, Copy, Check } from "lucide-react";
+import { Mic, MicOff, RotateCcw, Copy, Check, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 type ReadingType = "1" | "3" | "yesno";

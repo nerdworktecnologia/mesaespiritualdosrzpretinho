@@ -4,50 +4,57 @@ export interface CardMeaning {
   meaning: string;
   shortMeaning: string;
   icon: string;
+  energy: "positive" | "neutral" | "alert";
 }
 
 export const cardMeanings: CardMeaning[] = [
-  { number: 1, name: "Caminho Aberto", meaning: "A espiritualidade mostra caminhos se abrindo. Algo novo pode começar em breve.", shortMeaning: "Caminhos se abrindo.", icon: "🛤️" },
-  { number: 2, name: "Dúvida", meaning: "Existe indecisão no caminho. A resposta depende muito das escolhas que ainda serão feitas.", shortMeaning: "Indecisão no caminho.", icon: "❓" },
-  { number: 3, name: "Interferência", meaning: "Tem gente interferindo nessa situação. Nem toda opinião que chega é positiva.", shortMeaning: "Interferência de terceiros.", icon: "👁️" },
-  { number: 4, name: "Proteção Espiritual", meaning: "A espiritualidade está protegendo. Mesmo com dificuldades, você não está sozinho.", shortMeaning: "Proteção espiritual ativa.", icon: "🛡️" },
-  { number: 5, name: "Conflito", meaning: "Existe energia de discussão ou desentendimento. Cuidado com palavras impulsivas.", shortMeaning: "Energia de conflito.", icon: "⚔️" },
-  { number: 6, name: "Amor Verdadeiro", meaning: "Existe sentimento verdadeiro nessa situação. Mas precisa ser cuidado para crescer.", shortMeaning: "Sentimento verdadeiro.", icon: "❤️" },
-  { number: 7, name: "Caminho Financeiro", meaning: "A pergunta toca em assuntos de trabalho ou dinheiro. Existe possibilidade de crescimento.", shortMeaning: "Caminho financeiro abrindo.", icon: "💰" },
-  { number: 8, name: "Inveja", meaning: "Existe energia de inveja ou olho grande. Evite comentar seus planos.", shortMeaning: "Energia de inveja.", icon: "🧿" },
-  { number: 9, name: "Mudança", meaning: "Algo está prestes a mudar. O caminho atual não permanecerá igual por muito tempo.", shortMeaning: "Mudança chegando.", icon: "🔄" },
-  { number: 10, name: "Vitória", meaning: "Depois de dificuldade vem vitória. O caminho não está perdido.", shortMeaning: "Vitória após dificuldade.", icon: "🏆" },
-  { number: 11, name: "Segredo", meaning: "Existe algo escondido nessa situação. Nem tudo foi revelado ainda.", shortMeaning: "Algo escondido.", icon: "🤫" },
-  { number: 12, name: "Atraso", meaning: "O caminho não está fechado, mas existe demora ou atraso.", shortMeaning: "Atraso no caminho.", icon: "⏳" },
-  { number: 13, name: "Corte", meaning: "Algo precisa ser encerrado para que um novo ciclo comece.", shortMeaning: "Corte necessário.", icon: "✂️" },
-  { number: 14, name: "União", meaning: "Energia de união ou parceria. Pode representar relacionamento ou acordo.", shortMeaning: "União ou parceria.", icon: "💑" },
-  { number: 15, name: "Falsidade", meaning: "Existe pessoa falsa ao redor dessa situação. Nem todo sorriso é verdadeiro.", shortMeaning: "Falsidade por perto.", icon: "🎭" },
-  { number: 16, name: "Bloqueio Temporário", meaning: "O caminho está travado no momento, mas não significa que permanecerá assim.", shortMeaning: "Bloqueio temporário.", icon: "🚧" },
-  { number: 17, name: "Ajuda Espiritual", meaning: "A espiritualidade está trabalhando a seu favor. Existe proteção invisível.", shortMeaning: "Ajuda espiritual chegando.", icon: "🙏" },
-  { number: 18, name: "Proteção Forte", meaning: "Existe proteção espiritual muito forte. Algo maior está cuidando desse caminho.", shortMeaning: "Proteção forte.", icon: "⭐" },
-  { number: 19, name: "Sorte", meaning: "Energia de sorte inesperada. Algo bom pode surgir sem aviso.", shortMeaning: "Sorte inesperada.", icon: "🍀" },
-  { number: 20, name: "Notícia", meaning: "Uma notícia ou mensagem importante está para chegar.", shortMeaning: "Notícia chegando.", icon: "📬" },
-  { number: 21, name: "Decisão", meaning: "Uma decisão importante precisa ser tomada. O caminho depende da escolha.", shortMeaning: "Decisão importante.", icon: "⚖️" },
-  { number: 22, name: "Traição", meaning: "Cuidado com quebra de confiança. Alguém pode decepcionar.", shortMeaning: "Cuidado com traição.", icon: "🗡️" },
-  { number: 23, name: "Trabalho", meaning: "Energia ligada a trabalho ou oportunidade. Pode indicar crescimento profissional.", shortMeaning: "Oportunidade de trabalho.", icon: "💼" },
-  { number: 24, name: "Prosperidade", meaning: "Caminho de prosperidade se abrindo. Mas exige esforço.", shortMeaning: "Prosperidade chegando.", icon: "👑" },
-  { number: 25, name: "Pensamento", meaning: "Alguém está pensando muito em você ou nessa situação.", shortMeaning: "Alguém pensando em você.", icon: "💭" },
-  { number: 26, name: "Instabilidade", meaning: "O caminho está instável. Pode haver mudanças repentinas.", shortMeaning: "Caminho instável.", icon: "💔" },
-  { number: 27, name: "Recomeço", meaning: "Um novo ciclo pode começar. Algo que parecia encerrado pode voltar.", shortMeaning: "Recomeço.", icon: "🌅" },
-  { number: 28, name: "Justiça Espiritual", meaning: "A espiritualidade está colocando tudo no seu devido lugar.", shortMeaning: "Justiça espiritual.", icon: "⚖️" },
-  { number: 29, name: "Amor Aberto", meaning: "O caminho do amor pode se abrir. Existe possibilidade de relacionamento.", shortMeaning: "Caminho do amor abrindo.", icon: "💕" },
-  { number: 30, name: "Mudança de Destino", meaning: "Algo grande pode mudar o rumo da situação.", shortMeaning: "Mudança de destino.", icon: "🌀" },
-  { number: 31, name: "Obstáculo Removido", meaning: "Algo que estava impedindo o caminho está sendo retirado.", shortMeaning: "Obstáculo sendo removido.", icon: "🔓" },
-  { number: 32, name: "Entidade Protetora", meaning: "Existe entidade espiritual protegendo. Você não está desamparado.", shortMeaning: "Entidade protegendo.", icon: "🕯️" },
-  { number: 33, name: "Energia Espiritual Forte", meaning: "A situação tem influência espiritual intensa.", shortMeaning: "Energia espiritual forte.", icon: "⚡" },
-  { number: 34, name: "Observação", meaning: "Alguém está observando seus passos ou sua vida.", shortMeaning: "Alguém observando.", icon: "🔍" },
-  { number: 35, name: "Realização", meaning: "Existe possibilidade de realização de desejo. Mas exige paciência.", shortMeaning: "Realização de desejo.", icon: "🌟" },
-  { number: 36, name: "Destino Favorável", meaning: "O destino tende a favorecer essa situação. Existe caminho positivo.", shortMeaning: "Destino favorável.", icon: "🎩" },
+  { number: 1, name: "Os Cristais", meaning: "A espiritualidade pede limpeza. Existe energia acumulada que precisa ser trabalhada antes de seguir em frente.", shortMeaning: "Limpeza espiritual necessária.", icon: "💎", energy: "alert" },
+  { number: 2, name: "O Lápis", meaning: "Hora de planejar. A espiritualidade mostra que a situação precisa de organização antes de agir.", shortMeaning: "Planejamento necessário.", icon: "✏️", energy: "neutral" },
+  { number: 3, name: "A Carteira", meaning: "Energia de prosperidade. O caminho financeiro pode se abrir. Existe fartura chegando.", shortMeaning: "Prosperidade no caminho.", icon: "👛", energy: "positive" },
+  { number: 4, name: "A Navalha", meaning: "Corte energético necessário. Algo precisa ser encerrado para que o novo chegue. Proteção espiritual ativa.", shortMeaning: "Corte e proteção.", icon: "🔪", energy: "alert" },
+  { number: 5, name: "O Chapéu", meaning: "Proteção de Zé Pelintra. Você está coberto espiritualmente. O guia está olhando por você.", shortMeaning: "Proteção do guia.", icon: "🎩", energy: "positive" },
+  { number: 6, name: "O Terno Branco", meaning: "Pureza e proteção espiritual. O caminho está limpo e a energia é favorável.", shortMeaning: "Pureza e proteção.", icon: "🤍", energy: "positive" },
+  { number: 7, name: "A Cerveja", meaning: "Energia de celebração. Algo bom pode acontecer. Momento de comemorar conquistas.", shortMeaning: "Celebração chegando.", icon: "🍺", energy: "neutral" },
+  { number: 8, name: "O Baralho", meaning: "Sorte e risco caminham juntos. A situação tem chances, mas exige atenção.", shortMeaning: "Sorte com risco.", icon: "🃏", energy: "neutral" },
+  { number: 9, name: "O Violão", meaning: "Energia de alegria e harmonia. A situação tende a se resolver de forma leve.", shortMeaning: "Alegria e harmonia.", icon: "🎸", energy: "positive" },
+  { number: 10, name: "A Encruzilhada", meaning: "Momento de decisão. A espiritualidade mostra que existe mais de um caminho possível.", shortMeaning: "Decisão importante.", icon: "✝️", energy: "neutral" },
+  { number: 11, name: "A Moeda", meaning: "Dinheiro rápido pode chegar. Oportunidade financeira surgindo.", shortMeaning: "Dinheiro rápido.", icon: "🪙", energy: "positive" },
+  { number: 12, name: "O Sapato Bicolor", meaning: "Caminhos se abrindo. A situação pode tomar um novo rumo. Movimento.", shortMeaning: "Caminhos novos.", icon: "👞", energy: "neutral" },
+  { number: 13, name: "O Punhal", meaning: "Defesa espiritual necessária. Existe algo ou alguém que precisa ser afastado.", shortMeaning: "Defesa necessária.", icon: "🗡️", energy: "alert" },
+  { number: 14, name: "O Fumo", meaning: "Descarrego espiritual. A espiritualidade está limpando o caminho. Energia sendo transmutada.", shortMeaning: "Descarrego espiritual.", icon: "🚬", energy: "alert" },
+  { number: 15, name: "O Pandeiro", meaning: "Movimento e ritmo. A situação está em andamento. Não pare agora.", shortMeaning: "Situação em movimento.", icon: "🥁", energy: "neutral" },
+  { number: 16, name: "O Paletó", meaning: "Postura e atitude. A espiritualidade pede que você se posicione com firmeza.", shortMeaning: "Postura firme.", icon: "🧥", energy: "neutral" },
+  { number: 17, name: "A Mesa", meaning: "Acordos e negociações. Algo pode ser resolvido através do diálogo.", shortMeaning: "Acordos possíveis.", icon: "🍽️", energy: "positive" },
+  { number: 18, name: "A Gravata Vermelha", meaning: "Energia de paixão e desejo. Sentimento forte na situação.", shortMeaning: "Paixão e desejo.", icon: "👔", energy: "neutral" },
+  { number: 19, name: "O Relógio", meaning: "Tudo tem seu tempo. A espiritualidade pede paciência. O momento certo vai chegar.", shortMeaning: "Tempo e paciência.", icon: "⏰", energy: "neutral" },
+  { number: 20, name: "O Anel", meaning: "Compromisso e fidelidade. Pode indicar união ou acordo firme.", shortMeaning: "Compromisso.", icon: "💍", energy: "neutral" },
+  { number: 21, name: "O Espelho", meaning: "Verdade sendo revelada. O que estava oculto pode vir à tona.", shortMeaning: "Verdade aparecendo.", icon: "🪞", energy: "neutral" },
+  { number: 22, name: "A Chave", meaning: "Solução encontrada. Algo que parecia fechado pode se abrir. Existe saída.", shortMeaning: "Solução e abertura.", icon: "🔑", energy: "positive" },
+  { number: 23, name: "A Vela", meaning: "Fé e luz espiritual. A espiritualidade está iluminando o caminho.", shortMeaning: "Fé iluminando.", icon: "🕯️", energy: "positive" },
+  { number: 24, name: "O Bilhete", meaning: "Notícia chegando. Uma mensagem ou informação importante está a caminho.", shortMeaning: "Notícia a caminho.", icon: "✉️", energy: "neutral" },
+  { number: 25, name: "O Dinheiro", meaning: "Abundância e prosperidade. Energia financeira muito forte nessa situação.", shortMeaning: "Abundância.", icon: "💵", energy: "positive" },
+  { number: 26, name: "O Perfume", meaning: "Atração e encanto. Existe magnetismo nessa situação.", shortMeaning: "Atração e encanto.", icon: "🧴", energy: "positive" },
+  { number: 27, name: "A Bengala", meaning: "Sabedoria e experiência. A resposta está na calma e na maturidade.", shortMeaning: "Sabedoria.", icon: "🦯", energy: "positive" },
+  { number: 28, name: "O Dado", meaning: "Sorte e acaso. A situação tem um componente de imprevisibilidade.", shortMeaning: "Sorte e acaso.", icon: "🎲", energy: "neutral" },
+  { number: 29, name: "O Chapéu de Palha", meaning: "Humildade e simplicidade. A resposta está nas coisas simples.", shortMeaning: "Humildade.", icon: "👒", energy: "neutral" },
+  { number: 30, name: "O Copo", meaning: "Partilha e generosidade. Compartilhar pode trazer bons resultados.", shortMeaning: "Partilha.", icon: "🥃", energy: "neutral" },
+  { number: 31, name: "A Navalha Aberta", meaning: "Perigo e situação delicada. A espiritualidade aconselha cautela e proteção.", shortMeaning: "Perigo, cautela.", icon: "⚠️", energy: "alert" },
+  { number: 32, name: "A Rosa Vermelha", meaning: "Amor verdadeiro. Sentimento forte e sincero na situação.", shortMeaning: "Amor verdadeiro.", icon: "🌹", energy: "positive" },
+  { number: 33, name: "O Chapéu no Chão", meaning: "Recomeço. Algo precisa ser deixado para trás para que o novo surja.", shortMeaning: "Recomeço necessário.", icon: "🎩", energy: "alert" },
+  { number: 34, name: "A Escada", meaning: "Crescimento e evolução. O caminho é de subida, mas cada degrau conta.", shortMeaning: "Crescimento gradual.", icon: "🪜", energy: "positive" },
+  { number: 35, name: "A Estrela", meaning: "Esperança e destino favorável. A espiritualidade ilumina esse caminho.", shortMeaning: "Esperança e luz.", icon: "⭐", energy: "positive" },
+  { number: 36, name: "Zé Pelintra", meaning: "Proteção total do guia. A carta mais forte do baralho. O mestre está presente.", shortMeaning: "Proteção total do mestre.", icon: "🎩✨", energy: "positive" },
 ];
 
+// Yes/No logic adapted to Zé Pelintra deck
+const yesCards = [3, 5, 6, 11, 22, 23, 25, 32, 35, 36];
+const maybeCards = [2, 8, 10, 12, 19, 20, 21, 24, 28];
+// alertCards (no) = [1, 4, 13, 14, 31, 33] + remaining neutrals [7, 9, 15, 16, 17, 18, 26, 27, 29, 30, 34]
+
 export function getYesNoResult(cardNumber: number): { result: string; color: string } {
-  if (cardNumber >= 1 && cardNumber <= 12) return { result: "SIM", color: "text-foreground" };
-  if (cardNumber >= 13 && cardNumber <= 24) return { result: "TALVEZ", color: "text-muted-foreground" };
-  if (cardNumber >= 25 && cardNumber <= 36) return { result: "NÃO", color: "text-foreground/50" };
-  return { result: "Carta inválida", color: "text-muted-foreground" };
+  if (yesCards.includes(cardNumber)) return { result: "SIM", color: "text-foreground" };
+  if (maybeCards.includes(cardNumber)) return { result: "TALVEZ", color: "text-muted-foreground" };
+  if ([1, 4, 13, 14, 31, 33].includes(cardNumber)) return { result: "NÃO", color: "text-foreground/50" };
+  // Remaining neutrals default to TALVEZ
+  return { result: "TALVEZ", color: "text-muted-foreground" };
 }

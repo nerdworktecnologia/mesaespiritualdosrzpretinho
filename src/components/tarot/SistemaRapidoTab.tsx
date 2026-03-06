@@ -33,7 +33,7 @@ function randomCards(count: number): number[] {
 
 // Position labels per reading type
 function getPositionLabels(type: ReadingType): string[] {
-  if (type === "3") return ["Energia da Situação", "Obstáculo", "Conselho Espiritual"];
+  if (type === "3") return ["Energia da Situação", "O Que Influencia", "Conselho Espiritual"];
   if (type === "5") return ["Passado", "Presente", "Influência Oculta", "Conselho Espiritual", "Desfecho"];
   return [];
 }

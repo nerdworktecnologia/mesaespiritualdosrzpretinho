@@ -3,10 +3,8 @@ import { CardMeaning, getYesNoResult } from "@/data/cardMeanings";
 const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
 
 function getCardTone(card: CardMeaning): "positive" | "warning" | "negative" {
-  const positiveNums = [1, 4, 6, 7, 10, 14, 17, 18, 19, 24, 27, 29, 31, 32, 33, 35, 36];
-  const negativeNums = [5, 8, 13, 16, 22];
-  if (positiveNums.includes(card.number)) return "positive";
-  if (negativeNums.includes(card.number)) return "negative";
+  if (card.energy === "positive") return "positive";
+  if (card.energy === "alert") return "negative";
   return "warning";
 }
 
@@ -25,16 +23,19 @@ const alerts: Record<string, string[]> = {
     "O caminho está aberto e a energia é favorável.",
     "A espiritualidade está sorrindo para essa situação.",
     "Existe força espiritual atuando a seu favor.",
+    "Zé Pelintra mostra que o caminho é de luz.",
   ],
   warning: [
-    "Mas existe energia de interferência ou dúvida ao redor.",
-    "Nem tudo está claro ainda. Cuidado com quem está perto.",
-    "A espiritualidade pede atenção. Observe antes de agir.",
+    "Mas existe energia de mudança ou escolha ao redor.",
+    "Nem tudo está definido ainda. Observe antes de agir.",
+    "A espiritualidade pede atenção. A situação está em movimento.",
+    "O caminho existe, mas exige sabedoria.",
   ],
   negative: [
-    "Existe energia pesada interferindo nesse caminho.",
-    "Cuidado. Nem tudo que parece ser, é de verdade.",
-    "A espiritualidade mostra obstáculo que precisa ser trabalhado.",
+    "Existe energia que precisa ser trabalhada nesse caminho.",
+    "Cuidado. A espiritualidade pede proteção e limpeza.",
+    "Algo precisa ser cortado para que o caminho se abra.",
+    "A espiritualidade mostra necessidade de descarrego.",
   ],
 };
 
@@ -43,17 +44,20 @@ const counsels: Record<string, string[]> = {
   positive: [
     "O conselho é seguir firme e aproveitar esse momento.",
     "Continue no caminho. O que é seu está chegando.",
-    "Mantenha a fé. A espiritualidade está do seu lado.",
+    "Mantenha a fé. Zé Pelintra está do seu lado.",
+    "Segue com confiança. A proteção é forte.",
   ],
   warning: [
     "O conselho é não comentar seus planos com qualquer pessoa.",
     "Faça uma limpeza espiritual e vigile suas companhias.",
     "Tenha paciência. O caminho existe, mas pede equilíbrio.",
+    "Espere o tempo certo. Nem tudo que parece ser, é.",
   ],
   negative: [
     "O conselho é recuar, refletir e esperar o momento certo.",
     "Não force nada. Às vezes o não também é proteção.",
-    "Cuide da sua energia. Nem todo caminho deve ser seguido agora.",
+    "Cuide da sua energia. Acenda uma vela e peça proteção.",
+    "Faça um descarrego antes de tomar qualquer decisão.",
   ],
 };
 
@@ -63,32 +67,27 @@ const closings = [
   "Segue firme e confia. Saravá.",
   "Fé no caminho. Saravá.",
   "Quem anda certo não tem o que temer. Saravá.",
+  "O mestre protege quem tem fé. Saravá.",
 ];
 
-// ── Full response: 3-part structure ──
+// ── Full response: card-by-card + synthesis ──
 export function generateFullResponse(cards: CardMeaning[], question: string): string {
   const tone = getOverallTone(cards);
 
-  // Part 1: Card-by-card energy reading
   const reading = cards
     .map((c, i) => {
       const position = cards.length === 3
-        ? ["(Passado)", "(Presente)", "(Futuro)"][i]
+        ? ["(Energia da Situação)", "(O Que Influencia)", "(Conselho Espiritual)"][i]
         : cards.length === 5
-          ? ["(Situação)", "(Obstáculo)", "(Conselho)", "(Influência)", "(Resultado)"][i]
+          ? ["(Passado)", "(Presente)", "(Influência Oculta)", "(Conselho Espiritual)", "(Desfecho)"][i]
           : "";
       return `Carta ${c.number} — ${c.name} ${position}\n${c.meaning}`;
     })
     .join("\n\n");
 
-  // Part 2: Alert/orientation
   const alert = pick(alerts[tone]);
-
-  // Part 3: Spiritual counsel
   const counsel = pick(counsels[tone]);
-
-  // Synthesis for 3+ cards
-  const synthesis = cards.length >= 3 ? buildSynthesis(cards, tone) : "";
+  const synthesis = cards.length >= 3 ? buildSynthesis(cards) : "";
 
   return [
     "Sr. Zé Pretinho fala:",
@@ -104,16 +103,18 @@ export function generateFullResponse(cards: CardMeaning[], question: string): st
   ].filter(Boolean).join("\n");
 }
 
-function buildSynthesis(cards: CardMeaning[], tone: "positive" | "warning" | "negative"): string {
+function buildSynthesis(cards: CardMeaning[]): string {
   const parts: string[] = [];
-  if (cards.some((c) => [4, 17, 18, 32, 33].includes(c.number)))
+  if (cards.some((c) => [5, 6, 36, 23].includes(c.number)))
     parts.push("A proteção espiritual está presente.");
-  if (cards.some((c) => [6, 14, 25, 29].includes(c.number)))
+  if (cards.some((c) => [32, 18, 26, 20].includes(c.number)))
     parts.push("Existe energia de sentimento verdadeiro.");
-  if (cards.some((c) => [3, 5, 8, 12, 15, 16, 22, 34].includes(c.number)))
-    parts.push("Há interferências que precisam ser trabalhadas.");
-  if (cards.some((c) => [7, 10, 19, 23, 24, 35, 36].includes(c.number)))
-    parts.push("O caminho aponta para conquistas.");
+  if (cards.some((c) => [1, 4, 13, 14, 31, 33].includes(c.number)))
+    parts.push("Há energia que precisa ser trabalhada ou cortada.");
+  if (cards.some((c) => [3, 11, 25, 34, 35].includes(c.number)))
+    parts.push("O caminho aponta para conquistas e prosperidade.");
+  if (cards.some((c) => [22, 17, 27].includes(c.number)))
+    parts.push("Existe solução e sabedoria disponível.");
 
   if (parts.length > 0) return parts.join("\n") + "\n";
   return "";
@@ -142,17 +143,17 @@ export function generateYesNoResponse(card: CardMeaning): string {
     SIM: [
       "O caminho está aberto. Tenha paciência que chega.",
       "Sim, mas com paciência e fé. Não desista.",
-      "A resposta é positiva. Confie.",
+      "A resposta é positiva. Confie na espiritualidade.",
     ],
     TALVEZ: [
       "Depende das suas atitudes a partir de agora.",
       "O caminho existe, mas precisa de trabalho espiritual.",
-      "A resposta está nas suas mãos.",
+      "A resposta está nas suas mãos. Faça a sua parte.",
     ],
     NÃO: [
       "Não é o momento. Espere o tempo certo.",
-      "Esse caminho está fechado por enquanto.",
-      "Não force. Às vezes o não é proteção.",
+      "Esse caminho está fechado por enquanto. Faça limpeza.",
+      "Não force. Às vezes o não é proteção do guia.",
     ],
   };
 

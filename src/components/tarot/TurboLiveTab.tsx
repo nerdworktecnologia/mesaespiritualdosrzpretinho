@@ -252,7 +252,18 @@ export default function TurboLiveTab() {
           </div>
           {isRecording && <p className="text-foreground/60 text-xs animate-pulse font-crimson">🎙️ Gravando...</p>}
 
-          {/* Detected theme badge */}
+          {/* Card input - manual */}
+          <div className="space-y-1">
+            <p className="font-cinzel text-[10px] uppercase tracking-widest text-muted-foreground">
+              🃏 Cartas sorteadas (1-36)
+            </p>
+            <Input
+              placeholder={`Digite ${readingType === "yesno" ? "1" : readingType} carta(s): ex 12 3 18`}
+              value={cardInput}
+              onChange={(e) => setCardInput(e.target.value)}
+              className="bg-secondary border-border text-lg font-cinzel tracking-widest py-4"
+            />
+          </div>
           {detectedTheme !== "geral" && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground font-cinzel uppercase tracking-wider">Tema detectado:</span>

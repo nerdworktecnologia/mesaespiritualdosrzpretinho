@@ -3,71 +3,70 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { calculateOdu } from "@/data/odus";
+import { calculateCabala, CabalaResult } from "@/data/odus";
 
 export default function CabalaTab() {
-  const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [result, setResult] = useState<ReturnType<typeof calculateOdu> | null>(null);
+  const [result, setResult] = useState<CabalaResult | null>(null);
 
   const calculate = () => {
-    if (!name || !birthDate) return;
-    setResult(calculateOdu(name, birthDate));
+    if (!birthDate) return;
+    setResult(calculateCabala(birthDate));
   };
 
   return (
     <Card className="card-mystical mystic-glow mt-4 animate-fade-up">
       <CardHeader>
-        <CardTitle className="font-cinzel gold-text text-xl">🔢 Cabala de Nascimento (Odu)</CardTitle>
+        <CardTitle className="font-cinzel gold-text text-xl">🔢 Cabala dos Odus</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label className="text-foreground/80">Nome completo</Label>
-            <Input
-              placeholder="Nome completo"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="bg-muted/50 border-border"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-foreground/80">Data de nascimento</Label>
-            <Input
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              className="bg-muted/50 border-border"
-            />
-          </div>
+        <div className="space-y-2">
+          <Label className="text-foreground/80">Data de nascimento</Label>
+          <Input
+            type="date"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            className="bg-muted/50 border-border"
+          />
         </div>
 
         <Button onClick={calculate} className="w-full font-cinzel text-lg py-6">
-          🔮 Calcular Odu
+          🔮 Calcular Cabala Completa
         </Button>
 
         {result && (
-          <div className="card-mystical rounded-lg p-6 mt-4 space-y-4 animate-fade-up border border-primary/20">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 rounded-lg bg-secondary/50">
-                <p className="text-muted-foreground text-sm">Odu Principal</p>
-                <p className="font-cinzel gold-text text-2xl font-bold">{result.principal.name}</p>
-                <p className="text-foreground/70 text-sm mt-1">{result.principal.meaning}</p>
-              </div>
-              <div className="text-center p-4 rounded-lg bg-secondary/50">
-                <p className="text-muted-foreground text-sm">Odu de Destino</p>
-                <p className="font-cinzel gold-text text-2xl font-bold">{result.destino.name}</p>
-                <p className="text-foreground/70 text-sm mt-1">{result.destino.meaning}</p>
-              </div>
+          <div className="space-y-4 animate-fade-up">
+            {/* Odu grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <OduCard label="👤 Centro (Principal)" odu={result.centro} />
+              <OduCard label="🧠 Testa (Mental)" odu={result.testa} />
+              <OduCard label="👁️ Nuca (Passado)" odu={result.nuca} />
+              <OduCard label="🛤️ Frente (Destino)" odu={result.frente} />
+              <OduCard label="🛡️ Costas (Proteção)" odu={result.costas} />
+              <OduCard label="🔮 Nascimento" odu={result.oduNascimento} />
             </div>
 
-            <div className="border-t border-border pt-4">
-              <h4 className="font-cinzel text-primary text-lg mb-2">✨ Mensagem Espiritual</h4>
-              <p className="text-foreground/80 whitespace-pre-line leading-relaxed">{result.message}</p>
+            {/* Full summary */}
+            <div className="card-mystical rounded-lg p-6 border border-primary/20">
+              <h4 className="font-cinzel text-primary text-lg mb-3">✨ Resumo Espiritual Completo</h4>
+              <pre className="whitespace-pre-wrap font-crimson text-foreground/80 text-base leading-relaxed">
+                {result.summary}
+              </pre>
             </div>
           </div>
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function OduCard({ label, odu }: { label: string; odu: { number: number; name: string; orixa: string; meaning: string } }) {
+  return (
+    <div className="text-center p-3 rounded-lg bg-secondary/50 border border-border/50">
+      <p className="text-muted-foreground text-xs mb-1">{label}</p>
+      <p className="font-cinzel gold-text text-lg font-bold">{odu.name}</p>
+      <p className="text-accent text-xs font-cinzel">{odu.orixa}</p>
+      <p className="text-foreground/50 text-xs mt-1 leading-snug">{odu.meaning}</p>
+    </div>
   );
 }

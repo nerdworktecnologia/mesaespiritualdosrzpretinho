@@ -11,12 +11,12 @@ interface BuziosResult {
 
 function jogarBuzios(): BuziosResult {
   const buzios: number[] = [];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 16; i++) {
     buzios.push(Math.random() < 0.5 ? 0 : 1);
   }
   let abertos = buzios.reduce((a, b) => a + b, 0);
   if (abertos === 0) abertos = 1;
-  // Map: 1-12 abertos → odus index (odus array is 0-indexed, odu numbers 1-16)
+  if (abertos > 16) abertos = 16;
   const odu = odus[abertos - 1];
   return { buzios, abertos, odu };
 }

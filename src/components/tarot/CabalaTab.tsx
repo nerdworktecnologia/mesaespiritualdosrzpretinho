@@ -22,7 +22,7 @@ interface CrossInterpretation {
 
 function jogarBuzios(): BuziosState {
   const buzios: number[] = [];
-  for (let i = 0; i < 12; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
+  for (let i = 0; i < 16; i++) buzios.push(Math.random() < 0.5 ? 0 : 1);
   let abertos = buzios.reduce((a, b) => a + b, 0);
   if (abertos === 0) abertos = 1;
   return { buzios, abertos, odu: odus[abertos - 1] };
@@ -118,7 +118,7 @@ export default function CabalaTab() {
         <Card className="card-mystical mystic-glow animate-fade-up">
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-lg">🐚 Jogo de Búzios</CardTitle>
-            <p className="text-muted-foreground text-xs">12 búzios — ● aberto / ○ fechado</p>
+            <p className="text-muted-foreground text-xs">16 búzios — ● aberto / ○ fechado</p>
           </CardHeader>
           <CardContent className="space-y-4">
             <Button onClick={handleBuzios} className="w-full font-cinzel text-base py-5">🐚 Jogar Búzios</Button>
@@ -132,7 +132,7 @@ export default function CabalaTab() {
                   ))}
                 </div>
                 <div className="text-center space-y-2 p-4 rounded-lg bg-secondary/50 border border-border/50">
-                  <p className="text-muted-foreground text-sm">Abertos: <span className="text-primary font-bold">{buziosResult.abertos}</span> de 12</p>
+                  <p className="text-muted-foreground text-sm">Abertos: <span className="text-primary font-bold">{buziosResult.abertos}</span> de 16</p>
                   <p className="font-cinzel gold-text text-2xl font-bold">{buziosResult.odu.name}</p>
                   <p className="text-accent text-sm font-cinzel">{buziosResult.odu.orixa}</p>
                   <p className="text-foreground/70 text-sm mt-2 leading-relaxed">{buziosResult.odu.meaning}</p>

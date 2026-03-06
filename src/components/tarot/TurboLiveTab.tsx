@@ -101,7 +101,7 @@ export default function TurboLiveTab() {
 
   const generate = async () => {
     const numbers = cardInput
-      .split(/[\s,]+/)
+      .split(/[\s]+/)
       .map((n) => parseInt(n.trim()))
       .filter((n) => n >= 1 && n <= 36);
 

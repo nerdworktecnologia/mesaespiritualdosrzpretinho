@@ -5,12 +5,11 @@ import { cardMeanings, getYesNoResult, CardMeaning } from "@/data/cardMeanings";
 import { generateShortResponse, generateFullResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { addToHistory } from "@/utils/history";
 import { playRevealSound, playResultSound } from "@/utils/sounds";
-import { detectTheme, getThemedCards } from "@/utils/themeDetection";
+import { detectTheme } from "@/utils/themeDetection";
 import TarotCard from "./TarotCard";
 import { Mic, MicOff, RotateCcw } from "lucide-react";
 
 type ReadingType = "1" | "3" | "5" | "yesno";
-type GenerationMode = "auto" | "manual";
 type ResponseLevel = "5s" | "15s" | "full";
 
 const quickTopics = [
@@ -26,14 +25,6 @@ const quickTopics = [
   { label: "💼 Emprego", q: "Vou arrumar trabalho?" },
 ];
 
-function randomCards(count: number): number[] {
-  const nums: number[] = [];
-  while (nums.length < count) {
-    const n = Math.floor(Math.random() * 36) + 1;
-    if (!nums.includes(n)) nums.push(n);
-  }
-  return nums;
-}
 
 // Position labels per reading type
 function getPositionLabels(type: ReadingType): string[] {
@@ -70,7 +61,6 @@ function generateCompleteResponse(cards: CardMeaning[], question: string, type: 
 export default function SistemaRapidoTab() {
   const [question, setQuestion] = useState("");
   const [readingType, setReadingType] = useState<ReadingType>("3");
-  const [mode, setMode] = useState<GenerationMode>("auto");
   const [cardInput, setCardInput] = useState("");
   const [isRecording, setIsRecording] = useState(false);
 
@@ -98,16 +88,9 @@ export default function SistemaRapidoTab() {
   };
 
   const generate = () => {
-    let numbers: number[];
     const count = readingType === "yesno" ? 1 : parseInt(readingType);
-
-    if (mode === "auto") {
-      const theme = detectTheme(question || "");
-      numbers = getThemedCards(count, theme);
-    } else {
-      numbers = cardInput.split(/[\s,]+/).map((n) => parseInt(n.trim())).filter((n) => n >= 1 && n <= 36);
-      if (numbers.length !== count) return;
-    }
+    const numbers = cardInput.split(/[\s]+/).map((n) => parseInt(n.trim())).filter((n) => n >= 1 && n <= 36);
+    if (numbers.length !== count) return;
 
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
     const labels = getPositionLabels(readingType);
@@ -212,34 +195,16 @@ export default function SistemaRapidoTab() {
             </div>
           </div>
 
-          {/* Mode toggle */}
-          <div>
-            <p className="font-cinzel text-xs uppercase tracking-widest text-muted-foreground mb-2">Modo</p>
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                onClick={() => setMode("auto")}
-                className={`font-cinzel text-sm tracking-wider py-4 ${mode === "auto" ? "bg-foreground text-background" : "bg-secondary text-foreground border border-border"}`}
-              >
-                ⚡ Automático
-              </Button>
-              <Button
-                onClick={() => setMode("manual")}
-                className={`font-cinzel text-sm tracking-wider py-4 ${mode === "manual" ? "bg-foreground text-background" : "bg-secondary text-foreground border border-border"}`}
-              >
-                ✏️ Manual
-              </Button>
-            </div>
-          </div>
-
-          {/* Manual card input */}
-          {mode === "manual" && (
+          {/* Card input */}
+          <div className="space-y-1">
+            <p className="font-cinzel text-xs uppercase tracking-widest text-muted-foreground">🃏 Cartas sorteadas (1-36)</p>
             <Input
-              placeholder={readingType === "yesno" ? "Nº da carta" : `${readingType} número(s) separados por vírgula`}
+              placeholder={readingType === "yesno" ? "Nº da carta" : `Digite ${readingType} número(s) separados por espaço`}
               value={cardInput}
               onChange={(e) => setCardInput(e.target.value)}
               className="bg-secondary border-border text-2xl font-cinzel tracking-[0.2em] text-center py-6"
             />
-          )}
+          </div>
 
           {/* Generate button */}
           <Button

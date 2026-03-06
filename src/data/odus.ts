@@ -27,12 +27,11 @@ export const odus: Odu[] = [
 ];
 
 export interface CabalaResult {
-  nuca: Odu;      // Passado/Origem
-  frente: Odu;    // Futuro/Destino
-  centro: Odu;    // Odu principal (cabeça)
-  testa: Odu;     // Caminho mental
-  costas: Odu;    // Proteção espiritual
-  oduNascimento: Odu; // Odu geral de nascimento
+  superior: Odu;    // Esquerda (posições ímpares)
+  inferior: Odu;    // Direita (posições pares)
+  lateral: Odu;     // Soma esquerda + direita
+  central: Odu;     // Soma esquerda + direita + lateral
+  final: Odu;       // Soma de tudo
   summary: string;
 }
 
@@ -45,83 +44,65 @@ function reduceToOdu(n: number): number {
 }
 
 export function calculateCabala(birthDate: string): CabalaResult {
-  // Parse date: expected format YYYY-MM-DD
+  // Format: YYYY-MM-DD → "DDMMAAAA" (8 dígitos)
   const parts = birthDate.split("-");
-  const year = parseInt(parts[0]);
-  const month = parseInt(parts[1]);
-  const day = parseInt(parts[2]);
+  const formatted = parts[2] + parts[1] + parts[0]; // DDMMAAAA
+  const numeros = formatted.split("").map(Number);
 
-  // 1. Odu de Nascimento (soma de todos os dígitos)
-  const allDigits = birthDate.replace(/\D/g, "").split("").reduce((s, d) => s + parseInt(d), 0);
-  const oduNascimentoNum = reduceToOdu(allDigits);
+  // PASSO 1 — separar esquerda (posições ímpares 0,2,4,6) e direita (1,3,5,7)
+  const esquerda = reduceToOdu(numeros[0] + numeros[2] + numeros[4] + numeros[6]);
+  const direita = reduceToOdu(numeros[1] + numeros[3] + numeros[5] + numeros[7]);
 
-  // 2. Nuca (Passado/Origem): dia + mês
-  const nucaSum = day + month;
-  const nucaNum = reduceToOdu(nucaSum);
+  // PASSO 2 — lateral: soma esquerda + direita
+  const lateralNum = reduceToOdu(esquerda + direita);
 
-  // 3. Frente (Futuro/Destino): últimos 2 dígitos do ano
-  const lastTwoDigits = year % 100;
-  const frenteSum = Math.floor(lastTwoDigits / 10) + (lastTwoDigits % 10);
-  const frenteNum = reduceToOdu(frenteSum);
+  // PASSO 3 — central: esquerda + direita + lateral
+  const centralNum = reduceToOdu(esquerda + direita + lateralNum);
 
-  // 4. Centro da Cabeça (Odu principal): nuca + frente
-  const centroSum = nucaNum + frenteNum;
-  const centroNum = reduceToOdu(centroSum);
+  // PASSO 4 — final: esquerda + direita + lateral + central
+  const finalNum = reduceToOdu(esquerda + direita + lateralNum + centralNum);
 
-  // 5. Testa (Caminho mental): dia + últimos 2 dígitos do ano
-  const testaSum = day + lastTwoDigits;
-  const testaNum = reduceToOdu(testaSum);
+  const superior = odus[esquerda - 1];
+  const inferior = odus[direita - 1];
+  const lateral = odus[lateralNum - 1];
+  const central = odus[centralNum - 1];
+  const finalOdu = odus[finalNum - 1];
 
-  // 6. Costas (Proteção): mês + últimos 2 dígitos do ano
-  const costasSum = month + lastTwoDigits;
-  const costasNum = reduceToOdu(costasSum);
+  const summary = generateCabalaSummary(superior, inferior, lateral, central, finalOdu);
 
-  const nuca = odus[nucaNum - 1];
-  const frente = odus[frenteNum - 1];
-  const centro = odus[centroNum - 1];
-  const testa = odus[testaNum - 1];
-  const costas = odus[costasNum - 1];
-  const oduNascimento = odus[oduNascimentoNum - 1];
-
-  const summary = generateCabalaSummary(nuca, frente, centro, testa, costas, oduNascimento);
-
-  return { nuca, frente, centro, testa, costas, oduNascimento, summary };
+  return { superior, inferior, lateral, central, final: finalOdu, summary };
 }
 
 function generateCabalaSummary(
-  nuca: Odu, frente: Odu, centro: Odu, testa: Odu, costas: Odu, nascimento: Odu
+  superior: Odu, inferior: Odu, lateral: Odu, central: Odu, finalOdu: Odu
 ): string {
   return [
-    `🔮 Odu de Nascimento: ${nascimento.name} (${nascimento.orixa})`,
-    `${nascimento.meaning}`,
-    `Personalidade: ${nascimento.personality}`,
+    `🔮 Odu Superior (Esquerda): ${superior.name} (${superior.orixa})`,
+    `${superior.meaning}`,
+    `Personalidade: ${superior.personality}`,
     "",
-    `👤 Centro da Cabeça (Odu Principal): ${centro.name} (${centro.orixa})`,
-    `Essa é a sua essência. ${centro.meaning}`,
-    `${centro.personality}`,
+    `👤 Odu Inferior (Direita): ${inferior.name} (${inferior.orixa})`,
+    `${inferior.meaning}`,
+    `${inferior.personality}`,
     "",
-    `🧠 Testa (Caminho Mental): ${testa.name} (${testa.orixa})`,
-    `A forma como você pensa e toma decisões. ${testa.meaning}`,
+    `🧠 Odu Lateral: ${lateral.name} (${lateral.orixa})`,
+    `${lateral.meaning}`,
     "",
-    `👁️ Nuca (Passado/Origem): ${nuca.name} (${nuca.orixa})`,
-    `De onde você vem espiritualmente. ${nuca.meaning}`,
-    `Herança espiritual: ${nuca.personality}`,
+    `🛤️ Odu Central: ${central.name} (${central.orixa})`,
+    `${central.meaning}`,
+    `${central.advice}`,
     "",
-    `🛤️ Frente (Futuro/Destino): ${frente.name} (${frente.orixa})`,
-    `Para onde você está caminhando. ${frente.meaning}`,
-    `${frente.advice}`,
-    "",
-    `🛡️ Costas (Proteção Espiritual): ${costas.name} (${costas.orixa})`,
-    `Quem protege você por trás. ${costas.meaning}`,
+    `🛡️ Odu Final: ${finalOdu.name} (${finalOdu.orixa})`,
+    `${finalOdu.meaning}`,
     "",
     `━━━━━━━━━━━━━━━━━━`,
     `✨ Resumo da Vida Espiritual:`,
-    `Você é regido(a) por ${centro.orixa} no centro da cabeça, com ${nascimento.orixa} como energia de nascimento.`,
-    `Sua origem espiritual vem de ${nuca.orixa} (nuca), e seu destino caminha para ${frente.orixa} (frente).`,
-    `Sua mente é guiada por ${testa.orixa} (testa) e sua proteção vem de ${costas.orixa} (costas).`,
+    `Seu Odu Superior é ${superior.name} (${superior.orixa}), e o Inferior é ${inferior.name} (${inferior.orixa}).`,
+    `O Odu Central da sua cabala é ${central.name} (${central.orixa}).`,
+    `O Odu Final, que rege sua missão, é ${finalOdu.name} (${finalOdu.orixa}).`,
     "",
-    `💡 Conselho principal: ${centro.advice}`,
-    `📿 Orixá regente: ${centro.orixa}`,
+    `💡 Conselho principal: ${central.advice}`,
+    `📿 Orixá regente: ${central.orixa}`,
   ].join("\n");
 }
 
@@ -129,8 +110,8 @@ function generateCabalaSummary(
 export function calculateOdu(fullName: string, birthDate: string) {
   const result = calculateCabala(birthDate);
   return {
-    principal: result.centro,
-    destino: result.frente,
+    principal: result.central,
+    destino: result.final,
     message: result.summary,
   };
 }

@@ -38,12 +38,11 @@ export default function CabalaTab() {
           <div className="space-y-4 animate-fade-up">
             {/* Odu grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              <OduCard label="👤 Centro (Principal)" odu={result.centro} />
-              <OduCard label="🧠 Testa (Mental)" odu={result.testa} />
-              <OduCard label="👁️ Nuca (Passado)" odu={result.nuca} />
-              <OduCard label="🛤️ Frente (Destino)" odu={result.frente} />
-              <OduCard label="🛡️ Costas (Proteção)" odu={result.costas} />
-              <OduCard label="🔮 Nascimento" odu={result.oduNascimento} />
+              <OduCard label="🔮 Superior" odu={result.superior} />
+              <OduCard label="👤 Inferior" odu={result.inferior} />
+              <OduCard label="🧠 Lateral" odu={result.lateral} />
+              <OduCard label="🛤️ Central" odu={result.central} />
+              <OduCard label="🛡️ Final" odu={result.final} />
             </div>
 
             {/* Full summary */}

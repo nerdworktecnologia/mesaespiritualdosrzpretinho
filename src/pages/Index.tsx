@@ -1,11 +1,22 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Volume2, VolumeX } from "lucide-react";
 import AtendimentoTab from "@/components/tarot/AtendimentoTab";
 import CabalaTab from "@/components/tarot/CabalaTab";
 import TiragemTab from "@/components/tarot/TiragemTab";
 import LiveModeTab from "@/components/tarot/LiveModeTab";
 import HistoricoTab from "@/components/tarot/HistoricoTab";
+import { isSoundEnabled, toggleSound } from "@/utils/sounds";
 
 const Index = () => {
+  const [soundOn, setSoundOn] = useState(isSoundEnabled());
+
+  const handleToggleSound = () => {
+    const newState = toggleSound();
+    setSoundOn(newState);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/50 py-4 px-4">

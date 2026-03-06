@@ -3,27 +3,28 @@ export interface Odu {
   name: string;
   orixa: string;
   meaning: string;
+  personality: string;
   evitar: string;
   advice: string;
 }
 
 export const odus: Odu[] = [
-  { number: 1, name: "Okanran", orixa: "Exu, Ogum", meaning: "Energia de força e transformação. Indica coragem e abertura de caminhos, mas pede controle da impulsividade.", evitar: "brigas, decisões precipitadas", advice: "praticar autocontrole e disciplina espiritual" },
-  { number: 2, name: "Ejioko", orixa: "Ibeji, Oxum", meaning: "Energia de equilíbrio, inteligência e observação. Mostra mente analítica e sensibilidade espiritual.", evitar: "indecisão e excesso de pensamento", advice: "confiar mais na própria intuição" },
-  { number: 3, name: "Etaogunda", orixa: "Ogum, Xangô", meaning: "Energia de luta e conquista. Indica crescimento através do esforço.", evitar: "conflitos constantes", advice: "manter disciplina e foco" },
-  { number: 4, name: "Irosun", orixa: "Iemanjá, Nanã", meaning: "Odù ligado à espiritualidade profunda e ancestralidade.", evitar: "ambientes negativos", advice: "fortalecer fé e espiritualidade" },
-  { number: 5, name: "Oxé", orixa: "Oxum, Logunedé", meaning: "Energia de prosperidade e magnetismo pessoal.", evitar: "vaidade excessiva", advice: "manter humildade e equilíbrio financeiro" },
-  { number: 6, name: "Obará", orixa: "Xangô, Ogum", meaning: "Energia de liderança e expansão.", evitar: "orgulho e autoritarismo", advice: "liderar com sabedoria" },
-  { number: 7, name: "Odi", orixa: "Omolu, Obaluaiê", meaning: "Energia de proteção e estratégia.", evitar: "guardar mágoas", advice: "praticar perdão" },
-  { number: 8, name: "Ejionile", orixa: "Xangô, Oxalá", meaning: "Odù da justiça e responsabilidade.", evitar: "rigidez e excesso de cobrança", advice: "buscar equilíbrio" },
-  { number: 9, name: "Ossá", orixa: "Iansã, Logunedé", meaning: "Energia de movimento e mudança.", evitar: "instabilidade", advice: "manter foco" },
-  { number: 10, name: "Ofun", orixa: "Oxalá, Orunmilá", meaning: "Odù da sabedoria espiritual.", evitar: "absorver energia negativa", advice: "cuidar da espiritualidade" },
-  { number: 11, name: "Owonrin", orixa: "Exu, Iansã", meaning: "Energia da comunicação e criatividade.", evitar: "falar demais", advice: "usar palavra com sabedoria" },
-  { number: 12, name: "Ejilaxeborá", orixa: "Oxum, Iemanjá", meaning: "Odù da união e parceria.", evitar: "anular a própria vontade", advice: "desenvolver autonomia" },
-  { number: 13, name: "Ejiologbon", orixa: "Orunmilá, Oxalá", meaning: "Energia de sabedoria e conhecimento.", evitar: "isolamento", advice: "compartilhar conhecimento" },
-  { number: 14, name: "Iká", orixa: "Obaluaiê, Nanã", meaning: "Energia espiritual profunda e transformação.", evitar: "ambientes negativos", advice: "fortalecer proteção espiritual" },
-  { number: 15, name: "Ogbéogundá", orixa: "Ogum, Oxóssi", meaning: "Odù de abertura de caminhos.", evitar: "agir sem planejamento", advice: "focar nos objetivos" },
-  { number: 16, name: "Aláfia", orixa: "Oxalá, Oxum", meaning: "Energia de paz e equilíbrio.", evitar: "acomodação", advice: "manter espiritualidade forte" },
+  { number: 1, name: "Okanran", orixa: "Exu, Ogum", meaning: "Energia de força e transformação. Indica coragem e abertura de caminhos, mas pede controle da impulsividade.", personality: "Pessoa forte, corajosa e determinada. Abre seus próprios caminhos com garra. Pode ser impulsiva e teimosa quando contrariada.", evitar: "brigas, decisões precipitadas", advice: "praticar autocontrole e disciplina espiritual" },
+  { number: 2, name: "Ejioko", orixa: "Ibeji, Oxum", meaning: "Energia de equilíbrio, inteligência e observação. Mostra mente analítica e sensibilidade espiritual.", personality: "Pessoa inteligente, observadora e analítica. Pensa antes de agir. Sensível espiritualmente, mas pode travar por excesso de dúvida.", evitar: "indecisão e excesso de pensamento", advice: "confiar mais na própria intuição" },
+  { number: 3, name: "Etaogunda", orixa: "Ogum, Xangô", meaning: "Energia de luta e conquista. Indica crescimento através do esforço.", personality: "Guerreiro(a) nato(a). Pessoa batalhadora que vence pelo esforço. Determinada e focada, mas pode entrar em conflitos desnecessários.", evitar: "conflitos constantes", advice: "manter disciplina e foco" },
+  { number: 4, name: "Irosun", orixa: "Iemanjá, Nanã", meaning: "Odù ligado à espiritualidade profunda e ancestralidade.", personality: "Pessoa ligada às raízes e à família. Forte intuição e mediunidade natural. Protetora e acolhedora, mas pode absorver energias alheias.", evitar: "ambientes negativos", advice: "fortalecer fé e espiritualidade" },
+  { number: 5, name: "Oxé", orixa: "Oxum, Logunedé", meaning: "Energia de prosperidade e magnetismo pessoal.", personality: "Pessoa magnética, sedutora e próspera. Tem facilidade para atrair coisas boas. Encantadora, mas precisa cuidar da vaidade.", evitar: "vaidade excessiva", advice: "manter humildade e equilíbrio financeiro" },
+  { number: 6, name: "Obará", orixa: "Xangô, Ogum", meaning: "Energia de liderança e expansão.", personality: "Líder natural com poder de comando. Pessoa justa e comunicativa. Expansiva e generosa, mas pode pecar pelo orgulho.", evitar: "orgulho e autoritarismo", advice: "liderar com sabedoria" },
+  { number: 7, name: "Odi", orixa: "Omolu, Obaluaiê", meaning: "Energia de proteção e estratégia.", personality: "Pessoa estratégica, reservada e inteligente. Observa tudo antes de agir. Forte espiritualmente, mas pode guardar ressentimentos.", evitar: "guardar mágoas", advice: "praticar perdão" },
+  { number: 8, name: "Ejionile", orixa: "Xangô, Oxalá", meaning: "Odù da justiça e responsabilidade.", personality: "Pessoa justa, responsável e equilibrada. Tem senso de dever forte. Pode ser rígida demais consigo e com os outros.", evitar: "rigidez e excesso de cobrança", advice: "buscar equilíbrio" },
+  { number: 9, name: "Ossá", orixa: "Iansã, Logunedé", meaning: "Energia de movimento e mudança.", personality: "Pessoa inquieta, corajosa e transformadora. Não tem medo de mudanças. Precisa de liberdade, mas deve cuidar da instabilidade.", evitar: "instabilidade", advice: "manter foco" },
+  { number: 10, name: "Ofun", orixa: "Oxalá, Orunmilá", meaning: "Odù da sabedoria espiritual.", personality: "Pessoa sábia, espiritual e com missão elevada. Pureza de coração e visão profunda. Pode ser incompreendida pelo mundo material.", evitar: "absorver energia negativa", advice: "cuidar da espiritualidade" },
+  { number: 11, name: "Owonrin", orixa: "Exu, Iansã", meaning: "Energia da comunicação e criatividade.", personality: "Pessoa criativa, comunicativa e expressiva. Tem o dom da palavra e da arte. Carismática, mas precisa saber a hora de calar.", evitar: "falar demais", advice: "usar palavra com sabedoria" },
+  { number: 12, name: "Ejilaxeborá", orixa: "Oxum, Iemanjá", meaning: "Odù da união e parceria.", personality: "Pessoa acolhedora, parceira e dedicada. Valoriza vínculos e relacionamentos. Pode se anular em prol dos outros.", evitar: "anular a própria vontade", advice: "desenvolver autonomia" },
+  { number: 13, name: "Ejiologbon", orixa: "Orunmilá, Oxalá", meaning: "Energia de sabedoria e conhecimento.", personality: "Alma velha. Pessoa madura, estudiosa e com visão de longo prazo. Sábia desde jovem, mas pode se isolar.", evitar: "isolamento", advice: "compartilhar conhecimento" },
+  { number: 14, name: "Iká", orixa: "Obaluaiê, Nanã", meaning: "Energia espiritual profunda e transformação.", personality: "Pessoa resiliente que supera grandes provas. Forte espiritualmente e com poder de cura. Cada obstáculo a fortalece.", evitar: "ambientes negativos", advice: "fortalecer proteção espiritual" },
+  { number: 15, name: "Ogbéogundá", orixa: "Ogum, Oxóssi", meaning: "Odù de abertura de caminhos.", personality: "Pessoa com caminhos sempre se abrindo. Prosperidade natural e facilidade para conquistas. Precisa manter a humildade.", evitar: "agir sem planejamento", advice: "focar nos objetivos" },
+  { number: 16, name: "Aláfia", orixa: "Oxalá, Oxum", meaning: "Energia de paz e equilíbrio.", personality: "Pessoa pacificadora, equilibrada e com proteção espiritual forte. Missão elevada. Não deve se acomodar.", evitar: "acomodação", advice: "manter espiritualidade forte" },
 ];
 
 export interface CabalaResult {

@@ -111,13 +111,22 @@ export default function Home() {
               Painel de Atendimento
             </p>
           </div>
-          <Button
-            onClick={() => navigateToMesa()}
-            className="font-cinzel text-xs tracking-wider uppercase bg-foreground text-background hover:bg-foreground/90 gap-2"
-          >
-            <Sparkles className="h-4 w-4" />
-            Abrir Mesa
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => navigate("/live")}
+              variant="secondary"
+              className="font-cinzel text-xs tracking-wider uppercase gap-2 border border-border"
+            >
+              ⚡ Live
+            </Button>
+            <Button
+              onClick={() => navigateToMesa()}
+              className="font-cinzel text-xs tracking-wider uppercase bg-foreground text-background hover:bg-foreground/90 gap-2"
+            >
+              <Sparkles className="h-4 w-4" />
+              Abrir Mesa
+            </Button>
+          </div>
         </div>
       </header>
 

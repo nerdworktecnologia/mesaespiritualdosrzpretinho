@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { CardMeaning } from "@/data/cardMeanings";
 
 interface TarotCardProps {
@@ -13,11 +13,11 @@ function SparkleEffect() {
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; duration: number; delay: number }[]>([]);
 
   useEffect(() => {
-    const p = Array.from({ length: 16 }, (_, i) => ({
+    const p = Array.from({ length: 12 }, (_, i) => ({
       id: i,
       x: Math.random() * 140 - 20,
       y: Math.random() * 200 - 20,
-      size: Math.random() * 6 + 2,
+      size: Math.random() * 4 + 2,
       duration: Math.random() * 0.8 + 0.4,
       delay: Math.random() * 0.3,
     }));
@@ -35,8 +35,8 @@ function SparkleEffect() {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            background: `radial-gradient(circle, hsl(45 100% 70%), hsl(45 90% 55%), transparent)`,
-            boxShadow: `0 0 ${p.size * 2}px hsl(45 90% 55% / 0.8), 0 0 ${p.size * 4}px hsl(45 90% 55% / 0.4)`,
+            background: `radial-gradient(circle, hsl(0 0% 100%), hsl(0 0% 80%), transparent)`,
+            boxShadow: `0 0 ${p.size * 2}px hsl(0 0% 100% / 0.6)`,
             animation: `sparkle-float ${p.duration}s ease-out ${p.delay}s forwards`,
             opacity: 0,
           }}
@@ -100,69 +100,61 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
           transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-        {/* Front face (revealed) */}
+        {/* Front face */}
         <div
           className="absolute inset-0 rounded-lg overflow-hidden flex flex-col items-center justify-center"
           style={{
             backfaceVisibility: "hidden",
-            background: "linear-gradient(145deg, hsl(270 25% 14%), hsl(270 30% 8%))",
-            border: "1.5px solid hsl(45 90% 55% / 0.3)",
-            boxShadow: flipped
-              ? "0 4px 20px hsl(45 90% 55% / 0.1)"
-              : showSparkle
-                ? "0 4px 40px hsl(45 90% 55% / 0.5), 0 0 60px hsl(45 90% 55% / 0.2)"
-                : "0 4px 30px hsl(45 90% 55% / 0.25), 0 0 40px hsl(45 90% 55% / 0.1)",
+            background: "linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 3%))",
+            border: "1px solid hsl(0 0% 25%)",
+            boxShadow: showSparkle
+              ? "0 0 30px hsl(0 0% 100% / 0.2), 0 0 60px hsl(0 0% 100% / 0.05)"
+              : "0 4px 20px hsl(0 0% 0% / 0.5)",
             transition: "box-shadow 0.5s ease",
           }}
         >
-          {/* Corner numbers */}
-          <div className="absolute top-1 left-1.5 font-cinzel gold-text font-bold" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
+          <div className="absolute top-1 left-1.5 font-cinzel text-foreground/50 font-bold" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
             {card.number}
           </div>
-          <div className="absolute bottom-1 right-1.5 font-cinzel gold-text font-bold rotate-180" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
+          <div className="absolute bottom-1 right-1.5 font-cinzel text-foreground/50 font-bold rotate-180" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
             {card.number}
           </div>
-          {/* Border ornaments */}
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(45 90% 55% / 0.3), transparent)" }} />
-          <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(45 90% 55% / 0.3), transparent)" }} />
+          <div className="absolute top-0 left-0 right-0 h-px bg-foreground/10" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/10" />
 
           <span className={`${iconSizes[size]} drop-shadow-lg`} role="img" aria-label={card.name}>
             {card.icon}
           </span>
-          <span className={`font-cinzel gold-text font-bold mt-1 ${numberSizes[size]}`}>
+          <span className={`font-cinzel text-foreground font-bold mt-1 ${numberSizes[size]}`}>
             {card.number}
           </span>
-          <span className={`font-cinzel text-foreground/70 text-center px-1 leading-tight ${nameSizes[size]}`}>
+          <span className={`font-cinzel text-foreground/60 text-center px-1 leading-tight ${nameSizes[size]}`}>
             {card.name}
           </span>
         </div>
 
-        {/* Back face (hidden) */}
+        {/* Back face */}
         <div
           className="absolute inset-0 rounded-lg overflow-hidden flex items-center justify-center"
           style={{
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
-            background: "linear-gradient(145deg, hsl(270 30% 12%), hsl(280 35% 8%))",
-            border: "1.5px solid hsl(280 60% 30% / 0.5)",
-            boxShadow: "0 4px 20px hsl(280 60% 30% / 0.15)",
+            background: "linear-gradient(145deg, hsl(0 0% 10%), hsl(0 0% 4%))",
+            border: "1px solid hsl(0 0% 20%)",
           }}
         >
-          {/* Back pattern */}
-          <div className="flex flex-col items-center gap-1 opacity-60">
-            <span className="text-3xl">🎩</span>
-            <div className="w-8 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(45 90% 55% / 0.5), transparent)" }} />
-            <span className="font-cinzel text-[8px] text-foreground/40 tracking-widest">MALANDRO</span>
+          <div className="flex flex-col items-center gap-1 opacity-40">
+            <span className="text-2xl">✦</span>
+            <div className="w-8 h-px bg-foreground/20" />
+            <span className="font-cinzel text-[7px] text-foreground/30 tracking-[0.3em] uppercase">Zé Pretinho</span>
           </div>
-          {/* Cross pattern */}
           <div className="absolute inset-2 border border-foreground/5 rounded" />
-          <div className="absolute inset-4 border border-foreground/5 rounded" />
         </div>
       </div>
 
       {showMeaning && !flipped && (
         <div className="max-w-[140px] text-center animate-fade-up">
-          <p className="text-foreground/60 text-xs font-crimson italic leading-snug">{card.shortMeaning}</p>
+          <p className="text-foreground/50 text-xs font-crimson italic leading-snug">{card.shortMeaning}</p>
         </div>
       )}
     </div>

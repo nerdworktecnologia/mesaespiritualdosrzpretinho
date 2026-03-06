@@ -12,27 +12,24 @@ import { isSoundEnabled, toggleSound } from "@/utils/sounds";
 const Index = () => {
   const [soundOn, setSoundOn] = useState(isSoundEnabled());
 
-  const handleToggleSound = () => {
-    setSoundOn(toggleSound());
-  };
-
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border/50 py-4 px-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+      {/* Header */}
+      <header className="border-b border-border py-6 px-4">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="font-cinzel text-2xl md:text-3xl gold-text font-bold tracking-wider">
-              🎩 Tarot do Malandro
+            <h1 className="font-cinzel text-xl md:text-2xl tracking-[0.2em] uppercase text-foreground spirit-highlight">
+              Mesa Espiritual do Sr. Zé Pretinho
             </h1>
-            <p className="text-muted-foreground text-sm mt-1 font-crimson italic">
-              Sistema de Tarot para Lives — Zé Pelintra & Zé Pretinho
+            <p className="text-muted-foreground text-sm mt-2 font-crimson italic">
+              Consulta espiritual conduzida pela força de Sr. Zé Pretinho. Faça sua pergunta com fé.
             </p>
           </div>
           <Button
             variant="ghost"
             size="icon"
-            onClick={handleToggleSound}
-            className="text-muted-foreground hover:text-primary"
+            onClick={() => setSoundOn(toggleSound())}
+            className="text-muted-foreground hover:text-foreground"
             title={soundOn ? "Desativar sons" : "Ativar sons"}
           >
             {soundOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
@@ -40,35 +37,41 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto p-4 mt-4">
-        <Tabs defaultValue="atendimento" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-secondary/50 border border-border">
-            <TabsTrigger value="atendimento" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              📋 Atendimento
+      <main className="max-w-3xl mx-auto p-4 mt-4">
+        <Tabs defaultValue="mesa" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 bg-secondary border border-border">
+            <TabsTrigger value="mesa" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+              Mesa
             </TabsTrigger>
-            <TabsTrigger value="cabala" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              🔢 Cabala
+            <TabsTrigger value="live" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+              ⚡ Live
             </TabsTrigger>
-            <TabsTrigger value="tiragem" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              🔮 Tiragem
+            <TabsTrigger value="cabala" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+              Cabala
             </TabsTrigger>
-            <TabsTrigger value="live" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
-              🔥 Live
-            </TabsTrigger>
-            <TabsTrigger value="historico" className="font-cinzel text-xs md:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              📜 Histórico
+            <TabsTrigger value="historico" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+              Histórico
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="atendimento"><AtendimentoTab /></TabsContent>
-          <TabsContent value="cabala"><CabalaTab /></TabsContent>
-          <TabsContent value="tiragem"><TiragemTab /></TabsContent>
+          <TabsContent value="mesa"><MesaTab /></TabsContent>
           <TabsContent value="live"><LiveModeTab /></TabsContent>
+          <TabsContent value="cabala"><CabalaTab /></TabsContent>
           <TabsContent value="historico"><HistoricoTab /></TabsContent>
         </Tabs>
       </main>
     </div>
   );
 };
+
+// Combined Mesa tab: Atendimento + Tiragem in one flow
+function MesaTab() {
+  return (
+    <div className="space-y-4">
+      <AtendimentoTab />
+      <TiragemTab />
+    </div>
+  );
+}
 
 export default Index;

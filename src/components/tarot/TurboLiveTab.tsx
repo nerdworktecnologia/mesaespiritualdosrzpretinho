@@ -48,6 +48,7 @@ function generate5s(cards: CardMeaning[], type: ReadingType): string {
 export default function TurboLiveTab() {
   const [clientName, setClientName] = useState("");
   const [question, setQuestion] = useState("");
+  const [cardInput, setCardInput] = useState("");
   const [detectedTheme, setDetectedTheme] = useState<QuestionTheme>("geral");
   const [readingType, setReadingType] = useState<ReadingType>("3");
   const [isRecording, setIsRecording] = useState(false);
@@ -99,9 +100,17 @@ export default function TurboLiveTab() {
   };
 
   const generate = async () => {
-    const count = readingType === "yesno" ? 1 : parseInt(readingType);
-    const theme = detectedTheme;
-    const numbers = getThemedCards(count, theme);
+    const numbers = cardInput
+      .split(/[\s,]+/)
+      .map((n) => parseInt(n.trim()))
+      .filter((n) => n >= 1 && n <= 36);
+
+    const expectedCount = readingType === "yesno" ? 1 : parseInt(readingType);
+    if (numbers.length !== expectedCount) {
+      toast.error(`Digite ${expectedCount} carta(s) (1-36)`);
+      return;
+    }
+
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
 
     // Sounds
@@ -127,7 +136,7 @@ export default function TurboLiveTab() {
       id: Date.now().toString(),
       name: clientName || "—",
       question: question || "Consulta rápida",
-      theme,
+      theme: detectedTheme,
       cardNumbers: numbers,
       quickResponse: r5,
       fullResponse: rFull,
@@ -144,7 +153,7 @@ export default function TurboLiveTab() {
             question: question || "Consulta rápida",
             cards: cards.map((c) => ({ number: c.number, name: c.name, meaning: c.meaning, energy: c.energy })),
             readingType,
-            theme,
+            theme: detectedTheme,
           },
         });
 
@@ -178,6 +187,7 @@ export default function TurboLiveTab() {
   const reset = () => {
     setClientName("");
     setQuestion("");
+    setCardInput("");
     setDetectedTheme("geral");
     setResolvedCards([]);
     setResponse5s("");
@@ -242,7 +252,18 @@ export default function TurboLiveTab() {
           </div>
           {isRecording && <p className="text-foreground/60 text-xs animate-pulse font-crimson">🎙️ Gravando...</p>}
 
-          {/* Detected theme badge */}
+          {/* Card input - manual */}
+          <div className="space-y-1">
+            <p className="font-cinzel text-[10px] uppercase tracking-widest text-muted-foreground">
+              🃏 Cartas sorteadas (1-36)
+            </p>
+            <Input
+              placeholder={`Digite ${readingType === "yesno" ? "1" : readingType} carta(s): ex 12 3 18`}
+              value={cardInput}
+              onChange={(e) => setCardInput(e.target.value)}
+              className="bg-secondary border-border text-lg font-cinzel tracking-widest py-4"
+            />
+          </div>
           {detectedTheme !== "geral" && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground font-cinzel uppercase tracking-wider">Tema detectado:</span>

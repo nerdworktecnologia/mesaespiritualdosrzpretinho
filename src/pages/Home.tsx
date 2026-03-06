@@ -78,6 +78,15 @@ export default function Home() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<"dashboard" | "clients" | "agenda">("dashboard");
 
+  const navigateToMesa = (clientName?: string, whatsapp?: string, birthDate?: string) => {
+    const params = new URLSearchParams();
+    if (clientName) params.set("name", clientName);
+    if (whatsapp) params.set("whatsapp", whatsapp);
+    if (birthDate) params.set("birthDate", birthDate);
+    const qs = params.toString();
+    navigate(`/mesa${qs ? `?${qs}` : ""}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -92,7 +101,7 @@ export default function Home() {
             </p>
           </div>
           <Button
-            onClick={() => navigate("/mesa")}
+            onClick={() => navigateToMesa()}
             className="font-cinzel text-xs tracking-wider uppercase bg-foreground text-background hover:bg-foreground/90 gap-2"
           >
             <Sparkles className="h-4 w-4" />
@@ -127,9 +136,9 @@ export default function Home() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto p-4 mt-4">
-        {activeSection === "dashboard" && <DashboardSection onNavigate={setActiveSection} onOpenMesa={() => navigate("/mesa")} />}
+        {activeSection === "dashboard" && <DashboardSection onNavigate={setActiveSection} onOpenMesa={navigateToMesa} />}
         {activeSection === "clients" && <ClientsSection />}
-        {activeSection === "agenda" && <AgendaSection />}
+        {activeSection === "agenda" && <AgendaSection onAtender={navigateToMesa} />}
       </main>
     </div>
   );

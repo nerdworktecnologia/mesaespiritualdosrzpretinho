@@ -48,6 +48,7 @@ function generate5s(cards: CardMeaning[], type: ReadingType): string {
 export default function TurboLiveTab() {
   const [clientName, setClientName] = useState("");
   const [question, setQuestion] = useState("");
+  const [cardInput, setCardInput] = useState("");
   const [detectedTheme, setDetectedTheme] = useState<QuestionTheme>("geral");
   const [readingType, setReadingType] = useState<ReadingType>("3");
   const [isRecording, setIsRecording] = useState(false);
@@ -99,9 +100,17 @@ export default function TurboLiveTab() {
   };
 
   const generate = async () => {
-    const count = readingType === "yesno" ? 1 : parseInt(readingType);
-    const theme = detectedTheme;
-    const numbers = getThemedCards(count, theme);
+    const numbers = cardInput
+      .split(/[\s,]+/)
+      .map((n) => parseInt(n.trim()))
+      .filter((n) => n >= 1 && n <= 36);
+
+    const expectedCount = readingType === "yesno" ? 1 : parseInt(readingType);
+    if (numbers.length !== expectedCount) {
+      toast.error(`Digite ${expectedCount} carta(s) (1-36)`);
+      return;
+    }
+
     const cards = numbers.map((n) => cardMeanings[n - 1]).filter(Boolean);
 
     // Sounds
@@ -178,6 +187,7 @@ export default function TurboLiveTab() {
   const reset = () => {
     setClientName("");
     setQuestion("");
+    setCardInput("");
     setDetectedTheme("geral");
     setResolvedCards([]);
     setResponse5s("");

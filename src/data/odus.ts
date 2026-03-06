@@ -3,35 +3,35 @@ export interface Odu {
   name: string;
   orixa: string;
   meaning: string;
-  personality: string;
+  evitar: string;
   advice: string;
 }
 
 export const odus: Odu[] = [
-  { number: 1, name: "Okaran", orixa: "Exu", meaning: "Início, individualidade e força pessoal.", personality: "Pessoa forte, determinada, que abre seus próprios caminhos. Líder nato, mas precisa cuidar da solidão e da teimosia.", advice: "Aprenda a pedir ajuda. Nem tudo se resolve sozinho." },
-  { number: 2, name: "Ejiokô", orixa: "Ogum", meaning: "Dualidade, luta e conquista pelo esforço.", personality: "Guerreiro(a) nato(a). Pessoa batalhadora que vence pelo esforço próprio. Pode ser impaciente e impulsivo(a).", advice: "Controle a ansiedade. A vitória vem, mas no tempo certo." },
-  { number: 3, name: "Etaogundá", orixa: "Omolú/Ogun", meaning: "Transformação, superação e cura.", personality: "Pessoa que passou ou passará por grandes transformações. Tem força interior enorme. Curador(a) natural.", advice: "Não tenha medo das mudanças. Elas são seu caminho de evolução." },
-  { number: 4, name: "Irosun", orixa: "Yemanjá", meaning: "Ancestralidade, família e proteção materna.", personality: "Pessoa ligada à família e às raízes. Sensível, intuitiva e protetora. Forte conexão com o mundo espiritual.", advice: "Cuide das suas origens e ancestrais. A força vem de lá." },
-  { number: 5, name: "Oxê", orixa: "Oxum", meaning: "Amor, fertilidade e doçura.", personality: "Pessoa amorosa, carinhosa e sedutora. Tem dom para cuidar dos outros. Pode sofrer por amor se não tiver equilíbrio.", advice: "Ame, mas ame a si mesmo(a) primeiro. O amor próprio é a base." },
-  { number: 6, name: "Obará", orixa: "Xangô", meaning: "Justiça, comunicação e prosperidade.", personality: "Pessoa comunicativa, justa e próspera. Tem o dom da palavra e da liderança. Precisa cuidar do orgulho.", advice: "Use o poder da comunicação com sabedoria. A palavra tem força." },
-  { number: 7, name: "Odi", orixa: "Oxossi", meaning: "Renovação, recomeço e mistério.", personality: "Pessoa misteriosa, inteligente e estratégica. Tem facilidade para recomeçar. Forte ligação com a natureza.", advice: "Confie na sua intuição. Ela raramente erra." },
-  { number: 8, name: "Ejionilê", orixa: "Oxalá", meaning: "Paz, equilíbrio e sabedoria.", personality: "Pessoa sábia, calma e equilibrada. Tem missão de pacificador(a). Pode ser visto(a) como distante.", advice: "Mantenha o equilíbrio. Você é farol para os outros." },
-  { number: 9, name: "Ossá", orixa: "Yansã", meaning: "Mudança, movimento e coragem.", personality: "Pessoa corajosa, inquieta e transformadora. Não tem medo de mudanças. Precisa de liberdade.", advice: "Canalize sua energia. Mudança sem direção é apenas agitação." },
-  { number: 10, name: "Ofun", orixa: "Oxalufã", meaning: "Criação, pureza e espiritualidade elevada.", personality: "Pessoa com missão espiritual importante. Pureza de coração. Pode ser incompreendida pelo mundo.", advice: "Aceite sua missão espiritual. Você veio para algo maior." },
-  { number: 11, name: "Owarin", orixa: "Nanã", meaning: "Sabedoria ancestral e profundidade.", personality: "Pessoa profunda, reflexiva e ligada ao passado. Tem sabedoria além da idade. Pode ser melancólica.", advice: "Honre seus ancestrais. A sabedoria deles vive em você." },
-  { number: 12, name: "Ejilaxeborá", orixa: "Xangô/Yansã", meaning: "Poder, liderança e força espiritual.", personality: "Pessoa poderosa espiritualmente. Líder natural com muita força interior. Precisa controlar a dominação.", advice: "Use seu poder para proteger, não para dominar." },
-  { number: 13, name: "Ejiologbon", orixa: "Nanã/Oxalá", meaning: "Sabedoria, paciência e maturidade.", personality: "Alma velha. Pessoa madura desde jovem. Tem paciência e visão de longo prazo.", advice: "Sua sabedoria é rara. Compartilhe com quem merece." },
-  { number: 14, name: "Iká", orixa: "Obaluaê", meaning: "Superação de obstáculos e resiliência.", personality: "Pessoa que enfrenta muitas provas na vida mas sempre supera. Resiliência é sua marca.", advice: "Cada obstáculo superado te fortalece. Não desista." },
-  { number: 15, name: "Ogbeogundá", orixa: "Ogum/Oxóssi", meaning: "Prosperidade, abertura de caminhos.", personality: "Pessoa com caminhos sempre abrindo. Prosperidade natural. Precisa manter a humildade.", advice: "Seja grato(a) pelas portas que se abrem. A gratidão mantém o fluxo." },
-  { number: 16, name: "Alafin", orixa: "Todos os Orixás", meaning: "Totalidade, realeza espiritual e proteção completa.", personality: "Pessoa com proteção direta de todos os Orixás. Missão elevada. Forte intuição e mediunidade.", advice: "Você carrega uma coroa espiritual. Honre essa responsabilidade." },
+  { number: 1, name: "Okanran", orixa: "Exu, Ogum", meaning: "Energia de força e transformação. Indica coragem e abertura de caminhos, mas pede controle da impulsividade.", evitar: "brigas, decisões precipitadas", advice: "praticar autocontrole e disciplina espiritual" },
+  { number: 2, name: "Ejioko", orixa: "Ibeji, Oxum", meaning: "Energia de equilíbrio, inteligência e observação. Mostra mente analítica e sensibilidade espiritual.", evitar: "indecisão e excesso de pensamento", advice: "confiar mais na própria intuição" },
+  { number: 3, name: "Etaogunda", orixa: "Ogum, Xangô", meaning: "Energia de luta e conquista. Indica crescimento através do esforço.", evitar: "conflitos constantes", advice: "manter disciplina e foco" },
+  { number: 4, name: "Irosun", orixa: "Iemanjá, Nanã", meaning: "Odù ligado à espiritualidade profunda e ancestralidade.", evitar: "ambientes negativos", advice: "fortalecer fé e espiritualidade" },
+  { number: 5, name: "Oxé", orixa: "Oxum, Logunedé", meaning: "Energia de prosperidade e magnetismo pessoal.", evitar: "vaidade excessiva", advice: "manter humildade e equilíbrio financeiro" },
+  { number: 6, name: "Obará", orixa: "Xangô, Ogum", meaning: "Energia de liderança e expansão.", evitar: "orgulho e autoritarismo", advice: "liderar com sabedoria" },
+  { number: 7, name: "Odi", orixa: "Omolu, Obaluaiê", meaning: "Energia de proteção e estratégia.", evitar: "guardar mágoas", advice: "praticar perdão" },
+  { number: 8, name: "Ejionile", orixa: "Xangô, Oxalá", meaning: "Odù da justiça e responsabilidade.", evitar: "rigidez e excesso de cobrança", advice: "buscar equilíbrio" },
+  { number: 9, name: "Ossá", orixa: "Iansã, Logunedé", meaning: "Energia de movimento e mudança.", evitar: "instabilidade", advice: "manter foco" },
+  { number: 10, name: "Ofun", orixa: "Oxalá, Orunmilá", meaning: "Odù da sabedoria espiritual.", evitar: "absorver energia negativa", advice: "cuidar da espiritualidade" },
+  { number: 11, name: "Owonrin", orixa: "Exu, Iansã", meaning: "Energia da comunicação e criatividade.", evitar: "falar demais", advice: "usar palavra com sabedoria" },
+  { number: 12, name: "Ejilaxeborá", orixa: "Oxum, Iemanjá", meaning: "Odù da união e parceria.", evitar: "anular a própria vontade", advice: "desenvolver autonomia" },
+  { number: 13, name: "Ejiologbon", orixa: "Orunmilá, Oxalá", meaning: "Energia de sabedoria e conhecimento.", evitar: "isolamento", advice: "compartilhar conhecimento" },
+  { number: 14, name: "Iká", orixa: "Obaluaiê, Nanã", meaning: "Energia espiritual profunda e transformação.", evitar: "ambientes negativos", advice: "fortalecer proteção espiritual" },
+  { number: 15, name: "Ogbéogundá", orixa: "Ogum, Oxóssi", meaning: "Odù de abertura de caminhos.", evitar: "agir sem planejamento", advice: "focar nos objetivos" },
+  { number: 16, name: "Aláfia", orixa: "Oxalá, Oxum", meaning: "Energia de paz e equilíbrio.", evitar: "acomodação", advice: "manter espiritualidade forte" },
 ];
 
 export interface CabalaResult {
-  superior: Odu;    // Esquerda (posições ímpares)
-  inferior: Odu;    // Direita (posições pares)
-  lateral: Odu;     // Soma esquerda + direita
-  central: Odu;     // Soma esquerda + direita + lateral
-  final: Odu;       // Soma de tudo
+  superior: Odu;
+  inferior: Odu;
+  lateral: Odu;
+  central: Odu;
+  final: Odu;
   summary: string;
 }
 
@@ -49,17 +49,11 @@ export function calculateCabala(birthDate: string): CabalaResult {
   const formatted = parts[2] + parts[1] + parts[0]; // DDMMAAAA
   const numeros = formatted.split("").map(Number);
 
-  // PASSO 1 — separar esquerda (posições ímpares 0,2,4,6) e direita (1,3,5,7)
   const esquerda = reduceToOdu(numeros[0] + numeros[2] + numeros[4] + numeros[6]);
   const direita = reduceToOdu(numeros[1] + numeros[3] + numeros[5] + numeros[7]);
 
-  // PASSO 2 — lateral: soma esquerda + direita
   const lateralNum = reduceToOdu(esquerda + direita);
-
-  // PASSO 3 — central: esquerda + direita + lateral
   const centralNum = reduceToOdu(esquerda + direita + lateralNum);
-
-  // PASSO 4 — final: esquerda + direita + lateral + central
   const finalNum = reduceToOdu(esquerda + direita + lateralNum + centralNum);
 
   const superior = odus[esquerda - 1];
@@ -77,20 +71,20 @@ function generateCabalaSummary(
   superior: Odu, inferior: Odu, lateral: Odu, central: Odu, finalOdu: Odu
 ): string {
   return [
-    `🔮 Odu Superior (Esquerda): ${superior.name} (${superior.orixa})`,
+    `🔮 Odu Superior: ${superior.name} (${superior.orixa})`,
     `${superior.meaning}`,
-    `Personalidade: ${superior.personality}`,
+    `⚠️ Evitar: ${superior.evitar}`,
     "",
-    `👤 Odu Inferior (Direita): ${inferior.name} (${inferior.orixa})`,
+    `👤 Odu Inferior: ${inferior.name} (${inferior.orixa})`,
     `${inferior.meaning}`,
-    `${inferior.personality}`,
+    `⚠️ Evitar: ${inferior.evitar}`,
     "",
     `🧠 Odu Lateral: ${lateral.name} (${lateral.orixa})`,
     `${lateral.meaning}`,
     "",
     `🛤️ Odu Central: ${central.name} (${central.orixa})`,
     `${central.meaning}`,
-    `${central.advice}`,
+    `💡 Conselho: ${central.advice}`,
     "",
     `🛡️ Odu Final: ${finalOdu.name} (${finalOdu.orixa})`,
     `${finalOdu.meaning}`,
@@ -102,7 +96,7 @@ function generateCabalaSummary(
     `O Odu Final, que rege sua missão, é ${finalOdu.name} (${finalOdu.orixa}).`,
     "",
     `💡 Conselho principal: ${central.advice}`,
-    `📿 Orixá regente: ${central.orixa}`,
+    `📿 Orixás regentes: ${central.orixa}`,
   ].join("\n");
 }
 

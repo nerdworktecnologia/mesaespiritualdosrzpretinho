@@ -41,7 +41,7 @@ export default function Mesa() {
       </header>
 
       <main className="max-w-3xl mx-auto p-3 mt-2">
-        <Tabs defaultValue="turbo" className="w-full">
+        <Tabs defaultValue="painel" className="w-full">
           <TabsList className="grid w-full grid-cols-7 bg-secondary border border-border h-auto">
             <TabsTrigger value="painel" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🌟 Painel

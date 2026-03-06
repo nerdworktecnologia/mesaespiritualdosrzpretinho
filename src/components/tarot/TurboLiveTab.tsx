@@ -136,7 +136,7 @@ export default function TurboLiveTab() {
       id: Date.now().toString(),
       name: clientName || "—",
       question: question || "Consulta rápida",
-      theme,
+      theme: detectedTheme,
       cardNumbers: numbers,
       quickResponse: r5,
       fullResponse: rFull,
@@ -153,7 +153,7 @@ export default function TurboLiveTab() {
             question: question || "Consulta rápida",
             cards: cards.map((c) => ({ number: c.number, name: c.name, meaning: c.meaning, energy: c.energy })),
             readingType,
-            theme,
+            theme: detectedTheme,
           },
         });
 

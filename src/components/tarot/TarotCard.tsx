@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CardMeaning } from "@/data/cardMeanings";
+import { getCardImage } from "@/data/cardImages";
 
 interface TarotCardProps {
   card: CardMeaning;
@@ -13,15 +14,14 @@ function SparkleEffect() {
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; duration: number; delay: number }[]>([]);
 
   useEffect(() => {
-    const p = Array.from({ length: 12 }, (_, i) => ({
+    setParticles(Array.from({ length: 12 }, (_, i) => ({
       id: i,
       x: Math.random() * 140 - 20,
       y: Math.random() * 200 - 20,
       size: Math.random() * 4 + 2,
       duration: Math.random() * 0.8 + 0.4,
       delay: Math.random() * 0.3,
-    }));
-    setParticles(p);
+    })));
   }, []);
 
   return (
@@ -31,10 +31,7 @@ function SparkleEffect() {
           key={p.id}
           className="absolute rounded-full"
           style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
+            left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size,
             background: `radial-gradient(circle, hsl(0 0% 100%), hsl(0 0% 80%), transparent)`,
             boxShadow: `0 0 ${p.size * 2}px hsl(0 0% 100% / 0.6)`,
             animation: `sparkle-float ${p.duration}s ease-out ${p.delay}s forwards`,
@@ -57,14 +54,12 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
   const [flipped, setFlipped] = useState(!revealed);
   const [visible, setVisible] = useState(delay === 0);
   const [showSparkle, setShowSparkle] = useState(false);
+  const cardImage = getCardImage(card.number);
 
   useEffect(() => {
     if (delay > 0) {
       const showTimer = setTimeout(() => setVisible(true), delay);
-      const flipTimer = setTimeout(() => {
-        setFlipped(false);
-        setShowSparkle(true);
-      }, delay + 200);
+      const flipTimer = setTimeout(() => { setFlipped(false); setShowSparkle(true); }, delay + 200);
       const sparkleEnd = setTimeout(() => setShowSparkle(false), delay + 1500);
       return () => { clearTimeout(showTimer); clearTimeout(flipTimer); clearTimeout(sparkleEnd); };
     } else if (revealed) {
@@ -75,19 +70,11 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
     }
   }, [revealed, delay]);
 
-  const sizes = {
-    sm: "w-20 h-28",
-    md: "w-28 h-40",
-    lg: "w-36 h-52",
-  };
-
+  const sizes = { sm: "w-20 h-28", md: "w-28 h-40", lg: "w-36 h-52" };
   const iconSizes = { sm: "text-2xl", md: "text-4xl", lg: "text-5xl" };
-  const numberSizes = { sm: "text-xs", md: "text-sm", lg: "text-base" };
   const nameSizes = { sm: "text-[8px]", md: "text-[10px]", lg: "text-xs" };
 
-  if (!visible) {
-    return <div className={`${sizes[size]} rounded-lg opacity-0`} />;
-  }
+  if (!visible) return <div className={`${sizes[size]} rounded-lg opacity-0`} />;
 
   return (
     <div className="flex flex-col items-center gap-2 relative" style={{ perspective: "600px" }}>
@@ -105,7 +92,7 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
           className="absolute inset-0 rounded-lg overflow-hidden flex flex-col items-center justify-center"
           style={{
             backfaceVisibility: "hidden",
-            background: "linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 3%))",
+            background: cardImage ? "transparent" : "linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 3%))",
             border: "1px solid hsl(0 0% 25%)",
             boxShadow: showSparkle
               ? "0 0 30px hsl(0 0% 100% / 0.2), 0 0 60px hsl(0 0% 100% / 0.05)"
@@ -113,24 +100,23 @@ export default function TarotCard({ card, size = "md", showMeaning = false, reve
             transition: "box-shadow 0.5s ease",
           }}
         >
-          <div className="absolute top-1 left-1.5 font-cinzel text-foreground/50 font-bold" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
-            {card.number}
-          </div>
-          <div className="absolute bottom-1 right-1.5 font-cinzel text-foreground/50 font-bold rotate-180" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
-            {card.number}
-          </div>
-          <div className="absolute top-0 left-0 right-0 h-px bg-foreground/10" />
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/10" />
-
-          <span className={`${iconSizes[size]} drop-shadow-lg`} role="img" aria-label={card.name}>
-            {card.icon}
-          </span>
-          <span className={`font-cinzel text-foreground font-bold mt-1 ${numberSizes[size]}`}>
-            {card.number}
-          </span>
-          <span className={`font-cinzel text-foreground/60 text-center px-1 leading-tight ${nameSizes[size]}`}>
-            {card.name}
-          </span>
+          {cardImage ? (
+            <img src={cardImage} alt={card.name} className="absolute inset-0 w-full h-full object-cover rounded-lg" />
+          ) : (
+            <>
+              <div className="absolute top-1 left-1.5 font-cinzel text-foreground/50 font-bold" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
+                {card.number}
+              </div>
+              <div className="absolute bottom-1 right-1.5 font-cinzel text-foreground/50 font-bold rotate-180" style={{ fontSize: size === "sm" ? "8px" : "10px" }}>
+                {card.number}
+              </div>
+              <div className="absolute top-0 left-0 right-0 h-px bg-foreground/10" />
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-foreground/10" />
+              <span className={`${iconSizes[size]} drop-shadow-lg`} role="img" aria-label={card.name}>{card.icon}</span>
+              <span className="font-cinzel text-foreground font-bold mt-1 text-sm">{card.number}</span>
+              <span className={`font-cinzel text-foreground/60 text-center px-1 leading-tight ${nameSizes[size]}`}>{card.name}</span>
+            </>
+          )}
         </div>
 
         {/* Back face */}

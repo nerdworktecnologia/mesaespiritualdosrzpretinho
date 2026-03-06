@@ -175,16 +175,14 @@ export default function PainelEspiritualTab() {
         record.interpretation_resumo = interpretation.resumo;
       }
 
-      const { error } = await supabase.from("consultations").insert(record);
+      const { error } = await supabase.from("consultations").insert(record as any);
       if (error) throw error;
 
-      // Update client stats
+      // Update client last visit
       if (clientId) {
         await supabase.from("clients").update({
           last_visit: new Date().toISOString().split("T")[0],
-          total_readings: undefined, // will be handled by increment
         }).eq("id", clientId);
-        await supabase.rpc("increment_client_readings" as any, { client_id_param: clientId }).catch(() => {});
       }
 
       setSaved(true);

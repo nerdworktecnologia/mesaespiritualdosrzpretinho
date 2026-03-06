@@ -105,20 +105,22 @@ export default function LiveTikTokTab() {
       setInterpretation(parts.join("\n"));
 
       // Save as live consultation
-      await supabase.from("consultations").insert({
-        client_name: "Live TikTok",
-        question: pergunta || null,
-        tema,
-        reading_type: "live",
-        buzios_abertos: buzios?.abertos || null,
-        buzios_odu: buzios?.odu.name || null,
-        tarot_cards: cards.length > 0 ? cards.map((c) => c.number) : null,
-        tarot_card_names: cards.length > 0 ? cards.map((c) => c.name) : null,
-        interpretation_energia: data.energia || null,
-        interpretation_situacao: data.situacao || null,
-        interpretation_orientacao: data.orientacao || null,
-        interpretation_resumo: data.resumo || null,
-      }).catch(() => {});
+      try {
+        await supabase.from("consultations").insert({
+          client_name: "Live TikTok",
+          question: pergunta || null,
+          tema,
+          reading_type: "live",
+          buzios_abertos: buzios?.abertos || null,
+          buzios_odu: buzios?.odu.name || null,
+          tarot_cards: cards.length > 0 ? cards.map((c) => c.number) : null,
+          tarot_card_names: cards.length > 0 ? cards.map((c) => c.name) : null,
+          interpretation_energia: data.energia || null,
+          interpretation_situacao: data.situacao || null,
+          interpretation_orientacao: data.orientacao || null,
+          interpretation_resumo: data.resumo || null,
+        } as any);
+      } catch {}
     } catch (e: any) {
       console.error(e);
       toast({ title: "Erro", description: e.message || "Tente novamente", variant: "destructive" });

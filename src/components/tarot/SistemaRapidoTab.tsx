@@ -5,6 +5,7 @@ import { cardMeanings, getYesNoResult, CardMeaning } from "@/data/cardMeanings";
 import { generateShortResponse, generateFullResponse, generateYesNoResponse } from "@/utils/generateResponse";
 import { addToHistory } from "@/utils/history";
 import { playRevealSound, playResultSound } from "@/utils/sounds";
+import { detectTheme, getThemedCards } from "@/utils/themeDetection";
 import TarotCard from "./TarotCard";
 import { Mic, MicOff, RotateCcw } from "lucide-react";
 

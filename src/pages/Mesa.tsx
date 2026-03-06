@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Volume2, VolumeX, ArrowLeft } from "lucide-react";
+import { Volume2, VolumeX, ArrowLeft, Maximize } from "lucide-react";
 import AtendimentoTab from "@/components/tarot/AtendimentoTab";
 import CabalaTab from "@/components/tarot/CabalaTab";
 import TiragemTab from "@/components/tarot/TiragemTab";
@@ -49,7 +49,7 @@ export default function Mesa() {
             <TabsTrigger value="mesa" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
               Mesa
             </TabsTrigger>
-            <TabsTrigger value="live" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">
+            <TabsTrigger value="live" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background" onClick={(e) => { e.preventDefault(); navigate("/live"); }}>
               ⚡ Live
             </TabsTrigger>
             <TabsTrigger value="cabala" className="font-cinzel text-xs md:text-sm tracking-wider data-[state=active]:bg-foreground data-[state=active]:text-background">

@@ -98,7 +98,7 @@ export default function TurboLiveTab() {
     setDetectedTheme(theme);
   };
 
-  const generate = () => {
+  const generate = async () => {
     const count = readingType === "yesno" ? 1 : parseInt(readingType);
     const theme = detectedTheme;
     const numbers = getThemedCards(count, theme);
@@ -109,7 +109,7 @@ export default function TurboLiveTab() {
 
     setResolvedCards(cards);
 
-    // Generate 3 levels
+    // Generate local responses first (instant)
     const r5 = cards.map((c) => c.shortMeaning).join(" ");
     const r10 = readingType === "yesno" ? generateYesNoResponse(cards[0]) : generateShortResponse(cards);
     const rFull = readingType === "yesno" ? generateYesNoResponse(cards[0]) : generateFullResponse(cards, question || "Consulta live");
@@ -134,6 +134,45 @@ export default function TurboLiveTab() {
       time: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
     };
     setQueue((prev) => [item, ...prev].slice(0, 100));
+
+    // If AI mode is on, fetch AI interpretation in background
+    if (useAI) {
+      setAiLoading(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("interpret-cards", {
+          body: {
+            question: question || "Consulta rápida",
+            cards: cards.map((c) => ({ number: c.number, name: c.name, meaning: c.meaning, energy: c.energy })),
+            readingType,
+            theme,
+          },
+        });
+
+        if (error) throw error;
+
+        if (data && !data.error) {
+          setResponse5s(data.relampago || r5);
+          setResponse10s(data.curta || r10);
+          setResponseFull(data.completa || rFull);
+          // Update queue item
+          setQueue((prev) =>
+            prev.map((q) =>
+              q.id === item.id
+                ? { ...q, quickResponse: data.relampago || r5, fullResponse: data.completa || rFull }
+                : q
+            )
+          );
+          toast.success("✨ Interpretação espiritual gerada");
+        } else if (data?.error) {
+          toast.error(data.error);
+        }
+      } catch (err) {
+        console.error("AI interpretation error:", err);
+        // Keep local responses as fallback — no toast needed
+      } finally {
+        setAiLoading(false);
+      }
+    }
   };
 
   const reset = () => {

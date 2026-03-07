@@ -9,6 +9,7 @@ import TarotCard from "./TarotCard";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { detectarTema, temasLabels } from "@/utils/detectTema";
+import { gerarInterpretacaoOffline, OfflineInterpretation } from "@/utils/offlineInterpretation";
 
 interface BuziosState {
   buzios: number[];
@@ -26,6 +27,7 @@ interface FullInterpretation {
   situacao: string;
   orientacao: string;
   resumo: string;
+  isOffline?: boolean;
 }
 
 function jogarBuzios(): BuziosState {

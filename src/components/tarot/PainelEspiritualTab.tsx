@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Copy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -350,8 +351,21 @@ export default function PainelEspiritualTab() {
             </div>
 
             {/* Active level content */}
-            <div className="card-mystical rounded-lg p-5 border border-primary/20 animate-fade-up">
-              <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-base md:text-lg leading-relaxed">
+            <div className="card-mystical rounded-lg p-5 border border-primary/20 animate-fade-up relative">
+              <button
+                onClick={() => {
+                  const fullText = activeLevel === "completa" && interpretation
+                    ? `${interpretation.completa}\n\n🔮 Destino: ${interpretation.destino}\n🐚 Energia: ${interpretation.energia}\n🃏 Situação: ${interpretation.situacao}\n✨ Orientação: ${interpretation.orientacao}${interpretation.resumo ? `\n\n"${interpretation.resumo}"` : ""}`
+                    : interpretation[activeLevel];
+                  navigator.clipboard.writeText(fullText);
+                  toast({ title: "📋 Texto copiado!" });
+                }}
+                className="absolute top-3 right-3 p-1.5 rounded-md bg-secondary/80 hover:bg-secondary border border-border/50 text-muted-foreground hover:text-foreground transition-colors"
+                title="Copiar interpretação"
+              >
+                <Copy size={14} />
+              </button>
+              <pre className="whitespace-pre-wrap font-crimson text-foreground/90 text-base md:text-lg leading-relaxed pr-8">
                 {interpretation[activeLevel]}
               </pre>
             </div>

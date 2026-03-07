@@ -67,7 +67,7 @@ export default function BuziosTab() {
 
             {/* Detalhes */}
             <div className="card-mystical rounded-lg p-4 border border-primary/20 space-y-2">
-              <p className="text-foreground/80 text-sm"><span className="text-primary font-semibold">Personalidade:</span> {result.odu.personality}</p>
+              <p className="text-foreground/80 text-sm"><span className="text-primary font-semibold">Elemento:</span> {result.odu.elemento || "—"}</p>
               <p className="text-foreground/80 text-sm"><span className="text-primary font-semibold">Conselho:</span> {result.odu.advice}</p>
               <p className="text-foreground/80 text-sm"><span className="text-destructive font-semibold">⚠️ Evitar:</span> {result.odu.evitar}</p>
             </div>

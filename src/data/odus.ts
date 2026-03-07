@@ -281,36 +281,8 @@ function generateCabalaSummary(
     `Evite: ${finalOdu.evitar}`,
   ].join("\n");
 }
-    `${superior.personality}`,
-    ``,
-    `Este Odu indica: ${superior.meaning}`,
-    `O conselho espiritual é: ${superior.advice}`,
-    `Evite: ${superior.evitar}`,
-    `Os orixás que respondem são: ${superior.orixa || "Não especificado"}.`,
-    ``,
-    `━━━━━━━━━━━━━━━━━━`,
-    ``,
-    interpretarOdu("Odu Superior", "🔮", superior),
-    ``,
-    interpretarOdu("Odu Inferior", "👤", inferior),
-    ``,
-    interpretarOdu("Odu Lateral", "🧠", lateral),
-    ``,
-    interpretarOdu("Odu Central", "🛤️", central),
-    ``,
-    interpretarOdu("Odu Final", "🛡️", finalOdu),
-    ``,
-    `━━━━━━━━━━━━━━━━━━`,
-    `✨ Resumo Espiritual:`,
-    `Superior: ${superior.name} (${superior.orixa || "—"}) — ${superior.personality}`,
-    `Inferior: ${inferior.name} (${inferior.orixa || "—"}) — ${inferior.personality}`,
-    `Central: ${central.name} (${central.orixa || "—"}) — ${central.personality}`,
-    `Final: ${finalOdu.name} (${finalOdu.orixa || "—"}) — ${finalOdu.personality}`,
-    ``,
-    `💡 Conselho principal: ${central.advice}`,
-    `📿 Orixás regentes: ${central.orixa || "Não especificado"}`,
-  ].join("\n");
-}
+
+// Keep backward compatibility
 
 // Keep backward compatibility
 export function calculateOdu(fullName: string, birthDate: string) {

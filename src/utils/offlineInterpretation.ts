@@ -61,7 +61,7 @@ export function gerarInterpretacaoOffline(
     `📖 Consulta sobre: ${pergunta || "tema geral"}`,
     cabala ? `\n\n🔢 Cabala de Ifá: O cruzamento dos Odus ${cabala.superior.name} (superior) e ${cabala.final.name} (final) indica um ciclo de ${tema === "amor" ? "transformação afetiva" : tema === "trabalho" ? "evolução profissional" : "mudanças importantes"}.` : "",
     buzios ? `\n\n🐚 Búzios: ${buzios.odu.name} traz a energia de ${buzios.odu.orixa}. Com ${buzios.abertos} abertos, o momento pede ${buzios.abertos > 8 ? "ação e movimento" : "cautela e reflexão"}.` : "",
-    tarot.length > 0 ? `\n\n🃏 Tarot: ${tarot.map((c) => `${c.name} (${c.energy})`).join(", ")}. As cartas reforçam a necessidade de ${tarot[0]?.energy === "positiva" ? "confiança no caminho" : "atenção redobrada"}.` : "",
+    tarot.length > 0 ? `\n\n🃏 Tarot: ${tarot.map((c) => `${c.name} (${c.energy})`).join(", ")}. As cartas reforçam a necessidade de ${tarot[0]?.energy === "positive" ? "confiança no caminho" : "atenção redobrada"}.` : "",
   ].filter(Boolean).join("");
 
   const completa = [

@@ -115,11 +115,14 @@ export default function PainelEspiritualTab() {
 
       const { data, error } = await supabase.functions.invoke("spiritual-panel", { body: payload });
       if (error) throw error;
-      setInterpretation(data as FullInterpretation);
+      setInterpretation({ ...(data as FullInterpretation), isOffline: false });
       setActiveLevel("relampago");
     } catch (e: any) {
-      console.error(e);
-      toast({ title: "Erro ao interpretar", description: e.message || "Tente novamente", variant: "destructive" });
+      console.error("IA indisponível, usando motor offline:", e);
+      const offline = gerarInterpretacaoOffline(pergunta || "Consulta geral", temaAuto, cabalaResult, buziosResult, tarotCards);
+      setInterpretation(offline);
+      setActiveLevel("relampago");
+      toast({ title: "⚡ Interpretação gerada offline", description: "Motor local utilizado" });
     } finally {
       setLoading(false);
     }
@@ -307,7 +310,16 @@ export default function PainelEspiritualTab() {
       {interpretation && (
         <Card className="card-mystical mystic-glow animate-fade-up">
           <CardHeader className="pb-3">
-            <CardTitle className="font-cinzel gold-text text-lg">📜 Leitura Espiritual</CardTitle>
+            <CardTitle className="font-cinzel gold-text text-lg flex items-center gap-2">
+              📜 Leitura Espiritual
+              <span className={`text-[10px] font-cinzel px-2 py-0.5 rounded-full border ${
+                interpretation.isOffline
+                  ? "bg-amber-500/15 text-amber-400 border-amber-500/30"
+                  : "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+              }`}>
+                {interpretation.isOffline ? "⚡ Offline" : "🤖 IA"}
+              </span>
+            </CardTitle>
             {interpretation.temaDetectado && (
               <p className="text-xs text-muted-foreground">
                 Tema: <span className="text-primary">{temasLabels[interpretation.temaDetectado] || interpretation.temaDetectado}</span>

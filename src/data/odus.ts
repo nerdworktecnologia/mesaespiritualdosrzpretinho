@@ -1,177 +1,193 @@
 export interface Odu {
   number: number;
   name: string;
+  nomeIfa: string;
   orixa: string;
-  orixaDescricao: string;
   elemento: string;
+  cores: string[];
+  corpo: string;
   meaning: string;
   personality: string;
-  positivo: string;
-  negativo: string;
-  evitar: string;
   advice: string;
+  evitar: string;
 }
 
 export const odus: Odu[] = [
   {
-    number: 1, name: "Okanran", orixa: "Exu, Ogum",
-    orixaDescricao: "Regido por Exu, o orixá guardião da comunicação. Representa proteção, justiça, paciência e força. Personalidade disciplinada e protetora.",
-    elemento: "Fogo",
-    meaning: "Energia de força e transformação. Indica coragem e abertura de caminhos, mas pede controle da impulsividade. Tudo ao redor muda com velocidade impressionante.",
-    personality: "Pessoa forte, corajosa e determinada. Abre seus próprios caminhos com garra. Pode ser impulsiva e teimosa quando contrariada. Temperamento explosivo e sedutor.",
-    positivo: "Sorte nos negócios, desconfiança saudável que protege de riscos, capacidade de avaliar situações antes de agir.",
-    negativo: "Extremismo, envolvimentos rápidos e intempestivos, tendência à insubordinação e rebeldia. Pode gerar descontrole.",
-    evitar: "brigas, decisões precipitadas", advice: "praticar autocontrole e disciplina espiritual"
+    number: 1, name: "Ọ̀kànràn", nomeIfa: "Òkànràn méjì",
+    orixa: "Èṣù, Ibéjì",
+    elemento: "Ar e fogo",
+    cores: ["Preto", "Vermelho", "Roxo", "Branco", "Azul"],
+    corpo: "Língua, garganta, voz, respiração",
+    meaning: "Novidades, excessos da fala, magia, defesa, sustos, perigos e inimigos ocultos.",
+    personality: "Pessoa ligada à comunicação e à magia. Protege-se por instinto, mas pode criar inimigos pela fala excessiva.",
+    advice: "Limpar os caminhos e fortalecer a defesa espiritual.",
+    evitar: "Discussões, ambição, inimizades, fala excessiva."
   },
   {
-    number: 2, name: "Ejioko", orixa: "Ibeji, Obá",
-    orixaDescricao: "Regido por Ibeji (protetor dos gêmeos Taiwo e Kehide) e Obá (primeira esposa de Xangô, guerreira). Personalidade forte, objetiva e sincera.",
-    elemento: "Água",
-    meaning: "Energia de equilíbrio, inteligência e observação. Odu questionador, pensamento errático e mutável. Calma aparente que esconde dúvidas constantes.",
-    personality: "Pessoa inteligente, observadora e analítica. Pensa antes de agir. Sensível espiritualmente, mas pode travar por excesso de dúvida. Francos e sinceros.",
-    positivo: "Personalidade forte, objetivos firmes, espírito de luta, propenso ao sacrifício. Não aceita falsidade.",
-    negativo: "Constante mutação devido às dúvidas, brigas e complicações na rotina. Questiona o afeto dos outros.",
-    evitar: "indecisão e excesso de pensamento", advice: "confiar mais na própria intuição"
+    number: 2, name: "Éjì Òkò", nomeIfa: "Òtúrúpòn méjì",
+    orixa: "Ìyá mi, Àbíkú",
+    elemento: "Terra sobre água",
+    cores: ["Vermelho", "Preto"],
+    corpo: "",
+    meaning: "Casamento, união, mensagens positivas, gravidez, perturbações vencidas e soluções.",
+    personality: "Pessoa voltada para união e equilíbrio nas relações. Forte ligação com a maternidade e a família.",
+    advice: "Buscar equilíbrio nas relações e atenção à gestação.",
+    evitar: "Desarmonia, descuido com união e conflitos domésticos."
   },
   {
-    number: 3, name: "Etaogunda", orixa: "Oxum, Ogum",
-    orixaDescricao: "Regido por Oxum, orixá das águas doces, senhora da fertilidade, beleza, sensibilidade, dinheiro e riqueza espiritual.",
-    elemento: "Água",
-    meaning: "Energia de luta e conquista. Indica crescimento através do esforço. Capacidade de realizar objetivos, especialmente ligados ao trabalho.",
-    personality: "Guerreiro(a) nato(a). Pessoa batalhadora que vence pelo esforço. Obstinada, apaixonada, criativa e dedicada ao trabalho. Pode entrar em conflitos desnecessários.",
-    positivo: "Situações de vitória, produtividade, capacidade de realização. Forte especialmente em discussões e trabalho.",
-    negativo: "Dificuldades nos negócios, rivalidades intensas, traições. Pode anular presságios positivos da carreira quando em aspecto negativo.",
-    evitar: "conflitos constantes e rivalidades", advice: "manter disciplina e foco"
+    number: 3, name: "Ẹ́tà Ògúndá", nomeIfa: "Ìwòrì méjì",
+    orixa: "Ogum",
+    elemento: "Fogo sobre ar",
+    cores: [],
+    corpo: "",
+    meaning: "Luta, liderança, autoridade, poder, riscos, morte perto quando negativo e necessidade de ebó.",
+    personality: "Líder nato(a), firme e corajoso(a). Pode tender ao autoritarismo e à dupla personalidade.",
+    advice: "Agir com firmeza, mas sem arrogância.",
+    evitar: "Autoritarismo, falsidade, dupla personalidade."
   },
   {
-    number: 4, name: "Irosun", orixa: "Iemanjá, Eguns",
-    orixaDescricao: "Regido por Iemanjá (mãe de todos os orixás, decide o destino de quem entra no mar) e Eguns (espíritos evoluídos, iluminados, ligados à família).",
-    elemento: "Água",
-    meaning: "Odù ligado à espiritualidade profunda e ancestralidade. Indica pessoas generosas, com intuição aguçada e forte conexão com aspectos místicos.",
-    personality: "Pessoa ligada às raízes e à família. Forte intuição e mediunidade natural. Protetora e acolhedora, mas pode absorver energias alheias. Dada ao trabalho manual e vendas.",
-    positivo: "Fertilidade, trabalho, vitória através do esforço e conquista material. Capacidade transformadora.",
-    negativo: "Tendência a sofrer traições amorosas, acidentes, inveja dos inimigos. Constantemente caluniado. Separações e miséria.",
-    evitar: "ambientes negativos e pessoas invejosas", advice: "fortalecer fé e espiritualidade"
+    number: 4, name: "Ìròsùn", nomeIfa: "Ìròsùn",
+    orixa: "Ọya, Yemọjá, Égún, Ògún, Ọ̀ṣọ́ọ̀sì, Ọ̀sányìn",
+    elemento: "",
+    cores: [],
+    corpo: "",
+    meaning: "Espiritualidade, mediunidade, ancestralidade, fala excessiva, conquistas e disputas.",
+    personality: "Pessoa profundamente espiritual, com mediunidade natural. Fala muito e pode se expor demais.",
+    advice: "Fortalecer a espiritualidade e pensar antes de falar.",
+    evitar: "Impulsividade verbal, exposição excessiva e dúvidas."
   },
   {
-    number: 5, name: "Oxê", orixa: "Oxum, Logunedé",
-    orixaDescricao: "Regido por Oxum. O Odu foi gerado à beira do rio com cinco espelhos e um pano amarelo. Considerado o Odu da feitiçaria, concebido sem pecado original.",
-    elemento: "Água",
-    meaning: "Energia de prosperidade e magnetismo pessoal. Pessoas tranquilas, objetivas e serenas que auxiliam na resolução de situações complexas.",
-    personality: "Pessoa magnética, sedutora e próspera. Tem facilidade para atrair coisas boas. Encantadora, sensível, mas precisa cuidar da vaidade.",
-    positivo: "Capacidade de conseguir lucros, caráter transformador e mutável. Sabe aproveitar oportunidades com sabedoria.",
-    negativo: "Perdas e problemas de saúde (especialmente ligados ao ventre), tendência a mentir, degeneração e destruição quando em aspecto negativo.",
-    evitar: "vaidade excessiva e vingança", advice: "manter humildade e equilíbrio financeiro"
-  },
-  {
-    number: 6, name: "Obará", orixa: "Xangô, Oxóssi",
-    orixaDescricao: "Regido por Xangô (justiça e trovão) e Oxóssi (caça, fartura, sustento). Astuto, sábio e ardiloso. Grande proteção espiritual pelo fogo.",
-    elemento: "Fogo",
-    meaning: "Energia de liderança e expansão. Forte associação com justiça, atrevimento e ideia de provedor. Precisam manter-se calados sobre projetos pessoais.",
-    personality: "Líder natural com poder de comando. Pessoa justa, comunicativa, conquistadora. Luta pelo que deseja e conquista objetivos. Força de vontade imensa.",
-    positivo: "Proteção espiritual garantida, vitória através do trabalho, vontade de vencer. Costuma trabalhar com questões relativas à lei.",
-    negativo: "Má sorte no amor, não deve se iludir nem fazer grandes exigências dos parceiros. Problemas de ordem moral quando negativo.",
-    evitar: "orgulho e autoritarismo", advice: "liderar com sabedoria e manter sigilo sobre planos"
-  },
-  {
-    number: 7, name: "Odi", orixa: "Obaluaiê",
-    orixaDescricao: "Regido por Obaluaiê, protetor da saúde e das pessoas mais velhas. Associado à cura em todos os aspectos, manutenção da saúde mental e equilíbrio emocional.",
-    elemento: "Fogo",
-    meaning: "Um dos Odus mais ricos e prósperos. Forte ligação com a cura e manutenção do equilíbrio na área da saúde, tanto física quanto mental.",
-    personality: "Pessoa com fé, que multiplica seu dinheiro. Boa organização financeira, tende a se dar muito bem na carreira. Alegre, satisfeita e muito amiga.",
-    positivo: "Prefere não perder tempo se lamentando, mantém ânimo em alta independente dos acontecimentos. Busca constante de sucesso, fartura e prosperidade.",
-    negativo: "Caminhos fechados e dificuldades quando negativado. Fracassos na vida conjugal e na carreira. Destruição pode ser devastadora.",
-    evitar: "guardar mágoas e ambientes negativos", advice: "praticar perdão e manter a fé"
-  },
-  {
-    number: 8, name: "Ejionile", orixa: "Oxaguiã",
-    orixaDescricao: "Regido por Oxaguiã, que tem liderança como característica marcante. Seus filhos são orgulhosos, voltados para a vida familiar e bastante calmos. Valente, intuitivo, instável.",
-    elemento: "Fogo",
-    meaning: "Ligado à força do sol, do fogo e do céu. Um dos Odus mais quentes. Capacidade de se manter ativo, mas pode ser irritadiço e difícil de lidar.",
-    personality: "Pessoa justa, responsável, com senso de dever forte. Apesar do temperamento, tende a guardar tudo o que sente e nunca machucaria alguém por querer. Determinada.",
-    positivo: "Disposição para se manter ativo, agilidade mental, vontade de atingir o sucesso. Características dinâmicas que impelem a conquistar objetivos.",
-    negativo: "Ligado à inveja (oculta), expansão, orgulho e vaidade. Pode se tornar vingativo e falso quando sente ódio. Conflitos constantes no caminho.",
-    evitar: "rigidez e excesso de cobrança", advice: "buscar equilíbrio e controlar o temperamento"
-  },
-  {
-    number: 9, name: "Ossá", orixa: "Iemanjá",
-    orixaDescricao: "Regido por Iemanjá, mãe de todos os orixás, rainha das águas salgadas, 'Afrodite brasileira'. Ligado ao feminino pela ideia de maternidade e fertilidade.",
-    elemento: "Água",
-    meaning: "Odu extremamente feminino, relacionado à feitiçaria e práticas atribuídas às mulheres. Conexão com fertilidade e capacidade de doação incondicional.",
-    personality: "Pessoa sempre em busca de se conhecer melhor. Gosta de dominar assuntos importantes e adquirir conhecimento. Dinamismo e capacidade de apoiar os outros.",
-    positivo: "Autoconhecimento como característica marcante, desejo de se informar sobre o mundo. Expansão social e abundância, capacidade de realizar projetos de vida.",
-    negativo: "Influências negativas de egungum, situações de desespero e choro constantes. Possibilidade de atrair amizades falsas. Instabilidade emocional.",
-    evitar: "instabilidade e amizades falsas", advice: "manter foco e usar sabedoria para administrar dons"
-  },
-  {
-    number: 10, name: "Ofun", orixa: "Oxalufã",
-    orixaDescricao: "Regido por Oxalufã, orixá muito velho, da paz e da paciência. Seus filhos são pessoas doces, que andam e falam devagar. Bondosos e sabem quais sentimentos alimentar.",
-    elemento: "Água",
-    meaning: "Odù da sabedoria espiritual. Tranquilidade que revela necessidade de proteção contra traições de lugares inesperados. Adota mecanismos elaborados de defesa.",
-    personality: "Pessoa sábia, espiritual e com missão elevada. Honesta, inteligente, sabe cultivar boas amizades. Não tem medo de pedir ajuda quando precisa.",
-    positivo: "Voltado para caridade e paciência. Compreende com facilidade os seus problemas e está sempre disposto a ajudar quem precisa.",
-    negativo: "Deve tomar cuidado com traições, especialmente de pessoas próximas. Calúnias e situações sérias envolvendo figuras de autoridade.",
-    evitar: "absorver energia negativa e confiar demais", advice: "cuidar da espiritualidade e manter defesas"
-  },
-  {
-    number: 11, name: "Owonrin", orixa: "Iansã, Exu",
-    orixaDescricao: "Regido por Iansã (comandante dos raios, esposa de Xangô, sincretizada como Santa Bárbara) e Exu (mensageiro entre humanos e divindades, ambivalente, o mais humano dos orixás).",
-    elemento: "Fogo",
-    meaning: "Ligado à sexualidade e sedução. Características obstinadas, incapaz de desistir dos sonhos. Odu feminino ligado à reprodução.",
-    personality: "Pessoa criativa, comunicativa e expressiva. Tendência a conquistar relacionamentos longos, prósperos e duradouros. Conexão forte com sexualidade e reprodução.",
-    positivo: "Forma admirável de encarar o amor, tendência a relacionamentos longos e duradouros. Obstinação e determinação para alcançar sonhos.",
-    negativo: "Torna as pessoas volúveis e suscetíveis a más influências. Pressa e vontade de ter tudo ao mesmo tempo impede permanência. Fracassos afetivos e financeiros.",
-    evitar: "falar demais e impaciência", advice: "usar palavra com sabedoria e cultivar paciência"
-  },
-  {
-    number: 12, name: "Ejilaxeborá", orixa: "Xangô",
-    orixaDescricao: "Regido por Xangô, orixá da justiça, virilidade, trovões e fogo. Figura de guerreiro, bruxo e rei. Representa a necessidade de encontrar alegria de viver. Excessivamente masculino.",
-    elemento: "Fogo",
-    meaning: "Odù da união e parceria. Associado a duas forças em conflito, o resultado pende para o lado mais forte. Ligação com oposição, troca, casamento, pactos e acordos.",
-    personality: "Pessoa acolhedora, parceira e dedicada. Senso de justiça marcante. Somente atinge vitórias de forma admirável, dando o seu melhor.",
-    positivo: "Senso de justiça como característica marcante, vitórias admiráveis. Inteligência e paixão. Ideia de contrato e compromisso entre partes.",
-    negativo: "Arrogância, tendência a se colocar acima dos demais. Ciúme nos relacionamentos. Conflitos marcados por dualidade.",
-    evitar: "arrogância e ciúme", advice: "desenvolver autonomia e humildade"
-  },
-  {
-    number: 13, name: "Ejiologbon", orixa: "Nanã, Obaluaê",
-    orixaDescricao: "Regido por Nanã (anciã, avó nas religiões afro-brasileiras, ligada à sabedoria e águas paradas) e Obaluaê (voltado para cura e proteção de pessoas mais velhas).",
-    elemento: "Terra",
-    meaning: "Usa sagacidade e habilidades para conquistar bem-estar e fortuna. Dá-se bem em atividades ligadas à comunicação. Intuição aguçada e capacidade de convencer.",
-    personality: "Alma velha. Pessoa madura, teimosa, só faz o que deseja. Forte poder de realização, mas depende da vontade do Odu. Adaptável aos mais diversos locais.",
-    positivo: "Adaptabilidade absurda, poder de raciocínio, incrível capacidade de comunicação. Conseguem se adequar a qualquer ambiente com facilidade.",
-    negativo: "Tendência à melancolia, teimosia como característica negativa. Forte poder de realização que pode ser ignorado por falta de vontade.",
-    evitar: "isolamento e teimosia", advice: "compartilhar conhecimento e agir com determinação"
-  },
-  {
-    number: 14, name: "Iká", orixa: "Ewá, Oxumaré",
-    orixaDescricao: "Regido por Ewá (símbolo de beleza, sensualidade, sabedoria e vidência, protetora da pureza) e Oxumaré (conexão entre céu e terra, associado a dificuldades e superação).",
-    elemento: "Água",
-    meaning: "Odu ligado à ideia de superação. Aqueles associados a ele aprendem a lidar com dificuldades e ultrapassá-las de forma eficaz. Coragem e fluidez em negociações.",
-    personality: "Pessoa resiliente que supera grandes provas. Mesmo nas turbulências, prefere olhá-las como contratempos. Conquistam boas amizades ao longo da vida.",
-    positivo: "Vida feliz, boas amizades, capacidade de passar pelas tempestades de forma eficiente. Triunfa sobre inimigos e controla situações tumultuadas.",
-    negativo: "Impotência quando negativado, tendência a brigas, vinganças, perversidade e agressões na vida das pessoas associadas.",
-    evitar: "ambientes negativos e vinganças", advice: "fortalecer proteção espiritual e cultivar amizades"
-  },
-  {
-    number: 15, name: "Obeogundá", orixa: "Ewá",
-    orixaDescricao: "Influenciado por Ewá, deusa da intuição com dom da vidência. Associada à pureza, beleza e sensualidade. Orixá feminino e sábio.",
-    elemento: "Água",
-    meaning: "Sabedoria e dinamismo fazem parte das características, mas demonstra resistência às mudanças. Problemas com estagnação, especialmente no campo profissional.",
-    personality: "Pessoa com caminhos que se abrem pelo amor. Felicidade no amor é perspectiva real pela regência de Ewá. Dinâmica mas pode ser impulsiva e mimada.",
-    positivo: "Chance de felicidade no amor, embora precise batalhar por ela. Dinamismo potencializado pelo elemento Água. Capacidade de atingir objetivos.",
-    negativo: "Estagnação, inflexibilidade de opiniões mesmo percebendo estar errado. Resistência à mudança. Concorrência constante no amor. Possibilidades de sucesso limitadas.",
-    evitar: "estagnação e inflexibilidade", advice: "focar nos objetivos e aceitar mudanças"
-  },
-  {
-    number: 16, name: "Aláfia", orixa: "Oxalá, Orumilá",
-    orixaDescricao: "Regido por Oxalá (criação do mundo, símbolo de paz, sereno e pacificador) e Orumilá (profecia e adivinhação, sabedoria). Pessoas com lado espiritual desenvolvido.",
+    number: 5, name: "Ọ̀ṣẹ́", nomeIfa: "Ọ̀ṣẹ́",
+    orixa: "",
     elemento: "Ar",
-    meaning: "Odu positivo, tendência a estar sempre de bem com a vida. Progresso como realidade. Hesitação em situações que demandam instinto. Inclinações artísticas.",
-    personality: "Pessoa pacificadora, equilibrada, sensível e afetuosa. Características femininas pela conexão com o Ar. Constantemente tranquila pelo desenvolvimento espiritual.",
-    positivo: "Pureza como aspecto mais positivo. Espalham felicidade e paz em todos os espaços, tornando qualquer ambiente mais harmônico.",
-    negativo: "Poucos aspectos negativos. Acomodação pode interromper o progresso e causar declínio. Precisa encontrar ponto de equilíbrio.",
-    evitar: "acomodação e reclamações sem ação", advice: "manter espiritualidade forte e agir com mudanças de atitude"
+    cores: [],
+    corpo: "",
+    meaning: "Prosperidade, defesa, esperança, triunfo, grandes causas e proteção ao consulente.",
+    personality: "Pessoa esperançosa e defensora do que é justo. Acredita em viradas e luta por grandes causas.",
+    advice: "Defender o que é justo e manter a fé nas viradas.",
+    evitar: "Fofoca, feitiço e descuido com promessas."
+  },
+  {
+    number: 6, name: "Ọ̀bàrà", nomeIfa: "Ọ̀bàrà",
+    orixa: "",
+    elemento: "",
+    cores: ["Azul"],
+    corpo: "",
+    meaning: "Prosperidade rápida, cautela, humildade, paciência, liderança e crescimento.",
+    personality: "Líder natural com potencial de crescimento rápido. Precisa de cautela e humildade para sustentar conquistas.",
+    advice: "Agir com cautela, paciência e humildade.",
+    evitar: "Falsidade, cilada, malícia e precipitação."
+  },
+  {
+    number: 7, name: "Òdí", nomeIfa: "Òdí",
+    orixa: "",
+    elemento: "",
+    cores: [],
+    corpo: "",
+    meaning: "Cautela, dificuldades, justiça, saúde, viagem curta e superação com fé.",
+    personality: "Pessoa cautelosa, com força de vontade para superar dificuldades. Ligada à justiça e à saúde.",
+    advice: "Manter cautela, força de vontade e cuidado com a saúde.",
+    evitar: "Má conduta, roubo, perseguição e excessos carnais."
+  },
+  {
+    number: 8, name: "Éjì Onílẹ̀", nomeIfa: "Primeiro Odù de Ifá (pai de todos os Odù)",
+    orixa: "Ṣàngó, Ọ̀ṣùn, Òṣàlá, Òṣàgiyán",
+    elemento: "Fogo",
+    cores: [],
+    corpo: "",
+    meaning: "Pai de todos os Odù, vida, supremacia, boas notícias, ciúmes, desavenças e grande força.",
+    personality: "Pessoa com grande força interior. Tende ao ciúme e desavenças familiares, mas carrega supremacia espiritual.",
+    advice: "Recuar dentro de casa quando necessário e buscar reconciliação.",
+    evitar: "Perturbação familiar, ciúmes e conflitos domésticos."
+  },
+  {
+    number: 9, name: "Ọ̀sà", nomeIfa: "Ọ̀sà",
+    orixa: "Ọ̀rúnmìlà",
+    elemento: "",
+    cores: [],
+    corpo: "",
+    meaning: "Sangue, Ìyá mi, perseguições, inimigos, elevação espiritual e material, poderes mediúnicos.",
+    personality: "Pessoa com poderes mediúnicos fortes. Sujeita a perseguições, mas com capacidade de elevação espiritual e material.",
+    advice: "Agir com cautela e reforçar a proteção espiritual.",
+    evitar: "Feitiço, perseguição, descuido com cabeça e santo."
+  },
+  {
+    number: 10, name: "Òfún", nomeIfa: "Òfún",
+    orixa: "Òṣàlá, Odùduwà, Égún, Ìyá mi, Ọbàtálá, Ìrókò",
+    elemento: "",
+    cores: ["Branco"],
+    corpo: "Pernas, joelhos, barriga, umbigo, líquidos do corpo",
+    meaning: "Grande mãe, princípio maternal, riquezas, longevidade, recursos materiais e sabedoria.",
+    personality: "Pessoa maternal, sábia e voltada para acúmulo de recursos. Longevidade e força interior marcantes.",
+    advice: "Cuidar da espiritualidade e do acúmulo emocional e material.",
+    evitar: "Avareza, obsessão por dinheiro, traição e absorver negatividade."
+  },
+  {
+    number: 11, name: "Ọwọ́nrín", nomeIfa: "Ọwọ́nrín",
+    orixa: "",
+    elemento: "Fogo e terra",
+    cores: [],
+    corpo: "",
+    meaning: "Criatividade, movimento, inveja, roubo dentro de casa, brigas e risco de vida.",
+    personality: "Pessoa criativa e dinâmica, mas sujeita à inveja e conflitos domésticos. Precisa de vigilância constante.",
+    advice: "Usar inteligência e vigilância no ambiente doméstico.",
+    evitar: "Fuxico, roubo, problemas com égún e brigas de casal."
+  },
+  {
+    number: 12, name: "Éjìlà Ṣẹbọrà", nomeIfa: "Ìwòrì méjì",
+    orixa: "Ṣàngó",
+    elemento: "",
+    cores: [],
+    corpo: "",
+    meaning: "Barulho, intriga, orgulho, mudanças importantes, vitórias depois de dificuldades e ajuda de Èṣù.",
+    personality: "Pessoa orgulhosa e transformadora. Vence depois de grandes dificuldades, com ajuda espiritual de Èṣù.",
+    advice: "Cuidar da cabeça física e espiritual e usar astúcia.",
+    evitar: "Feitiço, fofoca, briga de casal e briga de família."
+  },
+  {
+    number: 13, name: "Éjì Ọlọgbọn", nomeIfa: "Ọ̀ yẹ̀kú méjì",
+    orixa: "",
+    elemento: "",
+    cores: [],
+    corpo: "Ossos, juntas, cartilagens, unhas, cabelos, maxilar superior",
+    meaning: "Noite, morte, esgotamento, más notícias, rompimento, desgaste de recursos e força oculta.",
+    personality: "Pessoa com força oculta, mas sujeita a esgotamento e más notícias. Precisa de cuidados espirituais urgentes.",
+    advice: "Fazer cuidados espirituais urgentes quando necessário.",
+    evitar: "Feitiço de cemitério, rompimentos e desgaste extremo."
+  },
+  {
+    number: 14, name: "Ìka", nomeIfa: "Ìka",
+    orixa: "Ibéji, Ṣàngó, Yemọjá, Òṣùmàrè, Ògún, Òrìṣàlá, Ìrókò, Ọ̀sányìn",
+    elemento: "Terra e água",
+    cores: [],
+    corpo: "",
+    meaning: "Confusão, alianças perigosas em negócios, pobreza vencida com rigor espiritual e proteção.",
+    personality: "Pessoa resiliente que supera a pobreza com rigor espiritual. Cuidado com alianças e negócios duvidosos.",
+    advice: "Ter cuidado com negócios e reforçar a proteção espiritual.",
+    evitar: "Ambientes negativos, alianças duvidosas e confusão."
+  },
+  {
+    number: 15, name: "Ogbègúndá", nomeIfa: "Ìrẹtẹ̀ méjì",
+    orixa: "Ògún",
+    elemento: "Fogo sobre água",
+    cores: [],
+    corpo: "",
+    meaning: "Longevidade, mudez, determinação, ferro, resistência e foco em objetivos.",
+    personality: "Pessoa determinada, silenciosa e resistente. Foco inabalável em seus objetivos.",
+    advice: "Perseverar com firmeza e direção.",
+    evitar: "Impaciência e agir sem planejamento."
+  },
+  {
+    number: 16, name: "Àláàfíà", nomeIfa: "Otùwá méjì",
+    orixa: "",
+    elemento: "",
+    cores: [],
+    corpo: "",
+    meaning: "Separar, desligar, apartar, mestre das línguas, calma aparente e estratégia.",
+    personality: "Pessoa estratégica com calma aparente. Mestre da comunicação, mas precisa cuidar com palavras duplas.",
+    advice: "Buscar paz com discernimento e cuidado com palavras duplas.",
+    evitar: "Teimosia, vingança, ardil e manipulação."
   },
 ];
 
@@ -198,18 +214,20 @@ export function calculateCabala(birthDate: string): CabalaResult {
   const formatted = parts[2] + parts[1] + parts[0]; // DDMMAAAA
   const numeros = formatted.split("").map(Number);
 
-  const esquerda = reduceToOdu(numeros[0] + numeros[2] + numeros[4] + numeros[6]);
-  const direita = reduceToOdu(numeros[1] + numeros[3] + numeros[5] + numeros[7]);
+  const esquerdaBruta = numeros[0] + numeros[2] + numeros[4] + numeros[6];
+  const direitaBruta = numeros[1] + numeros[3] + numeros[5] + numeros[7];
 
-  const lateralNum = reduceToOdu(esquerda + direita);
-  const centralNum = reduceToOdu(esquerda + direita + lateralNum);
-  const finalNum = reduceToOdu(esquerda + direita + lateralNum + centralNum);
+  const oduSuperiorNum = reduceToOdu(esquerdaBruta);
+  const oduInferiorNum = reduceToOdu(direitaBruta);
+  const oduLateralNum = reduceToOdu(oduSuperiorNum + oduInferiorNum);
+  const oduCentralNum = reduceToOdu(oduSuperiorNum + oduInferiorNum + oduLateralNum);
+  const oduFinalNum = reduceToOdu(oduSuperiorNum + oduInferiorNum + oduLateralNum + oduCentralNum);
 
-  const superior = odus[esquerda - 1];
-  const inferior = odus[lateralNum - 1];
-  const lateral = odus[centralNum - 1];
-  const central = odus[finalNum - 1];
-  const finalOdu = odus[direita - 1];
+  const superior = odus[oduSuperiorNum - 1];
+  const inferior = odus[oduInferiorNum - 1];
+  const lateral = odus[oduLateralNum - 1];
+  const central = odus[oduCentralNum - 1];
+  const finalOdu = odus[oduFinalNum - 1];
 
   const summary = generateCabalaSummary(superior, inferior, lateral, central, finalOdu);
 
@@ -217,17 +235,20 @@ export function calculateCabala(birthDate: string): CabalaResult {
 }
 
 function interpretarOdu(label: string, emoji: string, odu: Odu): string {
-  return [
-    `${emoji} ${label}: ${odu.name}`,
-    `Orixás: ${odu.orixa}`,
-    `Elemento: ${odu.elemento}`,
+  const lines = [
+    `${emoji} ${label}: ${odu.number} – ${odu.name} (${odu.nomeIfa})`,
+    `Orixás: ${odu.orixa || "Não especificado"}`,
+  ];
+  if (odu.elemento) lines.push(`Elemento: ${odu.elemento}`);
+  if (odu.cores.length > 0) lines.push(`Cores: ${odu.cores.join(", ")}`);
+  if (odu.corpo) lines.push(`Corpo: ${odu.corpo}`);
+  lines.push(
     `${odu.meaning}`,
     `Personalidade: ${odu.personality}`,
-    `✅ Positivo: ${odu.positivo}`,
-    `❌ Negativo: ${odu.negativo}`,
     `Conselho: ${odu.advice}`,
     `⚠️ Evitar: ${odu.evitar}`,
-  ].join("\n");
+  );
+  return lines.join("\n");
 }
 
 function generateCabalaSummary(
@@ -239,10 +260,10 @@ function generateCabalaSummary(
     `👤 Personalidade pelo cálculo:`,
     `${superior.personality}`,
     ``,
-    `Este Odu indica ${superior.meaning}`,
-    `O conselho espiritual é ${superior.advice}`,
-    `Evite ${superior.evitar}.`,
-    `Os orixás que respondem são ${superior.orixa}.`,
+    `Este Odu indica: ${superior.meaning}`,
+    `O conselho espiritual é: ${superior.advice}`,
+    `Evite: ${superior.evitar}`,
+    `Os orixás que respondem são: ${superior.orixa || "Não especificado"}.`,
     ``,
     `━━━━━━━━━━━━━━━━━━`,
     ``,
@@ -258,13 +279,13 @@ function generateCabalaSummary(
     ``,
     `━━━━━━━━━━━━━━━━━━`,
     `✨ Resumo Espiritual:`,
-    `Superior: ${superior.name} (${superior.orixa}) — ${superior.personality}`,
-    `Inferior: ${inferior.name} (${inferior.orixa}) — ${inferior.personality}`,
-    `Central: ${central.name} (${central.orixa}) — ${central.personality}`,
-    `Final: ${finalOdu.name} (${finalOdu.orixa}) — ${finalOdu.personality}`,
+    `Superior: ${superior.name} (${superior.orixa || "—"}) — ${superior.personality}`,
+    `Inferior: ${inferior.name} (${inferior.orixa || "—"}) — ${inferior.personality}`,
+    `Central: ${central.name} (${central.orixa || "—"}) — ${central.personality}`,
+    `Final: ${finalOdu.name} (${finalOdu.orixa || "—"}) — ${finalOdu.personality}`,
     ``,
     `💡 Conselho principal: ${central.advice}`,
-    `📿 Orixás regentes: ${central.orixa}`,
+    `📿 Orixás regentes: ${central.orixa || "Não especificado"}`,
   ].join("\n");
 }
 

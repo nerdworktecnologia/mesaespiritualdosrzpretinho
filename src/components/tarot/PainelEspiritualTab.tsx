@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Copy } from "lucide-react";
+import { Copy, Share2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -303,6 +303,29 @@ export default function PainelEspiritualTab() {
         </Button>
         {interpretation && !saved && (
           <Button onClick={handleSave} variant="secondary" className="font-cinzel text-sm py-5 border border-primary/30">💾 Salvar</Button>
+        )}
+        {interpretation && (
+          <Button
+            onClick={() => {
+              const header = `🌟 *Mesa Espiritual do Sr. Zé Pretinho*\n📜 *Leitura Espiritual*${clientName ? ` — ${clientName}` : ""}\n`;
+              const tema = temaAuto !== "geral" ? `🎯 Tema: ${temasLabels[temaAuto] || temaAuto}\n` : "";
+              const question = pergunta ? `❓ ${pergunta}\n` : "";
+              const divider = "─────────────────\n";
+              let body = "";
+              if (interpretation.destino) body += `🔮 *Destino Espiritual*\n${interpretation.destino}\n\n`;
+              if (interpretation.energia) body += `🐚 *Energia do Momento*\n${interpretation.energia}\n\n`;
+              if (interpretation.situacao) body += `🃏 *Situação Prática*\n${interpretation.situacao}\n\n`;
+              if (interpretation.orientacao) body += `✨ *Orientação Espiritual*\n${interpretation.orientacao}\n\n`;
+              if (interpretation.resumo) body += `💫 _"${interpretation.resumo}"_\n`;
+              const fullText = `${header}${tema}${question}${divider}\n${body}`;
+              const url = `https://wa.me/?text=${encodeURIComponent(fullText)}`;
+              window.open(url, "_blank");
+            }}
+            variant="secondary"
+            className="font-cinzel text-sm py-5 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10"
+          >
+            <Share2 size={16} /> WhatsApp
+          </Button>
         )}
         <Button onClick={handleNovaConsulta} variant="secondary" className="font-cinzel text-sm py-5 border border-border">🔄 Nova</Button>
       </div>

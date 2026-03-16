@@ -172,8 +172,7 @@ function getTextosTema(tema: string) {
 }
 
 function avaliarEnergiaCabala(cabala: CabalaResult): "positiva" | "negativa" {
-  // Simple heuristic: odd index Odus tend to be more challenging
-  const idx = parseInt(cabala.superior.name.replace(/\D/g, "")) || 1;
+  const idx = cabala.testa.number;
   return idx <= 8 ? "positiva" : "negativa";
 }
 

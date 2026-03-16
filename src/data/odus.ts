@@ -142,11 +142,11 @@ export const odus: Odu[] = [
 ];
 
 export interface CabalaResult {
-  superior: Odu;
-  inferior: Odu;
-  lateral: Odu;
-  central: Odu;
-  final: Odu;
+  testa: Odu;
+  nuca: Odu;
+  fronteEsq: Odu;
+  fronteDir: Odu;
+  grid: number[][];
   summary: string;
 }
 
@@ -159,76 +159,64 @@ function reduceToOdu(n: number): number {
 }
 
 export function calculateCabala(birthDate: string): CabalaResult {
-  // Format: YYYY-MM-DD
+  // Format: YYYY-MM-DD → DD/MM/YYYY digits
   const parts = birthDate.split("-");
-  const day = parts[2]; // DD
-  const month = parts[1]; // MM
-  const year = parts[0]; // YYYY
+  const digits = (parts[2] + parts[1] + parts[0]).split("").map(Number);
+  // 8 digits → 4 rows of 2 columns
+  const grid = [
+    [digits[0], digits[1]],
+    [digits[2], digits[3]],
+    [digits[4], digits[5]],
+    [digits[6], digits[7]],
+  ];
 
-  const dayDigits = day.split("").map(Number);
-  const monthDigits = month.split("").map(Number);
-  const yearDigits = year.split("").map(Number);
-  const allDigits = [...dayDigits, ...monthDigits, ...yearDigits];
+  // Testa = soma coluna esquerda
+  const testaSum = grid[0][0] + grid[1][0] + grid[2][0] + grid[3][0];
+  const testaNum = reduceToOdu(testaSum);
 
-  // Nascimento/Destino: soma de TODOS os dígitos da data
-  const sumAll = allDigits.reduce((a, b) => a + b, 0);
-  const destinoNum = reduceToOdu(sumAll);
+  // Nuca = soma coluna direita
+  const nucaSum = grid[0][1] + grid[1][1] + grid[2][1] + grid[3][1];
+  const nucaNum = reduceToOdu(nucaSum);
 
-  // Caminho/Pés: soma dos dígitos do dia + mês
-  const sumDayMonth = [...dayDigits, ...monthDigits].reduce((a, b) => a + b, 0);
-  const caminhoNum = reduceToOdu(sumDayMonth);
+  // Fronte Esquerda = soma linhas 1 e 2
+  const fronteEsqSum = grid[0][0] + grid[0][1] + grid[1][0] + grid[1][1];
+  const fronteEsqNum = reduceToOdu(fronteEsqSum);
 
-  // Temperamento/Cabeça: soma dos dígitos do ano
-  const sumYear = yearDigits.reduce((a, b) => a + b, 0);
-  const temperamentoNum = reduceToOdu(sumYear);
+  // Fronte Direita = soma linhas 3 e 4
+  const fronteDirSum = grid[2][0] + grid[2][1] + grid[3][0] + grid[3][1];
+  const fronteDirNum = reduceToOdu(fronteDirSum);
 
-  // Herança/Esquerda: desafios — soma destino + caminho reduzida
-  const herancaNum = reduceToOdu(destinoNum + caminhoNum);
+  const testa = odus[testaNum - 1];
+  const nuca = odus[nucaNum - 1];
+  const fronteEsq = odus[fronteEsqNum - 1];
+  const fronteDir = odus[fronteDirNum - 1];
 
-  // Proteção/Direita: forças de equilíbrio — soma destino + temperamento reduzida
-  const protecaoNum = reduceToOdu(destinoNum + temperamentoNum);
-
-  const superior = odus[destinoNum - 1];       // Nascimento/Destino
-  const lateral = odus[caminhoNum - 1];         // Caminho/Pés
-  const central = odus[temperamentoNum - 1];    // Temperamento/Cabeça
-  const inferior = odus[herancaNum - 1];        // Herança/Esquerda
-  const finalOdu = odus[protecaoNum - 1];       // Proteção/Direita
-
-  const summary = generateCabalaSummary(superior, inferior, lateral, central, finalOdu);
-
-  return { superior, inferior, lateral, central, final: finalOdu, summary };
-}
-
-function generateCabalaSummary(
-  superior: Odu, inferior: Odu, lateral: Odu, central: Odu, finalOdu: Odu
-): string {
-  return [
-    `🔮 Odu de Nascimento (Destino):`,
-    `${superior.name} — ${superior.meaning}`,
+  const summary = [
+    `🧠 Testa (Coluna Esquerda): ${testaSum} → ${testaNum}`,
+    `${testa.name} (${testa.orixa}) — ${testa.meaning}`,
     ``,
-    `🦶 Odu de Caminho (Pés):`,
-    `${lateral.name} — ${lateral.meaning}`,
+    `🔙 Nuca (Coluna Direita): ${nucaSum} → ${nucaNum}`,
+    `${nuca.name} (${nuca.orixa}) — ${nuca.meaning}`,
     ``,
-    `🧠 Odu de Temperamento (Cabeça):`,
-    `${central.name} — ${central.meaning}`,
+    `👈 Fronte Esquerda (Linhas 1+2): ${fronteEsqSum} → ${fronteEsqNum}`,
+    `${fronteEsq.name} (${fronteEsq.orixa}) — ${fronteEsq.meaning}`,
     ``,
-    `⚠️ Odu de Herança (Esquerda):`,
-    `${inferior.name} — ${inferior.meaning}`,
+    `👉 Fronte Direita (Linhas 3+4): ${fronteDirSum} → ${fronteDirNum}`,
+    `${fronteDir.name} (${fronteDir.orixa}) — ${fronteDir.meaning}`,
     ``,
-    `🛡️ Odu de Proteção (Direita):`,
-    `${finalOdu.name} — ${finalOdu.meaning}`,
-    ``,
-    `Conselho: ${superior.advice}`,
-    `Evitar: ${superior.evitar}`,
+    `Conselho: ${testa.advice}`,
+    `Evitar: ${testa.evitar}`,
   ].join("\n");
+
+  return { testa, nuca, fronteEsq, fronteDir, grid, summary };
 }
 
 // Keep backward compatibility
 export function calculateOdu(fullName: string, birthDate: string) {
   const result = calculateCabala(birthDate);
   return {
-    principal: result.central,
-    destino: result.final,
+    principal: result.testa,
+    destino: result.nuca,
     message: result.summary,
   };
 }

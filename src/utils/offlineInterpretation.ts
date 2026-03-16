@@ -172,8 +172,7 @@ function getTextosTema(tema: string) {
 }
 
 function avaliarEnergiaCabala(cabala: CabalaResult): "positiva" | "negativa" {
-  // Simple heuristic: odd index Odus tend to be more challenging
-  const idx = parseInt(cabala.superior.name.replace(/\D/g, "")) || 1;
+  const idx = cabala.testa.number;
   return idx <= 8 ? "positiva" : "negativa";
 }
 
@@ -196,8 +195,8 @@ export function gerarInterpretacaoOffline(
   let destinoText = "Cabala não consultada nesta leitura.";
   if (cabala) {
     const energiaCabala = avaliarEnergiaCabala(cabala);
-    destinoText = `Seu Odu superior é ${cabala.superior.name} (${cabala.superior.orixa}), indicando ${cabala.superior.meaning || "energias de transformação"}. O Odu central ${cabala.central.name} revela o eixo da sua missão, enquanto o Odu final ${cabala.final.name} aponta o caminho de resolução.\n\n${energiaCabala === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}`;
-    partes.push(`Cabala: ${cabala.superior.name} / ${cabala.central.name} / ${cabala.final.name}`);
+    destinoText = `Seu Odu da Testa é ${cabala.testa.name} (${cabala.testa.orixa}), indicando ${cabala.testa.meaning || "energias de transformação"}. O Odu da Fronte Esquerda ${cabala.fronteEsq.name} revela influências herdadas, enquanto a Nuca ${cabala.nuca.name} aponta o caminho de resolução.\n\n${energiaCabala === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}`;
+    partes.push(`Cabala: ${cabala.testa.name} / ${cabala.fronteEsq.name} / ${cabala.nuca.name}`);
   }
 
   // Búzios
@@ -227,7 +226,7 @@ export function gerarInterpretacaoOffline(
   const media = [
     `📖 Consulta sobre: ${pergunta || "tema geral"}`,
     `\n\n${t.abertura}`,
-    cabala ? `\n\n🔢 Cabala de Ifá: O cruzamento dos Odus ${cabala.superior.name} (superior) e ${cabala.final.name} (final) — ${avaliarEnergiaCabala(cabala) === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}` : "",
+    cabala ? `\n\n🔢 Cabala de Ifá: O cruzamento dos Odus ${cabala.testa.name} (testa) e ${cabala.nuca.name} (nuca) — ${avaliarEnergiaCabala(cabala) === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}` : "",
     buzios ? `\n\n🐚 Búzios: ${buzios.odu.name} traz a energia de ${buzios.odu.orixa}. Com ${buzios.abertos} abertos, ${buzios.abertos > 8 ? t.buziosAltos : t.buziosBaixos}` : "",
     tarot.length > 0 ? `\n\n🃏 Tarot: ${tarot.map((c) => `${c.name} (${c.energy === "positive" ? "✨" : "⚠️"})`).join(", ")}. ${avaliarEnergiaTarot(tarot) === "positiva" ? t.tarotPositivo : t.tarotNegativo}` : "",
     `\n\n💫 ${t.orientacaoGeral}`,
@@ -247,7 +246,7 @@ export function gerarInterpretacaoOffline(
 
   // Orientação
   const orientacao = cabala && buzios
-    ? `A combinação de ${cabala.superior.name} com ${buzios.odu.name} revela que ${t.cruzamento}. ${buzios.abertos > 8 ? t.buziosAltos : t.buziosBaixos} ${t.orientacaoGeral}`
+    ? `A combinação de ${cabala.testa.name} com ${buzios.odu.name} revela que ${t.cruzamento}. ${buzios.abertos > 8 ? t.buziosAltos : t.buziosBaixos} ${t.orientacaoGeral}`
     : t.orientacaoGeral;
 
   const resumo = `${t.resumoFinal} (Interpretação local — ${partes.length} sistema(s) oracular(es) cruzado(s))`;

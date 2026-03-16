@@ -60,11 +60,10 @@ export default function CabalaTab() {
           pergunta: "Interpretação cruzada entre Cabala de Ifá e Jogo de Búzios",
           tema: "espiritual",
           cabala: {
-            superior: cabalaResult.superior.name, superiorOrixa: cabalaResult.superior.orixa,
-            inferior: cabalaResult.inferior.name, inferiorOrixa: cabalaResult.inferior.orixa,
-            lateral: cabalaResult.lateral.name, lateralOrixa: cabalaResult.lateral.orixa,
-            central: cabalaResult.central.name, centralOrixa: cabalaResult.central.orixa,
-            final: cabalaResult.final.name, finalOrixa: cabalaResult.final.orixa,
+            testa: cabalaResult.testa.name, testaOrixa: cabalaResult.testa.orixa,
+            nuca: cabalaResult.nuca.name, nucaOrixa: cabalaResult.nuca.orixa,
+            fronteEsq: cabalaResult.fronteEsq.name, fronteEsqOrixa: cabalaResult.fronteEsq.orixa,
+            fronteDir: cabalaResult.fronteDir.name, fronteDirOrixa: cabalaResult.fronteDir.orixa,
           },
           buzios: {
             abertos: buziosResult.abertos,
@@ -96,14 +95,24 @@ export default function CabalaTab() {
             <Button onClick={handleCabala} className="w-full font-cinzel text-base py-5">🔮 Calcular Cabala</Button>
             {cabalaResult && (
               <div className="space-y-3 animate-fade-up">
-                <div className="flex flex-col items-center gap-2">
-                  <OduCard label="🔮 Nascimento (Destino)" odu={cabalaResult.superior} />
-                  <div className="flex gap-2">
-                    <OduCard label="⚠️ Herança (Esq.)" odu={cabalaResult.inferior} size="sm" />
-                    <OduCard label="🧠 Temperamento" odu={cabalaResult.central} size="sm" />
-                    <OduCard label="🦶 Caminho (Pés)" odu={cabalaResult.lateral} size="sm" />
+                {/* Grid de dígitos */}
+                {cabalaResult.grid && (
+                  <div className="flex justify-center gap-4 py-2">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-center font-mono text-lg text-foreground/80">
+                      {cabalaResult.grid.map((row, i) => (
+                        <>{row.map((d, j) => <span key={`${i}-${j}`} className="w-6">{d}</span>)}</>
+                      ))}
+                    </div>
                   </div>
-                  <OduCard label="🛡️ Proteção (Dir.)" odu={cabalaResult.final} />
+                )}
+                {/* Head layout */}
+                <div className="flex flex-col items-center gap-2">
+                  <OduCard label="🧠 Testa" odu={cabalaResult.testa} />
+                  <div className="flex gap-2">
+                    <OduCard label="👈 Fronte Esq." odu={cabalaResult.fronteEsq} size="sm" />
+                    <OduCard label="👉 Fronte Dir." odu={cabalaResult.fronteDir} size="sm" />
+                  </div>
+                  <OduCard label="🔙 Nuca" odu={cabalaResult.nuca} />
                 </div>
               </div>
             )}
@@ -161,7 +170,7 @@ export default function CabalaTab() {
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-lg">✨ Interpretação Cruzada</CardTitle>
             <p className="text-muted-foreground text-xs">
-              Cabala: {cabalaResult?.central.name} × Búzios: {buziosResult?.odu.name}
+              Cabala: {cabalaResult?.testa.name} × Búzios: {buziosResult?.odu.name}
             </p>
           </CardHeader>
           <CardContent className="space-y-4">

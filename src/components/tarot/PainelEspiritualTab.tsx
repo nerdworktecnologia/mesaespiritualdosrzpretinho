@@ -91,11 +91,10 @@ export default function PainelEspiritualTab() {
 
       if (cabalaResult) {
         payload.cabala = {
-          superior: cabalaResult.superior.name, superiorOrixa: cabalaResult.superior.orixa,
-          inferior: cabalaResult.inferior.name, inferiorOrixa: cabalaResult.inferior.orixa,
-          lateral: cabalaResult.lateral.name, lateralOrixa: cabalaResult.lateral.orixa,
-          central: cabalaResult.central.name, centralOrixa: cabalaResult.central.orixa,
-          final: cabalaResult.final.name, finalOrixa: cabalaResult.final.orixa,
+          testa: cabalaResult.testa.name, testaOrixa: cabalaResult.testa.orixa,
+          nuca: cabalaResult.nuca.name, nucaOrixa: cabalaResult.nuca.orixa,
+          fronteEsq: cabalaResult.fronteEsq.name, fronteEsqOrixa: cabalaResult.fronteEsq.orixa,
+          fronteDir: cabalaResult.fronteDir.name, fronteDirOrixa: cabalaResult.fronteDir.orixa,
         };
       }
 
@@ -147,11 +146,11 @@ export default function PainelEspiritualTab() {
       };
 
       if (cabalaResult) {
-        record.cabala_superior = cabalaResult.superior.name;
-        record.cabala_inferior = cabalaResult.inferior.name;
-        record.cabala_lateral = cabalaResult.lateral.name;
-        record.cabala_central = cabalaResult.central.name;
-        record.cabala_final = cabalaResult.final.name;
+        record.cabala_superior = cabalaResult.testa.name;
+        record.cabala_inferior = cabalaResult.nuca.name;
+        record.cabala_lateral = cabalaResult.fronteEsq.name;
+        record.cabala_central = cabalaResult.fronteDir.name;
+        record.cabala_final = cabalaResult.testa.name;
       }
       if (buziosResult) {
         record.buzios_abertos = buziosResult.abertos;
@@ -236,13 +235,12 @@ export default function PainelEspiritualTab() {
             {cabalaResult && (
               <div className="space-y-2 animate-fade-up">
                 <div className="flex flex-col items-center gap-1">
-                  <OduBadge label="Superior" name={cabalaResult.superior.name} />
+                  <OduBadge label="Testa" name={cabalaResult.testa.name} />
                   <div className="flex gap-1 flex-wrap justify-center">
-                    <OduBadge label="Lateral" name={cabalaResult.lateral.name} size="sm" />
-                    <OduBadge label="Central" name={cabalaResult.central.name} size="sm" />
-                    <OduBadge label="Inferior" name={cabalaResult.inferior.name} size="sm" />
+                    <OduBadge label="Fr. Esq." name={cabalaResult.fronteEsq.name} size="sm" />
+                    <OduBadge label="Fr. Dir." name={cabalaResult.fronteDir.name} size="sm" />
                   </div>
-                  <OduBadge label="Final" name={cabalaResult.final.name} />
+                  <OduBadge label="Nuca" name={cabalaResult.nuca.name} />
                 </div>
               </div>
             )}

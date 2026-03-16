@@ -203,17 +203,23 @@ function generateCabalaSummary(
   superior: Odu, inferior: Odu, lateral: Odu, central: Odu, finalOdu: Odu
 ): string {
   return [
-    `Destino espiritual:`,
-    `${superior.name} indica ${superior.meaning}`,
+    `🔮 Odu de Nascimento (Destino):`,
+    `${superior.name} — ${superior.meaning}`,
     ``,
-    `Energia atual:`,
-    `${lateral.name} mostra ${lateral.meaning}`,
+    `🦶 Odu de Caminho (Pés):`,
+    `${lateral.name} — ${lateral.meaning}`,
     ``,
-    `Caminho interno:`,
-    `${central.name} revela ${central.meaning}`,
+    `🧠 Odu de Temperamento (Cabeça):`,
+    `${central.name} — ${central.meaning}`,
     ``,
-    `Resultado espiritual:`,
-    `${finalOdu.name} indica ${finalOdu.advice}`,
+    `⚠️ Odu de Herança (Esquerda):`,
+    `${inferior.name} — ${inferior.meaning}`,
+    ``,
+    `🛡️ Odu de Proteção (Direita):`,
+    `${finalOdu.name} — ${finalOdu.meaning}`,
+    ``,
+    `Conselho: ${superior.advice}`,
+    `Evitar: ${superior.evitar}`,
   ].join("\n");
 }
 

@@ -101,13 +101,13 @@ export default function CabalaTab() {
             {cabalaResult && (
               <div className="space-y-3 animate-fade-up">
                 <div className="flex flex-col items-center gap-2">
-                  <OduCard label="🔮 Superior" odu={cabalaResult.superior} />
+                  <OduCard label="🔮 Nascimento (Destino)" odu={cabalaResult.superior} />
                   <div className="flex gap-2">
-                    <OduCard label="🧠 Lateral" odu={cabalaResult.lateral} size="sm" />
-                    <OduCard label="🛤️ Central" odu={cabalaResult.central} size="sm" />
-                    <OduCard label="👤 Inferior" odu={cabalaResult.inferior} size="sm" />
+                    <OduCard label="⚠️ Herança (Esq.)" odu={cabalaResult.inferior} size="sm" />
+                    <OduCard label="🧠 Temperamento" odu={cabalaResult.central} size="sm" />
+                    <OduCard label="🦶 Caminho (Pés)" odu={cabalaResult.lateral} size="sm" />
                   </div>
-                  <OduCard label="🛡️ Final" odu={cabalaResult.final} />
+                  <OduCard label="🛡️ Proteção (Dir.)" odu={cabalaResult.final} />
                 </div>
               </div>
             )}

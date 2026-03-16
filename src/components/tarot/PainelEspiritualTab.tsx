@@ -146,11 +146,11 @@ export default function PainelEspiritualTab() {
       };
 
       if (cabalaResult) {
-        record.cabala_superior = cabalaResult.superior.name;
-        record.cabala_inferior = cabalaResult.inferior.name;
-        record.cabala_lateral = cabalaResult.lateral.name;
-        record.cabala_central = cabalaResult.central.name;
-        record.cabala_final = cabalaResult.final.name;
+        record.cabala_superior = cabalaResult.testa.name;
+        record.cabala_inferior = cabalaResult.nuca.name;
+        record.cabala_lateral = cabalaResult.fronteEsq.name;
+        record.cabala_central = cabalaResult.fronteDir.name;
+        record.cabala_final = cabalaResult.testa.name;
       }
       if (buziosResult) {
         record.buzios_abertos = buziosResult.abertos;

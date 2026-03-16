@@ -159,22 +159,40 @@ function reduceToOdu(n: number): number {
 }
 
 export function calculateCabala(birthDate: string): CabalaResult {
-  // Format: YYYY-MM-DD → "DDMMAAAA" (8 dígitos)
+  // Format: YYYY-MM-DD
   const parts = birthDate.split("-");
-  const formatted = parts[2] + parts[1] + parts[0]; // DDMMAAAA
-  const numeros = formatted.split("").map(Number);
+  const day = parts[2]; // DD
+  const month = parts[1]; // MM
+  const year = parts[0]; // YYYY
 
-  const esquerda = reduceToOdu(numeros[0] + numeros[2] + numeros[4] + numeros[6]);
-  const direita = reduceToOdu(numeros[1] + numeros[3] + numeros[5] + numeros[7]);
-  const lateralNum = reduceToOdu(esquerda + direita);
-  const centralNum = reduceToOdu(esquerda + direita + lateralNum);
-  const finalNum = reduceToOdu(esquerda + direita + lateralNum + centralNum);
+  const dayDigits = day.split("").map(Number);
+  const monthDigits = month.split("").map(Number);
+  const yearDigits = year.split("").map(Number);
+  const allDigits = [...dayDigits, ...monthDigits, ...yearDigits];
 
-  const superior = odus[esquerda - 1];
-  const inferior = odus[direita - 1];
-  const lateral = odus[lateralNum - 1];
-  const central = odus[centralNum - 1];
-  const finalOdu = odus[finalNum - 1];
+  // Nascimento/Destino: soma de TODOS os dígitos da data
+  const sumAll = allDigits.reduce((a, b) => a + b, 0);
+  const destinoNum = reduceToOdu(sumAll);
+
+  // Caminho/Pés: soma dos dígitos do dia + mês
+  const sumDayMonth = [...dayDigits, ...monthDigits].reduce((a, b) => a + b, 0);
+  const caminhoNum = reduceToOdu(sumDayMonth);
+
+  // Temperamento/Cabeça: soma dos dígitos do ano
+  const sumYear = yearDigits.reduce((a, b) => a + b, 0);
+  const temperamentoNum = reduceToOdu(sumYear);
+
+  // Herança/Esquerda: desafios — soma destino + caminho reduzida
+  const herancaNum = reduceToOdu(destinoNum + caminhoNum);
+
+  // Proteção/Direita: forças de equilíbrio — soma destino + temperamento reduzida
+  const protecaoNum = reduceToOdu(destinoNum + temperamentoNum);
+
+  const superior = odus[destinoNum - 1];       // Nascimento/Destino
+  const lateral = odus[caminhoNum - 1];         // Caminho/Pés
+  const central = odus[temperamentoNum - 1];    // Temperamento/Cabeça
+  const inferior = odus[herancaNum - 1];        // Herança/Esquerda
+  const finalOdu = odus[protecaoNum - 1];       // Proteção/Direita
 
   const summary = generateCabalaSummary(superior, inferior, lateral, central, finalOdu);
 

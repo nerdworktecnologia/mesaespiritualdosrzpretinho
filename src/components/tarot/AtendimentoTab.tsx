@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Mic, MicOff, Phone } from "lucide-react";
+import { Mic, MicOff, Phone, Search, UserPlus, Check } from "lucide-react";
 import { calculateCabala, CabalaResult } from "@/data/odus";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ClientData {
   name: string;
@@ -16,8 +18,19 @@ interface ClientData {
   question: string;
 }
 
+interface DbClient {
+  id: string;
+  name: string;
+  whatsapp: string | null;
+  birth_date: string | null;
+  notes: string | null;
+  total_readings: number;
+  last_visit: string | null;
+}
+
 export default function AtendimentoTab() {
   const [searchParams] = useSearchParams();
+  const { toast } = useToast();
   const [data, setData] = useState<ClientData>(() => ({
     name: searchParams.get("name") || "",
     whatsapp: searchParams.get("whatsapp") || "",
@@ -28,6 +41,38 @@ export default function AtendimentoTab() {
   const [isRecording, setIsRecording] = useState(false);
   const [saved, setSaved] = useState(false);
   const [cabalaResult, setCabalaResult] = useState<CabalaResult | null>(null);
+  const [clients, setClients] = useState<DbClient[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [showList, setShowList] = useState(true);
+
+  // Fetch clients from database
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
+  const fetchClients = async () => {
+    const { data: rows } = await supabase
+      .from("clients")
+      .select("*")
+      .order("last_visit", { ascending: false, nullsFirst: false });
+    if (rows) setClients(rows);
+  };
+
+  const filteredClients = clients.filter((c) =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const selectClient = (client: DbClient) => {
+    setData({
+      ...data,
+      name: client.name,
+      whatsapp: client.whatsapp || "",
+      birthDate: client.birth_date || "",
+    });
+    setSelectedClientId(client.id);
+    setShowList(false);
+  };
 
   const handleVoice = async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -48,18 +93,51 @@ export default function AtendimentoTab() {
     recognition.start();
   };
 
-  const handleSave = () => {
-    if (!data.name || !data.birthDate || !data.question) return;
-    const cabala = calculateCabala(data.birthDate);
+  const handleSave = async () => {
+    if (!data.name || !data.question) return;
+
+    // Calculate cabala if birthDate provided
+    const cabala = data.birthDate ? calculateCabala(data.birthDate) : null;
     setCabalaResult(cabala);
     setSaved(true);
-    saveClient(data.name, data.whatsapp);
+
+    // Save or update client in database
+    try {
+      if (selectedClientId) {
+        // Update existing client
+        await supabase
+          .from("clients")
+          .update({
+            whatsapp: data.whatsapp || null,
+            birth_date: data.birthDate || null,
+            last_visit: new Date().toISOString().split("T")[0],
+            total_readings: (clients.find((c) => c.id === selectedClientId)?.total_readings || 0) + 1,
+          })
+          .eq("id", selectedClientId);
+      } else {
+        // Create new client
+        await supabase.from("clients").insert({
+          name: data.name,
+          whatsapp: data.whatsapp || null,
+          birth_date: data.birthDate || null,
+          last_visit: new Date().toISOString().split("T")[0],
+          total_readings: 1,
+        });
+      }
+      toast({ title: selectedClientId ? "Cliente atualizado" : "Novo cliente salvo" });
+      fetchClients();
+    } catch (e: any) {
+      console.error(e);
+    }
   };
 
   const handleReset = () => {
     setData({ name: "", whatsapp: "", birthDate: "", birthTime: "", question: "" });
     setSaved(false);
     setCabalaResult(null);
+    setSelectedClientId(null);
+    setShowList(true);
+    setSearchTerm("");
   };
 
   return (
@@ -69,49 +147,122 @@ export default function AtendimentoTab() {
 
         {!saved ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-foreground/50 text-xs uppercase tracking-wider">Nome</Label>
-                <Input
-                  placeholder="Nome do cliente"
-                  value={data.name}
-                  onChange={(e) => setData({ ...data, name: e.target.value })}
-                  className="bg-secondary border-border"
-                />
-              </div>
+            {/* Client list / search */}
+            {showList && clients.length > 0 && (
               <div className="space-y-2">
                 <Label className="text-foreground/50 text-xs uppercase tracking-wider flex items-center gap-1">
-                  <Phone className="h-3 w-3" /> WhatsApp
+                  <Search className="h-3 w-3" /> Selecionar cliente
                 </Label>
                 <Input
-                  placeholder="(11) 99999-9999"
-                  value={data.whatsapp}
-                  onChange={(e) => setData({ ...data, whatsapp: e.target.value })}
+                  placeholder="Buscar cliente..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="bg-secondary border-border"
                 />
+                <div className="max-h-40 overflow-y-auto space-y-1 rounded-md border border-border bg-secondary/50 p-2">
+                  {filteredClients.length === 0 ? (
+                    <p className="text-muted-foreground text-xs text-center py-2">Nenhum cliente encontrado</p>
+                  ) : (
+                    filteredClients.slice(0, 20).map((client) => (
+                      <button
+                        key={client.id}
+                        onClick={() => selectClient(client)}
+                        className="w-full text-left px-3 py-2 rounded hover:bg-accent/20 transition-colors flex items-center justify-between group"
+                      >
+                        <div>
+                          <span className="text-foreground text-sm font-medium">{client.name}</span>
+                          {client.whatsapp && (
+                            <span className="text-muted-foreground text-xs ml-2">{client.whatsapp}</span>
+                          )}
+                        </div>
+                        <span className="text-muted-foreground text-[10px]">
+                          {client.total_readings} consulta{client.total_readings !== 1 ? "s" : ""}
+                        </span>
+                      </button>
+                    ))
+                  )}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-muted-foreground w-full"
+                  onClick={() => setShowList(false)}
+                >
+                  <UserPlus className="h-3 w-3 mr-1" /> Novo cliente
+                </Button>
               </div>
-            </div>
+            )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-foreground/50 text-xs uppercase tracking-wider">Data de nascimento</Label>
-                <Input
-                  type="date"
-                  value={data.birthDate}
-                  onChange={(e) => setData({ ...data, birthDate: e.target.value })}
-                  className="bg-secondary border-border"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-foreground/50 text-xs uppercase tracking-wider">Hora de nascimento (opcional)</Label>
-                <Input
-                  type="time"
-                  value={data.birthTime}
-                  onChange={(e) => setData({ ...data, birthTime: e.target.value })}
-                  className="bg-secondary border-border"
-                />
-              </div>
-            </div>
+            {/* Client form */}
+            {(!showList || clients.length === 0) && (
+              <>
+                {clients.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-muted-foreground"
+                    onClick={() => { setShowList(true); setSelectedClientId(null); }}
+                  >
+                    ← Voltar à lista
+                  </Button>
+                )}
+
+                {selectedClientId && (
+                  <div className="flex items-center gap-2 p-2 rounded bg-primary/10 border border-primary/20">
+                    <Check className="h-4 w-4 text-primary" />
+                    <span className="text-sm text-foreground">{data.name}</span>
+                    <Button variant="ghost" size="sm" className="ml-auto text-xs" onClick={() => { setSelectedClientId(null); setData({ ...data, name: "", whatsapp: "", birthDate: "" }); }}>
+                      Trocar
+                    </Button>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-foreground/50 text-xs uppercase tracking-wider">Nome</Label>
+                    <Input
+                      placeholder="Nome do cliente"
+                      value={data.name}
+                      onChange={(e) => setData({ ...data, name: e.target.value })}
+                      className="bg-secondary border-border"
+                      disabled={!!selectedClientId}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-foreground/50 text-xs uppercase tracking-wider flex items-center gap-1">
+                      <Phone className="h-3 w-3" /> WhatsApp
+                    </Label>
+                    <Input
+                      placeholder="(11) 99999-9999"
+                      value={data.whatsapp}
+                      onChange={(e) => setData({ ...data, whatsapp: e.target.value })}
+                      className="bg-secondary border-border"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-foreground/50 text-xs uppercase tracking-wider">Data de nascimento</Label>
+                    <Input
+                      type="date"
+                      value={data.birthDate}
+                      onChange={(e) => setData({ ...data, birthDate: e.target.value })}
+                      className="bg-secondary border-border"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-foreground/50 text-xs uppercase tracking-wider">Hora de nascimento (opcional)</Label>
+                    <Input
+                      type="time"
+                      value={data.birthTime}
+                      onChange={(e) => setData({ ...data, birthTime: e.target.value })}
+                      className="bg-secondary border-border"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className="space-y-2">
               <Label className="text-foreground/50 text-xs uppercase tracking-wider">Pergunta</Label>
@@ -136,8 +287,6 @@ export default function AtendimentoTab() {
               )}
             </div>
 
-            <ClientSuggestions onSelect={(name, whatsapp) => setData((prev) => ({ ...prev, name, whatsapp }))} />
-
             <Button
               onClick={handleSave}
               className="w-full font-cinzel text-sm py-6 tracking-wider uppercase bg-foreground text-background hover:bg-foreground/90"
@@ -156,7 +305,7 @@ export default function AtendimentoTab() {
                       <Phone className="h-3 w-3" /> {data.whatsapp}
                     </p>
                   )}
-                  <p className="text-foreground/40 text-xs mt-1">Nasc: {data.birthDate}</p>
+                  {data.birthDate && <p className="text-foreground/40 text-xs mt-1">Nasc: {data.birthDate}</p>}
                 </div>
                 <Button variant="ghost" size="sm" onClick={handleReset} className="text-xs text-muted-foreground">
                   Novo
@@ -201,35 +350,6 @@ function MiniOdu({ label, odu }: { label: string; odu: { number: number; name: s
       <p className="text-muted-foreground text-[9px] uppercase tracking-wider">{label}</p>
       <p className="font-cinzel text-foreground text-xs font-bold">{odu.number} – {odu.name}</p>
       <p className="text-foreground/40 text-[9px]">{odu.orixa}</p>
-    </div>
-  );
-}
-
-function saveClient(name: string, whatsapp: string) {
-  if (!name) return;
-  try {
-    const clients: Record<string, string> = JSON.parse(localStorage.getItem("tarot-clients") || "{}");
-    clients[name] = whatsapp;
-    localStorage.setItem("tarot-clients", JSON.stringify(clients));
-  } catch {}
-}
-
-function ClientSuggestions({ onSelect }: { onSelect: (name: string, whatsapp: string) => void }) {
-  let clients: Record<string, string> = {};
-  try { clients = JSON.parse(localStorage.getItem("tarot-clients") || "{}"); } catch {}
-  const entries = Object.entries(clients);
-  if (entries.length === 0) return null;
-
-  return (
-    <div className="space-y-2">
-      <Label className="text-muted-foreground text-[10px] uppercase tracking-wider">Clientes recentes</Label>
-      <div className="flex flex-wrap gap-2">
-        {entries.slice(0, 8).map(([name, whatsapp]) => (
-          <Button key={name} variant="outline" size="sm" className="text-xs border-border hover:border-foreground/30" onClick={() => onSelect(name, whatsapp)}>
-            {name}
-          </Button>
-        ))}
-      </div>
     </div>
   );
 }

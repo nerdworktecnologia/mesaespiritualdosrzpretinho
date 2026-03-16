@@ -60,11 +60,10 @@ export default function CabalaTab() {
           pergunta: "Interpretação cruzada entre Cabala de Ifá e Jogo de Búzios",
           tema: "espiritual",
           cabala: {
-            superior: cabalaResult.superior.name, superiorOrixa: cabalaResult.superior.orixa,
-            inferior: cabalaResult.inferior.name, inferiorOrixa: cabalaResult.inferior.orixa,
-            lateral: cabalaResult.lateral.name, lateralOrixa: cabalaResult.lateral.orixa,
-            central: cabalaResult.central.name, centralOrixa: cabalaResult.central.orixa,
-            final: cabalaResult.final.name, finalOrixa: cabalaResult.final.orixa,
+            testa: cabalaResult.testa.name, testaOrixa: cabalaResult.testa.orixa,
+            nuca: cabalaResult.nuca.name, nucaOrixa: cabalaResult.nuca.orixa,
+            fronteEsq: cabalaResult.fronteEsq.name, fronteEsqOrixa: cabalaResult.fronteEsq.orixa,
+            fronteDir: cabalaResult.fronteDir.name, fronteDirOrixa: cabalaResult.fronteDir.orixa,
           },
           buzios: {
             abertos: buziosResult.abertos,

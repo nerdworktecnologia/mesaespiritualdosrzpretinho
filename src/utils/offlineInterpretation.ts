@@ -226,7 +226,7 @@ export function gerarInterpretacaoOffline(
   const media = [
     `📖 Consulta sobre: ${pergunta || "tema geral"}`,
     `\n\n${t.abertura}`,
-    cabala ? `\n\n🔢 Cabala de Ifá: O cruzamento dos Odus ${cabala.superior.name} (superior) e ${cabala.final.name} (final) — ${avaliarEnergiaCabala(cabala) === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}` : "",
+    cabala ? `\n\n🔢 Cabala de Ifá: O cruzamento dos Odus ${cabala.testa.name} (testa) e ${cabala.nuca.name} (nuca) — ${avaliarEnergiaCabala(cabala) === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}` : "",
     buzios ? `\n\n🐚 Búzios: ${buzios.odu.name} traz a energia de ${buzios.odu.orixa}. Com ${buzios.abertos} abertos, ${buzios.abertos > 8 ? t.buziosAltos : t.buziosBaixos}` : "",
     tarot.length > 0 ? `\n\n🃏 Tarot: ${tarot.map((c) => `${c.name} (${c.energy === "positive" ? "✨" : "⚠️"})`).join(", ")}. ${avaliarEnergiaTarot(tarot) === "positiva" ? t.tarotPositivo : t.tarotNegativo}` : "",
     `\n\n💫 ${t.orientacaoGeral}`,

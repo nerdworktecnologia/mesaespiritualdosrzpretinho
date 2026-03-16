@@ -195,8 +195,8 @@ export function gerarInterpretacaoOffline(
   let destinoText = "Cabala não consultada nesta leitura.";
   if (cabala) {
     const energiaCabala = avaliarEnergiaCabala(cabala);
-    destinoText = `Seu Odu superior é ${cabala.superior.name} (${cabala.superior.orixa}), indicando ${cabala.superior.meaning || "energias de transformação"}. O Odu central ${cabala.central.name} revela o eixo da sua missão, enquanto o Odu final ${cabala.final.name} aponta o caminho de resolução.\n\n${energiaCabala === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}`;
-    partes.push(`Cabala: ${cabala.superior.name} / ${cabala.central.name} / ${cabala.final.name}`);
+    destinoText = `Seu Odu da Testa é ${cabala.testa.name} (${cabala.testa.orixa}), indicando ${cabala.testa.meaning || "energias de transformação"}. O Odu da Fronte Esquerda ${cabala.fronteEsq.name} revela influências herdadas, enquanto a Nuca ${cabala.nuca.name} aponta o caminho de resolução.\n\n${energiaCabala === "positiva" ? t.cabalaPositiva : t.cabalaNegativa}`;
+    partes.push(`Cabala: ${cabala.testa.name} / ${cabala.fronteEsq.name} / ${cabala.nuca.name}`);
   }
 
   // Búzios

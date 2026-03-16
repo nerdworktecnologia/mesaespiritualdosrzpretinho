@@ -195,7 +195,7 @@ export default function AtendimentoTab() {
   );
 }
 
-function MiniOdu({ label, odu }: { label: string; odu: { name: string; orixa: string } }) {
+function MiniOdu({ label, odu }: { label: string; odu: { number: number; name: string; orixa: string } }) {
   return (
     <div className="text-center p-2 rounded bg-secondary border border-border">
       <p className="text-muted-foreground text-[9px] uppercase tracking-wider">{label}</p>

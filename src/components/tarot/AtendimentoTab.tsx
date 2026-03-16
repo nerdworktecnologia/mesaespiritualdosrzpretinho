@@ -319,12 +319,11 @@ export default function AtendimentoTab() {
             {cabalaResult && (
               <div className="card-mystical rounded-lg p-4 border border-border animate-fade-up">
                 <h4 className="font-cinzel text-foreground text-xs tracking-wider uppercase mb-3">Cabala dos Odus</h4>
-                <div className="grid grid-cols-3 gap-2 mb-3">
-                  <MiniOdu label="Superior" odu={cabalaResult.superior} />
-                  <MiniOdu label="Inferior" odu={cabalaResult.inferior} />
-                  <MiniOdu label="Lateral" odu={cabalaResult.lateral} />
-                  <MiniOdu label="Central" odu={cabalaResult.central} />
-                  <MiniOdu label="Final" odu={cabalaResult.final} />
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <MiniOdu label="Testa" odu={cabalaResult.testa} />
+                  <MiniOdu label="Nuca" odu={cabalaResult.nuca} />
+                  <MiniOdu label="Fr. Esq." odu={cabalaResult.fronteEsq} />
+                  <MiniOdu label="Fr. Dir." odu={cabalaResult.fronteDir} />
                 </div>
                 <div className="border-t border-border pt-3">
                   <pre className="whitespace-pre-wrap font-crimson text-foreground/50 text-xs leading-relaxed">

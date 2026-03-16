@@ -170,7 +170,7 @@ export default function CabalaTab() {
           <CardHeader className="pb-3">
             <CardTitle className="font-cinzel gold-text text-lg">✨ Interpretação Cruzada</CardTitle>
             <p className="text-muted-foreground text-xs">
-              Cabala: {cabalaResult?.central.name} × Búzios: {buziosResult?.odu.name}
+              Cabala: {cabalaResult?.testa.name} × Búzios: {buziosResult?.odu.name}
             </p>
           </CardHeader>
           <CardContent className="space-y-4">

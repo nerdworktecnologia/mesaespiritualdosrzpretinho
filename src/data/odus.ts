@@ -215,8 +215,8 @@ export function calculateCabala(birthDate: string): CabalaResult {
 export function calculateOdu(fullName: string, birthDate: string) {
   const result = calculateCabala(birthDate);
   return {
-    principal: result.central,
-    destino: result.final,
+    principal: result.testa,
+    destino: result.nuca,
     message: result.summary,
   };
 }

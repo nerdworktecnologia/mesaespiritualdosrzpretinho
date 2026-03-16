@@ -246,7 +246,7 @@ export function gerarInterpretacaoOffline(
 
   // Orientação
   const orientacao = cabala && buzios
-    ? `A combinação de ${cabala.superior.name} com ${buzios.odu.name} revela que ${t.cruzamento}. ${buzios.abertos > 8 ? t.buziosAltos : t.buziosBaixos} ${t.orientacaoGeral}`
+    ? `A combinação de ${cabala.testa.name} com ${buzios.odu.name} revela que ${t.cruzamento}. ${buzios.abertos > 8 ? t.buziosAltos : t.buziosBaixos} ${t.orientacaoGeral}`
     : t.orientacaoGeral;
 
   const resumo = `${t.resumoFinal} (Interpretação local — ${partes.length} sistema(s) oracular(es) cruzado(s))`;

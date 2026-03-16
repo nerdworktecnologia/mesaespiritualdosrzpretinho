@@ -235,13 +235,12 @@ export default function PainelEspiritualTab() {
             {cabalaResult && (
               <div className="space-y-2 animate-fade-up">
                 <div className="flex flex-col items-center gap-1">
-                  <OduBadge label="Superior" name={cabalaResult.superior.name} />
+                  <OduBadge label="Testa" name={cabalaResult.testa.name} />
                   <div className="flex gap-1 flex-wrap justify-center">
-                    <OduBadge label="Lateral" name={cabalaResult.lateral.name} size="sm" />
-                    <OduBadge label="Central" name={cabalaResult.central.name} size="sm" />
-                    <OduBadge label="Inferior" name={cabalaResult.inferior.name} size="sm" />
+                    <OduBadge label="Fr. Esq." name={cabalaResult.fronteEsq.name} size="sm" />
+                    <OduBadge label="Fr. Dir." name={cabalaResult.fronteDir.name} size="sm" />
                   </div>
-                  <OduBadge label="Final" name={cabalaResult.final.name} />
+                  <OduBadge label="Nuca" name={cabalaResult.nuca.name} />
                 </div>
               </div>
             )}

@@ -133,7 +133,7 @@ export default function CabalaTab() {
                 </div>
                 <div className="text-center space-y-2 p-4 rounded-lg bg-secondary/50 border border-border/50">
                   <p className="text-muted-foreground text-sm">Abertos: <span className="text-primary font-bold">{buziosResult.abertos}</span> de 16</p>
-                  <p className="font-cinzel gold-text text-2xl font-bold">{buziosResult.odu.name}</p>
+                  <p className="font-cinzel gold-text text-2xl font-bold">{buziosResult.odu.number} – {buziosResult.odu.name}</p>
                   <p className="text-accent text-sm font-cinzel">{buziosResult.odu.orixa}</p>
                   <p className="text-foreground/70 text-sm mt-2 leading-relaxed">{buziosResult.odu.meaning}</p>
                 </div>

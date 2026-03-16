@@ -60,7 +60,7 @@ export default function BuziosTab() {
               <p className="text-muted-foreground text-sm">
                 Abertos: <span className="text-primary font-bold">{result.abertos}</span> de 16
               </p>
-              <p className="font-cinzel gold-text text-2xl font-bold">{result.odu.name}</p>
+              <p className="font-cinzel gold-text text-2xl font-bold">{result.odu.number} – {result.odu.name}</p>
               <p className="text-accent text-sm font-cinzel">{result.odu.orixa}</p>
               <p className="text-foreground/70 text-sm mt-2 leading-relaxed">{result.odu.meaning}</p>
             </div>

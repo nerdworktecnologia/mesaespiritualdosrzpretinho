@@ -266,7 +266,7 @@ export default function PainelEspiritualTab() {
                 </div>
                 <div className="text-center p-3 rounded-lg bg-secondary/50 border border-border/50">
                   <p className="text-muted-foreground text-xs">Abertos: <span className="text-primary font-bold">{buziosResult.abertos}</span>/16</p>
-                  <p className="font-cinzel gold-text text-xl font-bold">{buziosResult.odu.name}</p>
+                  <p className="font-cinzel gold-text text-xl font-bold">{buziosResult.odu.number} – {buziosResult.odu.name}</p>
                   <p className="text-accent text-xs font-cinzel">{buziosResult.odu.orixa}</p>
                 </div>
               </div>

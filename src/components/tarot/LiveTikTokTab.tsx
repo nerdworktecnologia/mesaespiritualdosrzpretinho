@@ -179,7 +179,7 @@ export default function LiveTikTokTab() {
                     <span key={i} className={`text-2xl ${b === 1 ? "text-primary" : "text-muted-foreground/30"}`}>{b === 1 ? "●" : "○"}</span>
                   ))}
                 </div>
-                <p className="font-cinzel gold-text text-xl font-bold">{buziosResult.odu.name}</p>
+                <p className="font-cinzel gold-text text-xl font-bold">{buziosResult.odu.number} – {buziosResult.odu.name}</p>
               </div>
             )}
 

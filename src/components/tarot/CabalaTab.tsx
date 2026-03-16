@@ -93,10 +93,6 @@ export default function CabalaTab() {
             <CardTitle className="font-cinzel gold-text text-lg">🔢 Cabala de Ifá</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-foreground/80">Data de nascimento</Label>
-              <Input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="bg-muted/50 border-border" />
-            </div>
             <Button onClick={handleCabala} className="w-full font-cinzel text-base py-5">🔮 Calcular Cabala</Button>
             {cabalaResult && (
               <div className="space-y-3 animate-fade-up">

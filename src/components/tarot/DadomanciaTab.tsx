@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { getDiceInterpretation } from "@/data/dadomancia";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Save } from "lucide-react";
 
 const diceEmojis = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
 
 export default function DadomanciaTab() {
   const [dice, setDice] = useState<(number | null)[]>([null, null, null]);
   const [hasResult, setHasResult] = useState(false);
+  const [clientName, setClientName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const setDieValue = (index: number, value: number) => {
     const newDice = [...dice];
@@ -19,12 +26,41 @@ export default function DadomanciaTab() {
   const allSelected = dice.every((d) => d !== null && d >= 1 && d <= 6);
 
   const handleReveal = () => {
-    if (allSelected) setHasResult(true);
+    if (allSelected) {
+      setHasResult(true);
+      setSaved(false);
+    }
   };
 
   const handleClear = () => {
     setDice([null, null, null]);
     setHasResult(false);
+    setSaved(false);
+  };
+
+  const handleSave = async () => {
+    if (!interpretation || !clientName.trim()) {
+      toast.error("Informe o nome do consulente antes de salvar.");
+      return;
+    }
+    setSaving(true);
+    const { error } = await supabase.from("consultations").insert({
+      client_name: clientName.trim(),
+      reading_type: "dadomancia",
+      question: `Dados: ${d1}, ${d2}, ${d3} (soma: ${sum})`,
+      interpretation_resumo: interpretation.titulo,
+      interpretation_energia: interpretation.energia,
+      interpretation_situacao: interpretation.mensagem,
+      interpretation_orientacao: interpretation.conselho,
+      interpretation_destino: interpretation.alerta || null,
+    });
+    setSaving(false);
+    if (error) {
+      toast.error("Erro ao salvar consulta.");
+    } else {
+      toast.success("Consulta salva no histórico!");
+      setSaved(true);
+    }
   };
 
   const d1 = dice[0] ?? 0;
@@ -44,6 +80,13 @@ export default function DadomanciaTab() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Client name */}
+        <Input
+          placeholder="Nome do consulente..."
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
+          className="bg-secondary border-border font-crimson"
+        />
         {/* 3 dice selectors */}
         <div className="grid grid-cols-3 gap-3">
           {[0, 1, 2].map((idx) => (
@@ -134,6 +177,21 @@ export default function DadomanciaTab() {
                 <p className="text-xs font-cinzel text-destructive uppercase tracking-wider mb-1">⚠️ Alerta</p>
                 <p className="text-destructive font-crimson text-sm">{interpretation.alerta}</p>
               </div>
+            )}
+
+            {!saved && (
+              <Button
+                onClick={handleSave}
+                disabled={saving}
+                className="w-full font-cinzel text-sm py-5"
+                variant="outline"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? "Salvando..." : "Salvar no Histórico"}
+              </Button>
+            )}
+            {saved && (
+              <p className="text-center text-xs text-muted-foreground font-cinzel">✅ Consulta salva</p>
             )}
           </div>
         )}

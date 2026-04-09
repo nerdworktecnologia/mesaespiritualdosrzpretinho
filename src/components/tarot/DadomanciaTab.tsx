@@ -178,6 +178,21 @@ export default function DadomanciaTab() {
                 <p className="text-destructive font-crimson text-sm">{interpretation.alerta}</p>
               </div>
             )}
+
+            {!saved && (
+              <Button
+                onClick={handleSave}
+                disabled={saving}
+                className="w-full font-cinzel text-sm py-5"
+                variant="outline"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? "Salvando..." : "Salvar no Histórico"}
+              </Button>
+            )}
+            {saved && (
+              <p className="text-center text-xs text-muted-foreground font-cinzel">✅ Consulta salva</p>
+            )}
           </div>
         )}
       </CardContent>

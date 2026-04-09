@@ -80,6 +80,13 @@ export default function DadomanciaTab() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Client name */}
+        <Input
+          placeholder="Nome do consulente..."
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
+          className="bg-secondary border-border font-crimson"
+        />
         {/* 3 dice selectors */}
         <div className="grid grid-cols-3 gap-3">
           {[0, 1, 2].map((idx) => (

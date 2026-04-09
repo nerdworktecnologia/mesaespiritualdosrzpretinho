@@ -12,6 +12,9 @@ const diceEmojis = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
 export default function DadomanciaTab() {
   const [dice, setDice] = useState<(number | null)[]>([null, null, null]);
   const [hasResult, setHasResult] = useState(false);
+  const [clientName, setClientName] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const setDieValue = (index: number, value: number) => {
     const newDice = [...dice];

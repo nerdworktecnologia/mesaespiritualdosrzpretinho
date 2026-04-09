@@ -26,12 +26,41 @@ export default function DadomanciaTab() {
   const allSelected = dice.every((d) => d !== null && d >= 1 && d <= 6);
 
   const handleReveal = () => {
-    if (allSelected) setHasResult(true);
+    if (allSelected) {
+      setHasResult(true);
+      setSaved(false);
+    }
   };
 
   const handleClear = () => {
     setDice([null, null, null]);
     setHasResult(false);
+    setSaved(false);
+  };
+
+  const handleSave = async () => {
+    if (!interpretation || !clientName.trim()) {
+      toast.error("Informe o nome do consulente antes de salvar.");
+      return;
+    }
+    setSaving(true);
+    const { error } = await supabase.from("consultations").insert({
+      client_name: clientName.trim(),
+      reading_type: "dadomancia",
+      question: `Dados: ${d1}, ${d2}, ${d3} (soma: ${sum})`,
+      interpretation_resumo: interpretation.titulo,
+      interpretation_energia: interpretation.energia,
+      interpretation_situacao: interpretation.mensagem,
+      interpretation_orientacao: interpretation.conselho,
+      interpretation_destino: interpretation.alerta || null,
+    });
+    setSaving(false);
+    if (error) {
+      toast.error("Erro ao salvar consulta.");
+    } else {
+      toast.success("Consulta salva no histórico!");
+      setSaved(true);
+    }
   };
 
   const d1 = dice[0] ?? 0;

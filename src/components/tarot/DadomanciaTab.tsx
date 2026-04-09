@@ -1,31 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDiceInterpretation } from "@/data/dadomancia";
 
 const diceEmojis = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-
-const interpretations: Record<number, string> = {
-  3: "Momento de extrema cautela. Zé Pelintra pede paciência — não é hora de agir, mas de observar.",
-  4: "Caminhos travados. Há algo oculto impedindo seu avanço. Faça uma limpeza espiritual.",
-  5: "Mudança lenta chegando. Confie no tempo — as coisas vão se ajeitar aos poucos.",
-  6: "Equilíbrio frágil. Cuide das suas relações e evite conflitos desnecessários.",
-  7: "Sorte moderada. Zé Pelintra diz que o jogo está aberto, mas depende de você jogar certo.",
-  8: "Boas oportunidades à vista. Fique atento aos sinais — uma porta vai se abrir.",
-  9: "Prosperidade chegando. O caminho financeiro está favorável. Aproveite com sabedoria.",
-  10: "Vitória garantida! Zé Pelintra abençoa seus passos. Vá em frente sem medo.",
-  11: "Grande proteção espiritual. Seus guias estão ao seu lado. Momento de força e fé.",
-  12: "Conquista plena! Os dados caíram a seu favor. Celebre, mas mantenha a humildade.",
-  13: "Cuidado com excesso de confiança. A sorte pode virar se não agir com prudência.",
-  14: "Transformação profunda. Algo antigo precisa morrer para o novo nascer.",
-  15: "Caminho de luz. Zé Pelintra ilumina sua jornada. Siga com coragem e determinação.",
-  16: "Abundância e fartura. Momento excelente para negócios e empreendimentos.",
-  17: "Proteção máxima. Zé Pelintra está de guarda. Nenhum mal chegará até você.",
-  18: "Realização total! O melhor resultado possível. Todos os caminhos estão abertos e abençoados.",
-};
-
-function getInterpretation(sum: number): string {
-  return interpretations[sum] || "Consulte Zé Pelintra para orientação adicional.";
-}
 
 export default function DadomanciaTab() {
   const [dice, setDice] = useState<number[]>([0, 0, 0]);
@@ -59,6 +37,7 @@ export default function DadomanciaTab() {
   };
 
   const sum = dice[0] + dice[1] + dice[2];
+  const interpretation = hasResult ? getDiceInterpretation(dice[0], dice[1], dice[2]) : null;
 
   return (
     <Card className="border-border bg-card">
@@ -95,17 +74,43 @@ export default function DadomanciaTab() {
         </Button>
 
         {/* Result */}
-        {hasResult && (
+        {hasResult && interpretation && (
           <div className="space-y-3 animate-fade-in">
-            <div className="text-center">
-              <span className="text-muted-foreground text-sm font-crimson">Soma: </span>
-              <span className="text-foreground font-cinzel text-xl font-bold">{sum}</span>
-            </div>
-            <div className="bg-secondary/50 border border-border rounded-lg p-4">
-              <p className="text-foreground font-crimson text-sm leading-relaxed">
-                {getInterpretation(sum)}
+            {/* Title & Sum */}
+            <div className="text-center space-y-1">
+              <h3 className="font-cinzel text-sm font-bold text-foreground">
+                {interpretation.titulo}
+              </h3>
+              <p className="text-muted-foreground text-xs font-crimson">
+                Dados: {dice[0]} + {dice[1]} + {dice[2]} = {sum}
               </p>
             </div>
+
+            {/* Energia */}
+            <div className="bg-secondary/50 border border-border rounded-lg p-3">
+              <p className="text-xs font-cinzel text-muted-foreground uppercase tracking-wider mb-1">⚡ Energia</p>
+              <p className="text-foreground font-crimson text-sm">{interpretation.energia}</p>
+            </div>
+
+            {/* Mensagem */}
+            <div className="bg-secondary/50 border border-border rounded-lg p-3">
+              <p className="text-xs font-cinzel text-muted-foreground uppercase tracking-wider mb-1">📜 Mensagem</p>
+              <p className="text-foreground font-crimson text-sm leading-relaxed">{interpretation.mensagem}</p>
+            </div>
+
+            {/* Conselho */}
+            <div className="bg-secondary/50 border border-border rounded-lg p-3">
+              <p className="text-xs font-cinzel text-muted-foreground uppercase tracking-wider mb-1">💡 Conselho</p>
+              <p className="text-foreground font-crimson text-sm">{interpretation.conselho}</p>
+            </div>
+
+            {/* Alerta (if any) */}
+            {interpretation.alerta && (
+              <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-3">
+                <p className="text-xs font-cinzel text-destructive uppercase tracking-wider mb-1">⚠️ Alerta</p>
+                <p className="text-destructive font-crimson text-sm">{interpretation.alerta}</p>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

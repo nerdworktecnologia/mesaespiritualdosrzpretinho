@@ -13,6 +13,7 @@ import BancoRespostasTab from "@/components/tarot/BancoRespostasTab";
 import PainelEspiritualTab from "@/components/tarot/PainelEspiritualTab";
 import HistoricoConsultasTab from "@/components/tarot/HistoricoConsultasTab";
 import LiveTikTokTab from "@/components/tarot/LiveTikTokTab";
+import DadomanciaTab from "@/components/tarot/DadomanciaTab";
 import { isSoundEnabled, toggleSound } from "@/utils/sounds";
 
 export default function Mesa() {
@@ -63,7 +64,10 @@ export default function Mesa() {
             </TabsTrigger>
           </TabsList>
           {/* Row 2: secondary tabs */}
-          <TabsList className="grid w-full grid-cols-4 bg-secondary border border-border h-auto">
+          <TabsList className="grid w-full grid-cols-5 bg-secondary border border-border h-auto">
+            <TabsTrigger value="dados" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
+              🎲 Dados
+            </TabsTrigger>
             <TabsTrigger value="cabala" className="font-cinzel text-[7px] md:text-xs tracking-wider py-2 data-[state=active]:bg-foreground data-[state=active]:text-background">
               🔢 Cabala
             </TabsTrigger>
